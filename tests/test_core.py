@@ -123,7 +123,10 @@ def test_bracket_extract_and_payload():
     p = easychamp.build_payload({"id": "b", "name": ex.competition, "sport": ex.sport, "teams": ex.teams,
                                  "matches": [m.model_dump() for m in ex.matches]})
     champ = p["League"]["Champs"][0]
-    assert champ["SportKindName"] == "Esports"
+    assert champ["SportKindName"] == easychamp.sport_kind(ex.sport)
+    assert easychamp.sport_kind("Super Smash Bros. Ultimate") == "Smash"
+    assert easychamp.sport_kind("esports") == "OtherEsports"
+    assert easychamp.sport_kind("soccer") == "Soccer" and easychamp.sport_kind("Ice hockey") == "IceHockey"
     assert [s["Type"] for s in champ["Stages"]] == ["playoff"]
     keys = {f["Id"] for f in champ["Stages"][0]["Groups"][0]["Fixtures"]}
     assert len(keys) == 7
@@ -132,3 +135,16 @@ def test_bracket_extract_and_payload():
 def test_winner_from_score_in_knockout():
     m = Match(home="A", away="B", homeScore=1, awayScore=2, stage="semi-final")
     assert m.stage == "semifinal" and m.winner == "B" and m.status == "played"
+
+
+def test_bracket_rounds_named_and_ordered():
+    ex, _ = _parse((FIX / "bracket_extract.json").read_text())
+    rounds = easychamp.knockout_rounds([m for m in ex.matches if m.stage != "group"])
+    assert [len(r) for r in rounds] == [4, 2, 1]
+    # quarterfinals sit under the semifinal they fed: Kirbo and Marth4 first, Shellby and Ganonz after
+    assert [m.winner for m in rounds[0]] == ["Kirbo", "Marth4", "Shellby", "Ganonz"]
+    p = easychamp.build_payload({"id": "b", "name": "x", "sport": "smash", "teams": ex.teams,
+                                 "matches": [m.model_dump() for m in ex.matches]})
+    fx = p["League"]["Champs"][0]["Stages"][0]["Groups"][0]["Fixtures"]
+    assert [f["MatchDayName"] for f in fx] == ["quarterfinal"] * 4 + ["semifinal"] * 2 + ["final"]
+    assert [f["Order"] for f in fx] == list(range(9, 16))

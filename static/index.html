@@ -140,7 +140,9 @@ function loadSnap(s) {
     state.matches = ex.matches;
     state.teams = ex.teams;
     $("name").value = ex.competition;
-    $("sport").value = ["soccer", "futsal", "basketball", "volleyball", "padel", "esports"].includes(ex.sport) ? ex.sport : "other";
+    const sp = (ex.sport || "other").toLowerCase();
+    if (![...$("sport").options].some((o) => o.value === sp)) $("sport").add(new Option(sp[0].toUpperCase() + sp.slice(1), sp), 0);
+    $("sport").value = sp;
     $("changes").hidden = true;
   }
   $("review-img").src = `/api/images/${s.image}`;

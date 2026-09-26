@@ -19,8 +19,26 @@ import httpx
 
 from .schema import Match
 
-SPORTS = {"soccer": "Soccer", "futsal": "Futsal", "basketball": "Basketball",
-          "volleyball": "Volleyball", "padel": "Padel", "esports": "Esports"}
+KINDS = ["Soccer", "Basketball", "IceHockey", "Futsal", "Tennis", "Volleyball", "AmericanFootball", "Baseball",
+         "Softball", "Wrestling", "Pickleball", "Padel", "Rugby", "FIFA", "eFootball", "NBA2K", "RocketLeague",
+         "Dota2", "CounterStrike", "Valorant", "ApexLegends", "LeagueOfLegends", "MobileLegends", "RainbowSix",
+         "Overwatch", "PUBGMobile", "Smash", "PUBG", "BrawlStars", "Hearthstone", "CallOfDuty", "Fortnite",
+         "Tekken", "Other", "OtherEsports"]
+ALIASES = {"hockey": "IceHockey", "football": "Soccer", "fc": "FIFA", "eafc": "FIFA", "ea fc": "FIFA",
+           "super smash bros": "Smash", "smash bros": "Smash", "cs2": "CounterStrike", "lol": "LeagueOfLegends",
+           "esports": "OtherEsports", "other": "Other"}
+
+
+def sport_kind(sport: str | None) -> str:
+    """EasyChamp SportKind name for the board's sport or game."""
+    key = re.sub(r"[^a-z0-9 ]", "", (sport or "").casefold()).strip()
+    for k in KINDS:
+        if key.replace(" ", "") == k.casefold():
+            return k
+    for alias, k in ALIASES.items():
+        if alias in key:
+            return k
+    return "Soccer" if not key else "Other"
 API = os.environ.get("EC_API_URL", "https://easychamp.com/ec-standings-api")
 
 
@@ -60,9 +78,37 @@ def fixture_key(m: Match) -> str:
     return f"{slug(m.home)}-v-{slug(m.away)}-{m.stage}" + (f"-{slug(m.round)}" if m.round else "")
 
 
+STAGE_RANK = {"knockout": 0, "quarterfinal": 1, "semifinal": 2, "final": 3}
+ROUND_NAMES = {1: "final", 2: "semifinal", 3: "quarterfinal", 4: "round_of_16", 5: "round_of_32", 6: "round_of_64"}
+
+
+def knockout_rounds(matches: list[Match]) -> list[list[Match]]:
+    """Knockout matches grouped by round, first round first, each round ordered by bracket position.
+
+    Positions come from the winners: the two matches feeding a later match sit next to each other,
+    so EasyChamp's sequential bracket fill draws the tree the way the board shows it.
+    """
+    rounds: dict[str, tuple[int, int, list[Match]]] = {}
+    for i, m in enumerate(matches):
+        label = m.round or m.stage
+        rank, first, ms = rounds.get(label, (STAGE_RANK.get(m.stage, 0), i, []))
+        ms.append(m)
+        rounds[label] = (rank, first, ms)
+    ordered = [ms for _, _, ms in sorted(rounds.values(), key=lambda r: (r[0], r[1]))]
+    for r in range(len(ordered) - 2, -1, -1):
+        feeders, placed = ordered[r], []
+        for parent in ordered[r + 1]:
+            for side in (parent.home, parent.away):
+                child = next((c for c in feeders if c.winner == side and c not in placed), None)
+                if child:
+                    placed.append(child)
+        ordered[r] = placed + [c for c in feeders if c not in placed]
+    return ordered
+
+
 def build_payload(league: dict) -> dict:
     lid = league["id"]
-    sport = SPORTS.get(league.get("sport", "soccer"), "Soccer")
+    sport = sport_kind(league.get("sport"))
     matches = [Match.model_validate(m) for m in league["matches"]]
     names = list(dict.fromkeys(league.get("teams", []) + [t for m in matches for t in (m.home, m.away)]))
     team_id = {n: f"snap:{lid}:team:{slug(n)}" for n in names}
@@ -110,6 +156,18 @@ def build_payload(league: dict) -> dict:
             } for g, ms in groups.items()],
         })
     if knockout:
+        rounds = knockout_rounds(knockout)
+        double = any(re.search(r"loser|grand", (m.round or "").casefold()) for m in knockout)
+        ko_fixtures, base, seq = [], 2 * len(rounds[0]), 0
+        for ri, rms in enumerate(rounds):
+            depth = len(rounds) - ri
+            for m in rms:
+                seq += 1
+                f = fixture(m, base + seq)
+                f["MatchDay"] = ri + 1
+                f["RoundNumber"] = ri + 1
+                f["MatchDayName"] = m.round if double else ROUND_NAMES.get(depth, m.round or "knockout")
+                ko_fixtures.append(f)
         stages.append({
             "Id": f"snap:{lid}:stage:knockout", "Name": "Knockout", "Type": "playoff", "Order": 2,
             "RoundCount": 1, "TeamCount": len({t for m in knockout for t in (m.home, m.away)}), "GroupCount": 1,
@@ -117,7 +175,7 @@ def build_payload(league: dict) -> dict:
                 "Id": f"snap:{lid}:group:knockout", "Name": "Knockout",
                 "TeamIds": list(dict.fromkeys(team_id[t] for m in knockout for t in (m.home, m.away))),
                 "FixturesCount": len(knockout),
-                "Fixtures": [fixture(m, i + 1) for i, m in enumerate(knockout)],
+                "Fixtures": ko_fixtures,
             }],
         })
 
@@ -176,7 +234,10 @@ def find_links(league: dict, headers: dict) -> dict:
         links = {"leagueSite": lg.get("leagueWebsiteUrl")}
         if champ:
             cid = champ["fullUrl"].split("/champ/")[1].split("?")[0] if champ.get("fullUrl") else None
-            links["competition"] = champ.get("fullUrl", "").replace("tabs=teams", "tabs=standings") or None
+            has_table = any(m.get("stage", "group") == "group" for m in league.get("matches", []))
+            tab = "standings" if has_table else "knockout"
+            # the league site caches pages; a fresh query string shows the new result immediately
+            links["competition"] = (champ.get("fullUrl", "").replace("tabs=teams", f"tabs={tab}") + f"&v={int(datetime.now().timestamp())}") if champ.get("fullUrl") else None
             if cid:
                 links["watch"] = f"https://watch.easychamp.com/competition/{cid}"
         return links
