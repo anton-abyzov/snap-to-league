@@ -109,3 +109,26 @@ def test_api_sample_then_update(tmp_path, monkeypatch):
     assert len(merged) == 7 and changes == ["Hawks 2-1 Sharks"]
     assert c.get(f"/l/{lg['id']}").status_code == 200
     assert c.get("/api/leagues/nope").status_code == 404
+
+
+def test_bracket_extract_and_payload():
+    ex, _ = _parse((FIX / "bracket_extract.json").read_text())
+    assert [m.stage for m in ex.matches].count("quarterfinal") == 4
+    final = next(m for m in ex.matches if m.stage == "final")
+    assert final.status == "scheduled" and final.winner is None
+    assert all(m.winner for m in ex.matches if m.stage in {"quarterfinal", "semifinal"})
+    assert compute(ex.matches, []) == []  # no group stage, no table
+    _, flags = checks(ex, [])
+    assert not [f for f in flags if f.level == "error"]
+    p = easychamp.build_payload({"id": "b", "name": ex.competition, "sport": ex.sport, "teams": ex.teams,
+                                 "matches": [m.model_dump() for m in ex.matches]})
+    champ = p["League"]["Champs"][0]
+    assert champ["SportKindName"] == "Esports"
+    assert [s["Type"] for s in champ["Stages"]] == ["playoff"]
+    keys = {f["Id"] for f in champ["Stages"][0]["Groups"][0]["Fixtures"]}
+    assert len(keys) == 7
+
+
+def test_winner_from_score_in_knockout():
+    m = Match(home="A", away="B", homeScore=1, awayScore=2, stage="semi-final")
+    assert m.stage == "semifinal" and m.winner == "B" and m.status == "played"

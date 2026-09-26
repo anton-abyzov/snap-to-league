@@ -19,7 +19,8 @@
     <div class="actions">
       <label class="btn big" for="photo">Snap the board</label>
       <input id="photo" type="file" accept="image/*" capture="environment" hidden>
-      <button class="btn ghost" id="sample" type="button">Try the sample board</button>
+      <button class="btn ghost" id="sample" type="button">Sample board</button>
+      <button class="btn ghost" id="sample-bracket" type="button">Sample bracket</button>
     </div>
     <p id="league-note" class="muted" hidden></p>
   </section>
@@ -43,7 +44,7 @@
           <label class="field">Competition<input id="name"></label>
           <label class="field">Sport<select id="sport">
             <option value="soccer">Soccer</option><option value="futsal">Futsal</option><option value="basketball">Basketball</option>
-            <option value="volleyball">Volleyball</option><option value="padel">Padel</option><option value="other">Other</option>
+            <option value="volleyball">Volleyball</option><option value="padel">Padel</option><option value="esports">Esports</option><option value="other">Other</option>
           </select></label>
         </div>
         <p id="changes" class="changes" hidden></p>
@@ -53,7 +54,7 @@
         <button class="linkbtn" id="add" type="button">Add a match</button>
       </div>
       <div class="panel">
-        <h2>Standings</h2>
+        <h2>Table and bracket</h2>
         <div class="tablebox" id="table"></div>
         <div class="actions">
           <button class="btn" id="publish" type="button">Publish league</button>
@@ -79,7 +80,7 @@
 </main>
 
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, num } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml } from "/static/standings.js";
 
 const $ = (id) => document.getElementById(id);
 const state = { league: null, snap: null, matches: [], teams: [] };
@@ -125,6 +126,7 @@ $("photo").addEventListener("change", (e) => {
   e.target.value = "";
 });
 $("sample").addEventListener("click", () => submit(new FormData(), "/static/sample-board.jpg"));
+$("sample-bracket").addEventListener("click", () => { const f = new FormData(); f.append("kind", "bracket"); submit(f, "/static/sample-bracket.jpg"); });
 
 function loadSnap(s) {
   state.snap = s;
@@ -137,7 +139,7 @@ function loadSnap(s) {
     state.matches = ex.matches;
     state.teams = ex.teams;
     $("name").value = ex.competition;
-    $("sport").value = ["soccer", "futsal", "basketball", "volleyball", "padel"].includes(ex.sport) ? ex.sport : "other";
+    $("sport").value = ["soccer", "futsal", "basketball", "volleyball", "padel", "esports"].includes(ex.sport) ? ex.sport : "other";
     $("changes").hidden = true;
   }
   $("review-img").src = `/api/images/${s.image}`;
@@ -158,6 +160,8 @@ function renderMatches() {
       <button class="del" data-del="${i}" aria-label="Remove match" type="button">&times;</button>
       <div class="meta">
         <select aria-label="Stage" data-f="stage">${["group", "quarterfinal", "semifinal", "final", "knockout"].map((s) => `<option ${m.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select>
+        ${m.stage !== "group" ? `<input aria-label="Round" data-f="round" placeholder="round" value="${esc(m.round ?? "")}" size="8">
+        <select aria-label="Winner" data-f="winner"><option value="">no winner yet</option>${[m.home, m.away].filter(Boolean).map((t) => `<option ${m.winner === t ? "selected" : ""}>${esc(t)}</option>`).join("")}</select>` : ""}
         <input aria-label="When" data-f="when" placeholder="when" value="${esc(m.when ?? "")}" size="10">
         <input aria-label="Field" data-f="venue" placeholder="field" value="${esc(m.venue ?? "")}" size="8">
       </div>
@@ -166,7 +170,8 @@ function renderMatches() {
 }
 
 function renderTable() {
-  $("table").innerHTML = standingsTable(computeStandings(state.matches, state.teams));
+  const rows = computeStandings(state.matches, state.teams);
+  $("table").innerHTML = (rows.length ? standingsTable(rows) : "") + bracketHtml(state.matches);
 }
 
 $("matches").addEventListener("input", (e) => {
@@ -174,10 +179,11 @@ $("matches").addEventListener("input", (e) => {
   if (!box || !f) return;
   const m = state.matches[+box.dataset.i];
   m[f] = e.target.value === "" ? null : e.target.value;
-  if (f === "homeScore" || f === "awayScore") {
-    m[f] = num(m[f]);
-    m.status = m.homeScore !== null && m.awayScore !== null ? "played" : "scheduled";
-  }
+  if (f === "homeScore" || f === "awayScore") m[f] = num(m[f]);
+  if (m.stage !== "group" && m.homeScore !== null && m.awayScore !== null && m.homeScore !== m.awayScore && (f === "homeScore" || f === "awayScore"))
+    m.winner = m.homeScore > m.awayScore ? m.home : m.away;
+  m.status = (m.homeScore !== null && m.awayScore !== null) || m.winner ? "played" : "scheduled";
+  if (f === "stage") { renderMatches(); return; }
   renderTable();
 });
 $("matches").addEventListener("click", (e) => {

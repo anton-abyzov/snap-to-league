@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import base64
 import json
-import mimetypes
 import os
 import shutil
 import subprocess
@@ -20,16 +19,28 @@ import time
 from pathlib import Path
 
 import httpx
+from PIL import Image, ImageOps
 
 from .schema import Extraction, Row
 
 ROOT = Path(__file__).resolve().parent.parent
 PROMPT = (Path(__file__).parent / "prompt.txt").read_text()
-FIXTURE = ROOT / "tests" / "fixtures" / "board_extract.json"
+FIXTURES = {"board.jpg": ROOT / "tests" / "fixtures" / "board_extract.json",
+            "bracket.jpg": ROOT / "tests" / "fixtures" / "bracket_extract.json"}
 
 
 class ExtractError(RuntimeError):
     pass
+
+
+def prepare(image: Path, out_dir: Path, long_side: int = 1600) -> Path:
+    """Upright (phone EXIF rotation), capped at 1600 px, JPEG. Smaller input, faster read."""
+    with Image.open(image) as im:
+        im = ImageOps.exif_transpose(im).convert("RGB")
+        im.thumbnail((long_side, long_side))
+        out = out_dir / "photo.jpg"
+        im.save(out, quality=85)
+    return out
 
 
 def _parse(text: str) -> tuple[Extraction, list[Row]]:
@@ -40,6 +51,8 @@ def _parse(text: str) -> tuple[Extraction, list[Row]]:
     if "error" in data and "extracted" not in data:
         raise ExtractError(f"model declined: {data['error']}")
     ex = Extraction.model_validate(data.get("extracted", data))
+    if not ex.matches:
+        raise ExtractError("no matches found on the photo: " + "; ".join(ex.uncertain)[:200])
     rows = [Row.model_validate(r) for r in data.get("standings", [])]
     return ex, rows
 
@@ -48,12 +61,14 @@ def astra(image: Path) -> str:
     codex = shutil.which("codex")
     if not codex:
         raise ExtractError("codex CLI not found on PATH")
-    effort = os.environ.get("ASTRA_EFFORT", "medium")
+    effort = os.environ.get("ASTRA_EFFORT", "low")
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "out.json"
-        cmd = [codex, "exec", "-m", os.environ.get("ASTRA_MODEL", "gpt-6-astra"),
+        image = prepare(image, Path(tmp))
+        cmd = [codex, "exec", "--ignore-user-config", "--ephemeral",
+               "-m", os.environ.get("ASTRA_MODEL", "gpt-6-astra"),
                "-c", f'model_reasoning_effort="{effort}"', "-s", "read-only",
-               "--skip-git-repo-check", "-o", str(out), "-i", str(image), "-"]
+               "--skip-git-repo-check", "-o", str(out), f"--image={image.resolve()}", "-"]
         proc = subprocess.run(cmd, input=PROMPT, text=True, capture_output=True, cwd=tmp,
                               timeout=int(os.environ.get("ASTRA_TIMEOUT", "240")))
         if proc.returncode != 0 or not out.exists():
@@ -66,10 +81,13 @@ def gemini(image: Path) -> str:
     if not key:
         raise ExtractError("GEMINI_API_KEY is not set")
     model = os.environ.get("GEMINI_MODEL", "gemini-flash-latest")
-    mime = mimetypes.guess_type(image.name)[0] or "image/jpeg"
+    with tempfile.TemporaryDirectory() as tmp:
+        image = prepare(image, Path(tmp))
+        data = image.read_bytes()
+    mime = "image/jpeg"
     body = {
         "contents": [{"parts": [
-            {"inline_data": {"mime_type": mime, "data": base64.b64encode(image.read_bytes()).decode()}},
+            {"inline_data": {"mime_type": mime, "data": base64.b64encode(data).decode()}},
             {"text": PROMPT},
         ]}],
         "generationConfig": {"response_mime_type": "application/json"},
@@ -82,7 +100,12 @@ def gemini(image: Path) -> str:
 
 
 def fixture(image: Path) -> str:
-    return FIXTURE.read_text()
+    """Offline stand-in: the bracket answer for bracket photos, the board answer otherwise."""
+    raw = image.read_bytes()
+    for name, answer in FIXTURES.items():
+        if (ROOT / "tests" / "fixtures" / name).read_bytes() == raw:
+            return answer.read_text()
+    return FIXTURES["board.jpg"].read_text()
 
 
 BACKENDS = {"astra": astra, "gemini": gemini, "fixture": fixture}

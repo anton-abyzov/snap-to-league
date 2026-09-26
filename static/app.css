@@ -111,3 +111,12 @@ details pre { max-height: 320px; overflow: auto; font: 12px/1.45 var(--mono); ba
 .fx .s.sched { font: 600 13px var(--mono); color: var(--muted); }
 .stagehead { font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 10px; }
 @media (prefers-reduced-motion: no-preference) { .pulse { animation: pulse 1.4s ease-in-out infinite; } @keyframes pulse { 50% { opacity: .45; } } }
+
+.bracket { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 6px; }
+.round { min-width: 170px; flex: 1 0 170px; display: flex; flex-direction: column; justify-content: space-around; gap: 10px; }
+.bm { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); overflow: hidden; }
+.bm .p { display: flex; justify-content: space-between; gap: 8px; padding: 7px 10px; }
+.bm .p + .p { border-top: 1px solid var(--line); }
+.bm .p.win { font-weight: 700; color: var(--accent); background: var(--accent-soft); }
+.bm .sc { font: 700 14px var(--mono); }
+.bm .when { font: 500 12px var(--mono); color: var(--muted); padding: 5px 10px; border-top: 1px dashed var(--line); }

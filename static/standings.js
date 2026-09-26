@@ -1,6 +1,7 @@
 // Same rules as app/standings.py: group stage only, 3 for a win, 1 for a draw,
 // sorted by points, goal difference, goals for, then name.
 export function computeStandings(matches, teams = []) {
+  if (!matches.some((m) => m.stage === "group")) return [];
   const rows = new Map();
   const row = (t) => {
     if (!rows.has(t)) rows.set(t, { team: t, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0 });
@@ -34,9 +35,45 @@ export function standingsTable(rows, through = 2) {
   return `<table class="st">${head}<tbody>${body}</tbody></table>`;
 }
 
+const STAGE_RANK = { knockout: 0, quarterfinal: 1, semifinal: 2, final: 3 };
+
+export function bracketRounds(matches) {
+  const ko = matches.filter((m) => m.stage && m.stage !== "group");
+  const rounds = new Map();
+  ko.forEach((m, i) => {
+    const label = m.round || (m.stage === "knockout" ? "Knockout" : m.stage[0].toUpperCase() + m.stage.slice(1));
+    if (!rounds.has(label)) rounds.set(label, { label, rank: STAGE_RANK[m.stage] ?? 0, first: i, matches: [] });
+    rounds.get(label).matches.push(m);
+  });
+  return [...rounds.values()].sort((a, b) => a.rank - b.rank || a.first - b.first);
+}
+
+export function bracketHtml(matches) {
+  const rounds = bracketRounds(matches);
+  if (!rounds.length) return "";
+  const side = (m, who) => {
+    const name = who === "h" ? m.home : m.away;
+    const score = who === "h" ? m.homeScore : m.awayScore;
+    const win = m.winner && m.winner === name;
+    return `<div class="p ${win ? "win" : ""}"><span>${esc(name)}</span><span class="sc">${score ?? (win ? "W" : "")}</span></div>`;
+  };
+  return `<div class="bracket">${rounds.map((r) => `<div class="round"><div class="stagehead">${esc(r.label)}</div>${r.matches.map((m) => `<div class="bm">${side(m, "h")}${side(m, "a")}${m.status !== "played" && (m.when || m.venue) ? `<div class="when">${esc([m.when, m.venue].filter(Boolean).join(" · "))}</div>` : ""}</div>`).join("")}</div>`).join("")}</div>`;
+}
+
 export function readOut(name, rows, matches) {
-  const lines = [`${name}. Standings after ${rows.reduce((s, r) => s + r.P, 0) / 2} games.`];
+  const lines = [`${name}.`];
+  if (rows.length) lines.push(`Standings after ${rows.reduce((s, r) => s + r.P, 0) / 2} games.`);
   rows.forEach((r, i) => lines.push(`${ordinal(i + 1)}, ${r.team}, ${r.Pts} point${r.Pts === 1 ? "" : "s"}.`));
+  const rounds = bracketRounds(matches);
+  const lastPlayed = [...rounds].reverse().find((r) => r.matches.some((m) => m.winner));
+  if (lastPlayed) {
+    lines.push(`${lastPlayed.label} results.`);
+    lastPlayed.matches.filter((m) => m.winner).forEach((m) => {
+      const loser = m.winner === m.home ? m.away : m.home;
+      const sc = m.homeScore !== null && m.homeScore !== undefined && m.awayScore !== null && m.awayScore !== undefined ? ` ${Math.max(m.homeScore, m.awayScore)} to ${Math.min(m.homeScore, m.awayScore)}` : "";
+      lines.push(`${m.winner} beat ${loser}${sc}.`);
+    });
+  }
   const next = matches.find((m) => m.status === "scheduled");
   if (next) lines.push(`Next up${next.stage !== "group" ? `, the ${next.stage}` : ""}: ${next.home} against ${next.away}${next.when ? `, ${next.when}` : ""}${next.venue ? ` on ${next.venue}` : ""}.`);
   return lines.join(" ");

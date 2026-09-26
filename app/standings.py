@@ -14,6 +14,8 @@ WIN, DRAW = 3, 1
 
 
 def compute(matches: list[Match], teams: list[str] | None = None) -> list[Row]:
+    if not any(m.stage == "group" for m in matches):
+        return []  # a pure bracket has no table
     rows: dict[str, Row] = {t: Row(team=t) for t in (teams or [])}
     for m in matches:
         if m.stage != "group":
@@ -56,9 +58,11 @@ def checks(ex: Extraction, model_rows: list[Row]) -> tuple[list[Row], list[Flag]
             flags.append(Flag(level="warn", message=f"{' v '.join(sorted(pair))} is recorded {n} times", source="check"))
 
     for m in ex.matches:
+        if m.winner and m.winner not in (m.home, m.away):
+            flags.append(Flag(level="warn", message=f"{m.winner} is marked as winning {m.home} v {m.away}", source="check"))
         if m.home == m.away:
             flags.append(Flag(level="error", message=f"{m.home} is listed against itself", source="check"))
-        if m.status == "played" and (m.homeScore is None or m.awayScore is None):
+        if m.status == "played" and not m.winner and (m.homeScore is None or m.awayScore is None):
             flags.append(Flag(level="error", message=f"{m.home} v {m.away} is marked played without a full score", source="check"))
 
     if model_rows:

@@ -17,7 +17,7 @@ import httpx
 from .schema import Match
 
 SPORTS = {"soccer": "Soccer", "futsal": "Futsal", "basketball": "Basketball",
-          "volleyball": "Volleyball", "padel": "Padel"}
+          "volleyball": "Volleyball", "padel": "Padel", "esports": "Esports"}
 API = os.environ.get("EC_API_URL", "https://easychamp.com/ec-standings-api")
 
 
@@ -26,7 +26,7 @@ def slug(s: str) -> str:
 
 
 def fixture_key(m: Match) -> str:
-    return f"{slug(m.home)}-v-{slug(m.away)}-{m.stage}"
+    return f"{slug(m.home)}-v-{slug(m.away)}-{m.stage}" + (f"-{slug(m.round)}" if m.round else "")
 
 
 def build_payload(league: dict) -> dict:
@@ -43,7 +43,7 @@ def build_payload(league: dict) -> dict:
             "Status": 2 if played else 0,
             "Order": order,
             "Location": m.venue,
-            "MatchDayName": m.when,
+            "MatchDayName": m.round or m.when,
             "HomeTeam": {"Id": team_id[m.home], "Name": m.home, "SportKindName": sport},
             "AwayTeam": {"Id": team_id[m.away], "Name": m.away, "SportKindName": sport},
         }

@@ -18,7 +18,7 @@ from .standings import checks, compute
 
 ROOT = Path(__file__).resolve().parent.parent
 STATIC = ROOT / "static"
-SAMPLE = ROOT / "tests" / "fixtures" / "board.jpg"
+SAMPLES = {"board": ROOT / "tests" / "fixtures" / "board.jpg", "bracket": ROOT / "tests" / "fixtures" / "bracket.jpg"}
 MAX_BYTES = 12 * 1024 * 1024
 
 app = FastAPI(title="Snap to League")
@@ -102,9 +102,12 @@ async def snap(image: UploadFile = File(...), leagueId: str | None = Form(None))
 
 
 @app.post("/api/sample")
-async def sample(leagueId: str | None = Form(None)):
+async def sample(leagueId: str | None = Form(None), kind: str = Form("board")):
+    src = SAMPLES.get(kind)
+    if src is None:
+        raise HTTPException(400, f"No sample called {kind}")
     path = store.images_dir() / f"sample-{uuid.uuid4().hex[:8]}.jpg"
-    path.write_bytes(SAMPLE.read_bytes())
+    path.write_bytes(src.read_bytes())
     return await _run(path, leagueId)
 
 

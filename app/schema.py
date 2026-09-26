@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class Match(BaseModel):
@@ -16,11 +16,36 @@ class Match(BaseModel):
     venue: Optional[str] = None
     stage: Literal["group", "final", "semifinal", "quarterfinal", "knockout"] = "group"
     group: Optional[str] = None
+    round: Optional[str] = None
+    winner: Optional[str] = None
 
     @field_validator("home", "away")
     @classmethod
     def _strip(cls, v: str) -> str:
         return " ".join(v.split())
+
+    @field_validator("stage", mode="before")
+    @classmethod
+    def _stage(cls, v):
+        v = (v or "group").strip().casefold()
+        if v in {"group", "final", "semifinal", "quarterfinal", "knockout"}:
+            return v
+        if "semi" in v:
+            return "semifinal"
+        if "quarter" in v:
+            return "quarterfinal"
+        if "final" in v:
+            return "final"
+        return "knockout" if v not in {"league", "round robin", "pool"} else "group"
+
+    @model_validator(mode="after")
+    def _winner(self):
+        if self.winner is None and self.homeScore is not None and self.awayScore is not None and self.stage != "group":
+            if self.homeScore != self.awayScore:
+                self.winner = self.home if self.homeScore > self.awayScore else self.away
+        if self.winner and self.status == "scheduled":
+            self.status = "played"
+        return self
 
     @field_validator("homeScore", "awayScore", mode="before")
     @classmethod
