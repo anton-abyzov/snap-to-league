@@ -11,7 +11,11 @@ from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import easychamp, store
+from .env import load_env
+
+load_env()
+
+from . import easychamp, store  # noqa: E402
 from .extract import ExtractError, extract
 from .schema import Extraction, Match, Snap
 from .standings import checks, compute
@@ -82,7 +86,7 @@ def league_page(league_id: str):
 @app.get("/api/health")
 def health():
     return {"ok": True, "backend": os.environ.get("SNAP_BACKEND", "astra"),
-            "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and os.environ.get("EC_TOKEN") else "dry-run",
+            "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and (os.environ.get("EC_TOKEN") or os.environ.get("EC_TOKEN_CMD")) else "dry-run",
             "voice": bool(os.environ.get("ELEVENLABS_API_KEY"))}
 
 

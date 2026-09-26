@@ -72,7 +72,8 @@
     <p id="done-text"></p>
     <div class="url" id="done-url"></div>
     <div class="actions">
-      <a class="btn" id="done-open" href="#">Open the league board</a>
+      <a class="btn" id="done-open" href="#" target="_blank" rel="noopener">Open the league board</a>
+      <a class="btn ghost" id="done-local" href="#" target="_blank" rel="noopener" hidden>Big-screen board</a>
       <button class="btn ghost" id="again" type="button">Snap an update</button>
     </div>
     <details><summary>EasyChamp import payload</summary><pre id="payload"></pre></details>
@@ -213,12 +214,18 @@ $("publish").addEventListener("click", async () => {
     const pub = await r.json();
     if (!r.ok) throw new Error(pub.detail || "Could not publish");
     const url = `${location.origin}/l/${state.league.id}`;
-    $("done-title").textContent = pub.mode === "live" ? "League is live on EasyChamp" : "League board is live";
-    $("done-text").textContent = pub.mode === "live"
-      ? `EasyChamp answered ${pub.status}. Share this board or open it on EasyChamp.`
+    const ec = pub.links && (pub.links.competition || pub.links.leagueSite);
+    const live = pub.mode === "live" && pub.status === 200;
+    $("done-title").textContent = live ? "League is live on EasyChamp" : "League board is live";
+    $("done-text").textContent = live
+      ? "Teams can follow results and standings on the EasyChamp league site. Every new photo updates it."
+      : pub.mode === "live" ? `EasyChamp answered ${pub.status}; the local board below still works.`
       : "Share this board with the teams. The EasyChamp import payload below is ready; set EC_PUBLISH=1 to send it.";
-    $("done-url").textContent = url;
-    $("done-open").href = url;
+    $("done-url").textContent = ec || url;
+    $("done-open").href = ec || url;
+    $("done-open").textContent = ec ? "Open on EasyChamp" : "Open the league board";
+    $("done-local").href = url;
+    $("done-local").hidden = !ec;
     $("payload").textContent = JSON.stringify(pub.payload, null, 1);
     $("league-note").textContent = `Adding photos to ${state.league.name}.`;
     $("league-note").hidden = false;
