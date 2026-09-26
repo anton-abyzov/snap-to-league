@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Snap to League</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<main class="wrap">
+  <div class="bar">
+    <div class="brand"><span class="dot"></span>Snap to League</div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <section id="capture" class="hero">
+    <h1>Photo of the board. League in 30&nbsp;seconds.</h1>
+    <p class="muted">Snap a whiteboard, a paper scoresheet or a bracket. Astra reads every match, checks the maths and gives you a live standings table you can publish to EasyChamp.</p>
+    <div class="actions">
+      <label class="btn big" for="photo">Snap the board</label>
+      <input id="photo" type="file" accept="image/*" capture="environment" hidden>
+      <button class="btn ghost" id="sample" type="button">Try the sample board</button>
+    </div>
+    <p id="league-note" class="muted" hidden></p>
+  </section>
+
+  <section id="working" class="panel" hidden aria-live="polite">
+    <div class="working">
+      <img id="working-img" alt="The photo being read">
+      <div>
+        <div class="clock" id="clock">0 s</div>
+        <p class="pulse" id="working-text">Astra is reading the board</p>
+      </div>
+    </div>
+  </section>
+
+  <p id="error" class="err" hidden role="alert"></p>
+
+  <section id="review" hidden>
+    <div class="grid2">
+      <div class="panel">
+        <div class="row2">
+          <label class="field">Competition<input id="name"></label>
+          <label class="field">Sport<select id="sport">
+            <option value="soccer">Soccer</option><option value="futsal">Futsal</option><option value="basketball">Basketball</option>
+            <option value="volleyball">Volleyball</option><option value="padel">Padel</option><option value="other">Other</option>
+          </select></label>
+        </div>
+        <p id="changes" class="changes" hidden></p>
+        <div class="flags" id="flags"></div>
+        <h2>Matches</h2>
+        <div class="matches" id="matches"></div>
+        <button class="linkbtn" id="add" type="button">Add a match</button>
+      </div>
+      <div class="panel">
+        <h2>Standings</h2>
+        <div class="tablebox" id="table"></div>
+        <div class="actions">
+          <button class="btn" id="publish" type="button">Publish league</button>
+          <button class="btn ghost" id="read" type="button">Read out</button>
+        </div>
+        <p class="muted" id="read-note"></p>
+        <div class="photo"><img id="review-img" alt="The photo Astra read"></div>
+        <p class="muted" id="meta"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="done" class="panel done" hidden>
+    <h2 id="done-title">League is live</h2>
+    <p id="done-text"></p>
+    <div class="url" id="done-url"></div>
+    <div class="actions">
+      <a class="btn" id="done-open" href="#">Open the league board</a>
+      <button class="btn ghost" id="again" type="button">Snap an update</button>
+    </div>
+    <details><summary>EasyChamp import payload</summary><pre id="payload"></pre></details>
+  </section>
+</main>
+
+<script type="module">
+import { computeStandings, standingsTable, readOut, esc, speak, num } from "/static/standings.js";
+
+const $ = (id) => document.getElementById(id);
+const state = { league: null, snap: null, matches: [], teams: [] };
+const show = (...ids) => ["capture", "working", "review", "done"].forEach((v) => { $(v).hidden = !ids.includes(v); });
+
+fetch("/api/health").then((r) => r.json()).then((h) => {
+  $("chips").innerHTML = `<span class="chip">${esc(h.backend === "astra" ? "GPT-6 Astra" : h.backend)}</span>`
+    + `<span class="chip ${h.publish === "live" ? "" : "off"}">EasyChamp ${h.publish === "live" ? "live" : "dry run"}</span>`
+    + `<span class="chip ${h.voice ? "" : "off"}">${h.voice ? "ElevenLabs voice" : "Browser voice"}</span>`;
+}).catch(() => {});
+
+let timer;
+function startClock(src, leagueMode) {
+  $("working-img").src = src;
+  $("working-text").textContent = leagueMode ? "Astra is reading the new photo" : "Astra is reading the board";
+  $("error").hidden = true;
+  show("working");
+  const t0 = Date.now();
+  clearInterval(timer);
+  timer = setInterval(() => { $("clock").textContent = `${Math.round((Date.now() - t0) / 1000)} s`; }, 250);
+}
+
+async function submit(form, src) {
+  if (state.league) form.append("leagueId", state.league.id);
+  startClock(src, !!state.league);
+  try {
+    const r = await fetch(form.has("image") ? "/api/snap" : "/api/sample", { method: "POST", body: form });
+    const body = await r.json();
+    if (!r.ok) throw new Error(body.detail || `HTTP ${r.status}`);
+    loadSnap(body);
+  } catch (e) {
+    $("error").textContent = `${e.message}. Try a closer, straighter photo, or enter the matches by hand.`;
+    $("error").hidden = false;
+    show(state.league ? "done" : "capture");
+  } finally { clearInterval(timer); }
+}
+
+$("photo").addEventListener("change", (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const form = new FormData(); form.append("image", f);
+  submit(form, URL.createObjectURL(f));
+  e.target.value = "";
+});
+$("sample").addEventListener("click", () => submit(new FormData(), "/static/sample-board.jpg"));
+
+function loadSnap(s) {
+  state.snap = s;
+  const ex = s.extraction;
+  if (s.merged) {
+    state.matches = s.merged.matches;
+    $("changes").textContent = s.merged.changes.length ? `New from this photo: ${s.merged.changes.join(", ")}` : "No changes found in this photo";
+    $("changes").hidden = false;
+  } else {
+    state.matches = ex.matches;
+    state.teams = ex.teams;
+    $("name").value = ex.competition;
+    $("sport").value = ["soccer", "futsal", "basketball", "volleyball", "padel"].includes(ex.sport) ? ex.sport : "other";
+    $("changes").hidden = true;
+  }
+  $("review-img").src = `/api/images/${s.image}`;
+  $("meta").textContent = `Read by ${s.backend === "astra" ? "GPT-6 Astra" : s.backend} in ${s.seconds} s. ${ex.matches.length} matches on the photo.`;
+  $("flags").innerHTML = s.flags.map((f) => `<div class="flag ${f.level}"><span class="card"></span><div><small>${f.source === "astra" ? "Astra is unsure" : "Check"}</small>${esc(f.message)}</div></div>`).join("");
+  renderMatches();
+  show("review");
+}
+
+function renderMatches() {
+  $("matches").innerHTML = state.matches.map((m, i) => `
+    <div class="match" data-i="${i}">
+      <input aria-label="Home team" data-f="home" value="${esc(m.home)}">
+      <input aria-label="Home score" class="score" data-f="homeScore" inputmode="numeric" value="${m.homeScore ?? ""}">
+      <span class="dash">-</span>
+      <input aria-label="Away score" class="score" data-f="awayScore" inputmode="numeric" value="${m.awayScore ?? ""}">
+      <input aria-label="Away team" class="away" data-f="away" value="${esc(m.away)}">
+      <button class="del" data-del="${i}" aria-label="Remove match" type="button">&times;</button>
+      <div class="meta">
+        <select aria-label="Stage" data-f="stage">${["group", "quarterfinal", "semifinal", "final", "knockout"].map((s) => `<option ${m.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select>
+        <input aria-label="When" data-f="when" placeholder="when" value="${esc(m.when ?? "")}" size="10">
+        <input aria-label="Field" data-f="venue" placeholder="field" value="${esc(m.venue ?? "")}" size="8">
+      </div>
+    </div>`).join("");
+  renderTable();
+}
+
+function renderTable() {
+  $("table").innerHTML = standingsTable(computeStandings(state.matches, state.teams));
+}
+
+$("matches").addEventListener("input", (e) => {
+  const box = e.target.closest(".match"); const f = e.target.dataset.f;
+  if (!box || !f) return;
+  const m = state.matches[+box.dataset.i];
+  m[f] = e.target.value === "" ? null : e.target.value;
+  if (f === "homeScore" || f === "awayScore") {
+    m[f] = num(m[f]);
+    m.status = m.homeScore !== null && m.awayScore !== null ? "played" : "scheduled";
+  }
+  renderTable();
+});
+$("matches").addEventListener("click", (e) => {
+  if (e.target.dataset.del === undefined) return;
+  state.matches.splice(+e.target.dataset.del, 1); renderMatches();
+});
+$("add").addEventListener("click", () => {
+  state.matches.push({ home: "", away: "", homeScore: null, awayScore: null, status: "scheduled", stage: "group", when: null, venue: null, group: null });
+  renderMatches();
+});
+
+$("read").addEventListener("click", async () => {
+  const rows = computeStandings(state.matches, state.teams);
+  const how = await speak(readOut($("name").value, rows, state.matches));
+  $("read-note").textContent = how === "elevenlabs" ? "Voice by ElevenLabs" : how === "browser" ? "Browser voice (add an ElevenLabs key for the real one)" : "This browser cannot speak";
+});
+
+$("publish").addEventListener("click", async () => {
+  $("publish").disabled = true;
+  try {
+    const matches = state.matches.filter((m) => m.home && m.away);
+    let r = await fetch("/api/leagues", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, snapIds: [state.snap.id] }) });
+    if (!r.ok) throw new Error((await r.json()).detail || "Could not save the league");
+    state.league = await r.json();
+    r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST" });
+    const pub = await r.json();
+    if (!r.ok) throw new Error(pub.detail || "Could not publish");
+    const url = `${location.origin}/l/${state.league.id}`;
+    $("done-title").textContent = pub.mode === "live" ? "League is live on EasyChamp" : "League board is live";
+    $("done-text").textContent = pub.mode === "live"
+      ? `EasyChamp answered ${pub.status}. Share this board or open it on EasyChamp.`
+      : "Share this board with the teams. The EasyChamp import payload below is ready; set EC_PUBLISH=1 to send it.";
+    $("done-url").textContent = url;
+    $("done-open").href = url;
+    $("payload").textContent = JSON.stringify(pub.payload, null, 1);
+    $("league-note").textContent = `Adding photos to ${state.league.name}.`;
+    $("league-note").hidden = false;
+    show("done");
+  } catch (e) {
+    $("error").textContent = e.message; $("error").hidden = false;
+  } finally { $("publish").disabled = false; }
+});
+
+$("again").addEventListener("click", () => show("capture"));
+</script>
+</body>
+</html>

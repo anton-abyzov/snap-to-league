@@ -1,0 +1,133 @@
+{
+  "extracted": {
+    "competition": "Sat 7v7 Cup - Group A",
+    "teams": ["Lions", "Sharks", "Hawks", "Wolves"],
+    "matches": [
+      {
+        "home": "Lions",
+        "away": "Sharks",
+        "homeScore": 3,
+        "awayScore": 1,
+        "status": "played",
+        "when": null,
+        "venue": null,
+        "stage": "group"
+      },
+      {
+        "home": "Hawks",
+        "away": "Wolves",
+        "homeScore": 2,
+        "awayScore": 2,
+        "status": "played",
+        "when": null,
+        "venue": null,
+        "stage": "group"
+      },
+      {
+        "home": "Lions",
+        "away": "Hawks",
+        "homeScore": 0,
+        "awayScore": 1,
+        "status": "played",
+        "when": null,
+        "venue": null,
+        "stage": "group"
+      },
+      {
+        "home": "Sharks",
+        "away": "Wolves",
+        "homeScore": 4,
+        "awayScore": 2,
+        "status": "played",
+        "when": null,
+        "venue": null,
+        "stage": "group"
+      },
+      {
+        "home": "Lions",
+        "away": "Wolves",
+        "homeScore": 2,
+        "awayScore": 0,
+        "status": "played",
+        "when": null,
+        "venue": null,
+        "stage": "group"
+      },
+      {
+        "home": "Sharks",
+        "away": "Hawks",
+        "homeScore": 1,
+        "awayScore": 3,
+        "status": "played",
+        "when": null,
+        "venue": null,
+        "stage": "group"
+      },
+      {
+        "home": "Hawks",
+        "away": "Sharks",
+        "homeScore": null,
+        "awayScore": null,
+        "status": "scheduled",
+        "when": "Sun 10am",
+        "venue": "Field 2",
+        "stage": "final"
+      }
+    ],
+    "rules_notes": [
+      "top 2 go through.",
+      "Wolves forfeit last game?"
+    ],
+    "uncertain": [
+      "Wolves forfeiture is written as a question; no confirmed forfeiture or score adjustment is specified.",
+      "Written final is Hawks v Sharks, but recorded group results place Hawks and Lions in the top two.",
+      "Calendar dates and timezone are unspecified."
+    ]
+  },
+  "standings": [
+    {
+      "team": "Hawks",
+      "P": 3,
+      "W": 2,
+      "D": 1,
+      "L": 0,
+      "GF": 6,
+      "GA": 3,
+      "GD": 3,
+      "Pts": 7
+    },
+    {
+      "team": "Lions",
+      "P": 3,
+      "W": 2,
+      "D": 0,
+      "L": 1,
+      "GF": 5,
+      "GA": 2,
+      "GD": 3,
+      "Pts": 6
+    },
+    {
+      "team": "Sharks",
+      "P": 3,
+      "W": 1,
+      "D": 0,
+      "L": 2,
+      "GF": 6,
+      "GA": 8,
+      "GD": -2,
+      "Pts": 3
+    },
+    {
+      "team": "Wolves",
+      "P": 3,
+      "W": 0,
+      "D": 1,
+      "L": 2,
+      "GF": 4,
+      "GA": 8,
+      "GD": -4,
+      "Pts": 1
+    }
+  ]
+}

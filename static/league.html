@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>League board</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<main class="wrap">
+  <div class="bar">
+    <div class="brand"><span class="dot"></span>Snap to League</div>
+    <div class="chips"><span class="chip" id="updated">Loading</span></div>
+  </div>
+  <h1 id="name">League</h1>
+  <p class="muted" id="sub"></p>
+  <div class="grid2">
+    <section class="panel"><h2>Standings</h2><div class="tablebox" id="table"></div>
+      <div class="actions"><button class="btn ghost" id="read" type="button">Read out</button></div></section>
+    <section class="panel"><h2>Matches</h2><div class="board" id="board"></div></section>
+  </div>
+  <p class="err" id="error" hidden role="alert"></p>
+</main>
+<script type="module">
+import { computeStandings, standingsTable, readOut, esc, speak } from "/static/standings.js";
+const $ = (id) => document.getElementById(id);
+const id = location.pathname.split("/").pop();
+let league;
+
+async function load() {
+  try {
+    const r = await fetch(`/api/leagues/${encodeURIComponent(id)}`);
+    if (!r.ok) throw new Error(r.status === 404 ? "This league does not exist" : `HTTP ${r.status}`);
+    league = await r.json();
+    render();
+    $("error").hidden = true;
+  } catch (e) { $("error").textContent = e.message; $("error").hidden = false; }
+}
+
+function render() {
+  document.title = league.name;
+  $("name").textContent = league.name;
+  const played = league.matches.filter((m) => m.status === "played").length;
+  $("sub").textContent = `${league.sport[0].toUpperCase()}${league.sport.slice(1)} · ${played} of ${league.matches.length} matches played`;
+  $("updated").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+  const rows = computeStandings(league.matches, league.teams);
+  $("table").innerHTML = standingsTable(rows);
+  const stages = [...new Set(league.matches.map((m) => m.stage))];
+  $("board").innerHTML = stages.map((s) => `<div class="stagehead">${esc(s === "group" ? "Group stage" : s)}</div>` + league.matches.filter((m) => m.stage === s).map((m) => `
+    <div class="fx"><span class="h">${esc(m.home)}</span>
+    <span class="s ${m.status === "played" ? "" : "sched"}">${m.status === "played" ? `${m.homeScore} - ${m.awayScore}` : esc([m.when, m.venue].filter(Boolean).join(" · ") || "vs")}</span>
+    <span class="a">${esc(m.away)}</span></div>`).join("")).join("");
+}
+
+$("read").addEventListener("click", () => league && speak(readOut(league.name, computeStandings(league.matches, league.teams), league.matches)));
+load();
+setInterval(load, 15000);
+</script>
+</body>
+</html>
