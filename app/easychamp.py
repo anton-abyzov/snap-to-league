@@ -262,6 +262,22 @@ def publish(league: dict) -> dict:
     return out
 
 
+def set_time_zone(lg: dict, headers: dict) -> None:
+    """New imported leagues start in UTC; show kick-off times in the organizer's zone instead.
+    The update endpoint replaces the league, so every field is sent back as read."""
+    body = {
+        "sport": lg.get("sport"), "name": lg.get("name"), "subDomain": lg.get("subDomain"),
+        "alternativeSubDomains": lg.get("alternativeSubDomains") or [], "contacts": lg.get("contacts") or [],
+        "ownerId": lg.get("ownerId"), "externalId": lg.get("externalId"), "isPublished": lg.get("isPublished", True),
+        "supportedLanguages": lg.get("supportedLanguages") or [], "disableLanguageSwitcher": lg.get("disableLanguageSwitcher", False),
+        "facilityFirst": lg.get("facilityFirst", False), "timeZoneId": str(TZ),
+    }
+    try:
+        httpx.put(f"{API}/champ-leagues/{lg['id']}", json=body, headers=headers, timeout=30)
+    except httpx.HTTPError:
+        pass  # times still show, in UTC
+
+
 def find_links(league: dict, headers: dict) -> dict:
     """Where the imported league lives: the league website and the competition page."""
     try:
@@ -270,6 +286,8 @@ def find_links(league: dict, headers: dict) -> dict:
             return {}
         champs = httpx.get(f"{API}/champ-leagues/{lg['id']}/champs", headers=headers, timeout=30).json().get("items", [])
         champ = next((c for c in champs if str(c.get("externalId", "")).endswith(f"snap:{league['id']}:champ")), champs[0] if champs else None)
+        if lg.get("timeZoneId") in (None, "", "UTC"):
+            set_time_zone(lg, headers)
         links = {"leagueSite": lg.get("leagueWebsiteUrl")}
         if champ:
             cid = champ["fullUrl"].split("/champ/")[1].split("?")[0] if champ.get("fullUrl") else None
