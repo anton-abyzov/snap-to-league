@@ -27,7 +27,7 @@ Most amateur tournaments (pickup soccer, rec leagues, school intramurals, gaming
 |---|---|
 | Handwritten group board (synthetic) | 7 of 7 games, correct table, flagged a final that contradicts the table |
 | Handwritten 8-player bracket (synthetic) | 7 of 7 games, published as quarterfinals, semifinals and final |
-| Two scoresheets a week apart (synthetic) | 4 games with 16 scorers merged in 8.3 s; misspelled "Sharcs" flagged |
+| Two scoresheets a week apart (synthetic) | 4 games and 15 goals by 8 scorers merged in 8.3 s; misspelled "Sharcs" flagged |
 | Real Challonge bracket screenshot | 8 of 8 results |
 | Real start.gg pool screenshot | 20 of 22 results (2 cut off or misread) |
 | Real Score7 group and knockout screenshots | 9 of 9 results |

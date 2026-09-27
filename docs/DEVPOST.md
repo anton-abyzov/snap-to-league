@@ -34,7 +34,7 @@ Snap one or more photos of a whiteboard, scoresheet or bracket, or screenshots f
 ## Accomplishments
 
 - 37 of 39 results read correctly from real Challonge, start.gg and Score7 screenshots; 30 of 30 standings rows from start.gg and LeagueRepublic.
-- Two scoresheets taken a week apart merge into one league with 16 scorers in 8 seconds.
+- Two scoresheets taken a week apart merge into one league with 15 goals by 8 scorers in 8 seconds.
 - A photo becomes a real EasyChamp league site with the right quarterfinal, semifinal and final.
 
 ## What we learned
