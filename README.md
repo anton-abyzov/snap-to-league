@@ -1,71 +1,104 @@
 # Snap to League
 
-Take a phone photo of a tournament whiteboard, a paper scoresheet or a bracket. A frontier vision model reads every match, the app checks the numbers, and you get an editable standings table and a shareable league board that can be published to [EasyChamp](https://easychamp.com).
+**Photo of the board. Live league in seconds.**
 
-Built at ShellHacks 2026.
+Take a phone photo of a tournament whiteboard, a paper scoresheet, a bracket, or a screenshot from another app. Snap to League reads every result, checks the numbers, lets you fix anything it doubted, and publishes a live league with standings or a bracket on [EasyChamp](https://easychamp.com). The next photo updates the same league.
+
+Live: **https://snap.easychamp.com** · Built at ShellHacks 2026.
 
 ## Why
 
-Most small tournaments still run on whiteboards, paper and group chats. Moving them onto a league platform means retyping every team and result, so organizers never switch. Snap to League turns that setup into one photo.
+Most amateur tournaments (pickup soccer, rec leagues, school intramurals, gaming nights, bar leagues) still run on whiteboards, paper and group chats. League platforms only import CSV files, so organizers would have to retype everything, and they don't. We found no product that turns a photo into a live league page ([competitors](docs/MARKETING.md#competitors)).
+
+## What it does
+
+- **Several photos at once.** Every page of a tournament, read in parallel, with upload and reading progress per photo.
+- **Two AI readers.** Gemini 3.8 Flash reads each photo through Google's Gemini API; GPT-6 Astra reads it at the same time. Where they disagree on a result, the organizer gets a card to check. The organizer can pick the main reader, including open-weight models (GLM 5.3 Flash, Qwen 3.8 Flash).
+- **Checks that never trust the model.** The standings are recomputed from the results. Duplicate team spellings, games marked played without a score, a final that contradicts the table, and photos that disagree on a result are all flagged.
+- **Merging and updates.** The same team written two ways becomes one team. Scorers are attached to their games. A newer photo of the same board updates the league and shows exactly what changed (added, result, changed from 4-2 to 4-3).
+- **Any format it sees.** Group tables, knockout brackets (quarterfinal to final), scorers from scoresheets, standings-only screenshots, and screenshots from Challonge, start.gg, Score7 and LeagueRepublic.
+- **Publish to EasyChamp.** A real league site with standings or a bracket, rosters and goal events, created through EasyChamp's league import. Sport or game is detected (soccer, futsal, Smash, FIFA...).
+- **Announcer.** A league board left on a TV reads every new result out loud with an ElevenLabs voice.
+- **Guest mode.** No sign-up to read, review and share a board. Past imports are kept on the device; the stats page shows every import.
+
+## Results
+
+| Test | Result |
+|---|---|
+| Handwritten group board (synthetic) | 7 of 7 games, correct table, flagged a final that contradicts the table |
+| Handwritten 8-player bracket (synthetic) | 7 of 7 games, published as quarterfinals, semifinals and final |
+| Two scoresheets a week apart (synthetic) | 4 games with 16 scorers merged in 8.3 s; misspelled "Sharcs" flagged |
+| Real Challonge bracket screenshot | 8 of 8 results |
+| Real start.gg pool screenshot | 20 of 22 results (2 cut off or misread) |
+| Real Score7 group and knockout screenshots | 9 of 9 results |
+| Real start.gg and LeagueRepublic standings | 30 of 30 rows, in order |
+
+Ground truth for the real screenshots was read from each page's HTML, not the image (`tests/fixtures/external/*.truth.json`, `scripts/eval_external.py`). Model comparison: `scripts/bench.py`, table in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#models-and-cost).
 
 ## How it works
 
+```mermaid
+flowchart LR
+  P[Phone photos] --> J[/api/jobs/]
+  J --> G[Gemini 3.8 Flash<br/>Gemini API]
+  J --> A[GPT-6 Astra<br/>second opinion]
+  G --> V[Validate JSON<br/>Pydantic]
+  A --> D[Disagreements]
+  V --> M[Merge photos<br/>names, scorers, conflicts]
+  D --> M
+  M --> C[Checks<br/>recompute table]
+  C --> R[Review screen]
+  R --> B[League board]
+  R --> E[EasyChamp<br/>POST /import/league]
+  B --> S[ElevenLabs announcer]
 ```
-phone photo
-  -> GPT-6 Astra (via Codex CLI) or Gemini: teams, matches, scores, times, fields, doubts
-  -> schema validation (Pydantic)
-  -> checks: recompute the table, compare with the model's own table,
-             near-duplicate team names, played games without a score,
-             a final that contradicts the group table
-  -> review screen on the phone: yellow cards for anything uncertain, every cell editable
-  -> league board page + EasyChamp POST /import/league payload
-```
 
-A second photo of the same board merges into the same league: results update by fixture, new matches are appended, and the table re-ranks.
+Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · JSON format, validation, merging: [docs/JSON.md](docs/JSON.md) · Marketing: [docs/MARKETING.md](docs/MARKETING.md)
 
-The model's standings are never trusted. The table is recomputed from the results (3 points for a win, 1 for a draw; ties by goal difference, then goals for), and any disagreement is shown to the organizer.
+## Safety
 
-## Two readers
-
-Gemini 3.8 Flash reads the photo through Google's Gemini API (`GEMINI_API_KEY`; OpenRouter is the fallback) and GPT-6 Astra reads it at the same time. Direct Gemini reads of the two sample photos took 5.2 s and 3.4 s, all results correct. Where they disagree on a result, the organizer gets a card to check that match. Both models are one setting each (`SNAP_PRIMARY_MODEL`, `SNAP_SECOND_MODEL`, any OpenRouter vision model). Without an OpenRouter key the app reads with GPT-6 Astra through the Codex CLI.
-
-## Which model reads boards best
-
-`scripts/bench.py`, each sample photo read 3 times, a read counts only when every result is right:
-
-| Model | Perfect reads | Time | Cost per photo |
-|---|---|---|---|
-| Gemini 3.8 Flash | 6 / 6 | 6-9 s | $0.005 |
-| Claude Sonnet 5 | 6 / 6 | 9-11 s | $0.018 |
-| GPT-6 Astra | 4 / 6 | 9-10 s | $0.032 |
-| GPT-6 Luna | 1 / 6 | 8 s | $0.0005 |
-| Gemini 3.5 Flash Lite | 1 / 6 | 2 s | $0.002 |
-
-Two synthetic photos only; real photos from the venue are the next test.
+- API keys live only in the server's `.env` (git-ignored). The browser never sees them; responses and logs never include them.
+- Photos must open as images (JPEG, PNG, WebP), at most 12 MB each and 10 per import.
+- Per-device limits (60 photos an hour) and a daily AI budget for the whole app; separate limits for the voice, saves and publishes.
+- Publishing to EasyChamp needs an organizer PIN. Without it, a publish is a dry run that shows the payload, so a public URL can't write to production.
+- Every EasyChamp id is namespaced (`snap:<league>:...`) and a league is reused by name, so re-publishing updates instead of duplicating.
 
 ## Run it
 
 ```bash
 uv venv .venv --python 3.12
 uv pip install --python .venv/bin/python -e '.[dev,mongo]'
+cp .env.example .env   # add GEMINI_API_KEY, OPENROUTER_API_KEY, ELEVENLABS_API_KEY as you have them
 .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8077
 ```
 
-Open `http://<laptop-ip>:8077` on a phone on the same network. "Snap the board" opens the rear camera; "Try the sample board" runs the bundled photo.
+Open `http://<laptop-ip>:8077` on a phone on the same network. With no keys at all, `SNAP_BACKEND=fixture` runs the whole flow offline on the sample photos; with no OpenRouter key, GPT-6 Astra reads through the Codex CLI on the machine.
 
-With `OPENROUTER_API_KEY` set, two readers run side by side (see above). Without it, GPT-6 Astra reads through the Codex CLI (`codex exec`), using the Codex sign-in on the machine. `SNAP_BACKEND=gemini` with `GEMINI_API_KEY` calls the Gemini API directly, and `SNAP_BACKEND=fixture` runs offline. See `.env.example` for MongoDB Atlas, ElevenLabs and EasyChamp settings.
+Public address: `edge/` is a Cloudflare Worker on `snap.easychamp.com` in front of a Cloudflare Tunnel to the app (`cloudflared tunnel --protocol http2 --url http://localhost:8077`, then set `ORIGIN` in `edge/wrangler.toml` and `wrangler deploy`).
 
 ## Tests
 
 ```bash
-.venv/bin/python -m pytest -q
+.venv/bin/python -m pytest -q                # 21 tests, no network, never publishes
+.venv/bin/python scripts/eval_external.py    # real competitor screenshots against the running app
+.venv/bin/python scripts/bench.py google/gemini-3.8-flash z-ai/glm-5.3-flash   # model comparison
 ```
 
 ## Layout
 
-- `app/extract.py` model backends and JSON parsing
-- `app/standings.py` standings and consistency checks
-- `app/easychamp.py` EasyChamp ImportLeague payload and publishing (dry run unless `EC_PUBLISH=1`)
-- `app/store.py` MongoDB Atlas or local JSON storage
-- `static/` phone review screen and league board
-- `scripts/make_board.py` generates synthetic handwritten boards for testing
+| Path | What |
+|---|---|
+| `app/extract.py` | Readers (Gemini API, OpenRouter, Codex CLI), two-reader mode, JSON parsing |
+| `app/jobs.py` | Multi-photo imports with per-photo progress |
+| `app/merge.py` | Name matching, merging photos, conflicts, review of updates |
+| `app/standings.py` | Standings and consistency checks |
+| `app/easychamp.py` | EasyChamp league import payload, rounds, rosters, goal events, links |
+| `app/safety.py` | Image checks, rate limits, daily budget, publish PIN |
+| `app/stats.py` | Import statistics |
+| `static/` | Phone app, league board with announcer, stats page (EasyChamp Matchday tokens) |
+| `edge/` | Cloudflare Worker for snap.easychamp.com |
+| `scripts/` | Sample-photo generators, model benchmark, competitor screenshot eval |
+
+## Hackathon tracks
+
+Best Overall · Microsoft "What's Missing?" (AI that fixes an outdated process, no chat window) · MLH Best Use of Gemini API · MLH Best Use of ElevenLabs · MLH Best Domain Name from GoDaddy Registry. Submission text: [docs/DEVPOST.md](docs/DEVPOST.md).
