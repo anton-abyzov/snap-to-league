@@ -120,3 +120,7 @@ details pre { max-height: 320px; overflow: auto; font: 12px/1.45 var(--mono); ba
 .bm .p.win { font-weight: 700; color: var(--accent); background: var(--accent-soft); }
 .bm .sc { font: 700 14px var(--mono); }
 .bm .when { font: 500 12px var(--mono); color: var(--muted); padding: 5px 10px; border-top: 1px dashed var(--line); }
+
+.reader { max-width: 420px; text-transform: none; letter-spacing: 0; }
+.reader select { font-size: 15px; }
+.reader .muted { font: 400 13px/1.4 var(--body); text-transform: none; letter-spacing: 0; }

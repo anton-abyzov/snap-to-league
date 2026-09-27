@@ -14,14 +14,18 @@
   </div>
 
   <section id="capture" class="hero">
-    <h1>Photo of the board. League in 30&nbsp;seconds.</h1>
-    <p class="muted">Snap a whiteboard, a paper scoresheet or a bracket. Astra reads every match, checks the maths and gives you a live standings table you can publish to EasyChamp.</p>
+    <h1>Photo of the board. League in 20&nbsp;seconds.</h1>
+    <p class="muted">Snap a whiteboard, a paper scoresheet or a bracket. AI reads every match, checks the maths and gives you a live standings table you can publish to EasyChamp.</p>
     <div class="actions">
       <label class="btn big" for="photo">Snap the board</label>
       <input id="photo" type="file" accept="image/*" capture="environment" hidden>
       <button class="btn ghost" id="sample" type="button">Sample board</button>
       <button class="btn ghost" id="sample-bracket" type="button">Sample bracket</button>
     </div>
+    <label class="field reader" id="reader-box" hidden>Photo reader
+      <select id="reader"></select>
+      <span class="muted" id="reader-note"></span>
+    </label>
     <p id="league-note" class="muted" hidden></p>
   </section>
 
@@ -88,6 +92,14 @@ const state = { league: null, snap: null, matches: [], teams: [] };
 const show = (...ids) => ["capture", "working", "review", "done"].forEach((v) => { $(v).hidden = !ids.includes(v); });
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
+  if (h.choices && h.choices.length) {
+    let saved = null;
+    try { saved = localStorage.getItem("reader"); } catch (e) { /* storage blocked */ }
+    $("reader").innerHTML = h.choices.map((c) => `<option value="${esc(c.id)}">${esc(c.label)}${c.open ? " (open model)" : ""} · about $${c.cost} a photo</option>`).join("");
+    $("reader").value = h.choices.some((c) => c.id === saved) ? saved : h.primary;
+    $("reader-note").textContent = h.second ? `${h.second} checks every read and flags disagreements.` : "";
+    $("reader-box").hidden = false;
+  }
   $("chips").innerHTML = `<span class="chip">${esc(h.readers || h.backend)}</span>`
     + `<span class="chip ${h.publish === "live" ? "" : "off"}">EasyChamp ${h.publish === "live" ? "live" : "dry run"}</span>`
     + `<span class="chip ${h.voice ? "" : "off"}">${h.voice ? "ElevenLabs voice" : "Browser voice"}</span>`;
@@ -104,8 +116,11 @@ function startClock(src, leagueMode) {
   timer = setInterval(() => { $("clock").textContent = `${Math.round((Date.now() - t0) / 1000)} s`; }, 250);
 }
 
+$("reader").addEventListener("change", () => { try { localStorage.setItem("reader", $("reader").value); } catch (e) { /* storage blocked */ } });
+
 async function submit(form, src) {
   if (state.league) form.append("leagueId", state.league.id);
+  if (!$("reader-box").hidden) form.append("reader", $("reader").value);
   startClock(src, !!state.league);
   try {
     const r = await fetch(form.has("image") ? "/api/snap" : "/api/sample", { method: "POST", body: form });

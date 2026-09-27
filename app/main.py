@@ -57,9 +57,9 @@ def merge(old: list[dict], new: list[Match]) -> tuple[list[dict], list[str]]:
     return list(by_key.values()), changes
 
 
-async def _run(path: Path, league_id: str | None) -> dict:
+async def _run(path: Path, league_id: str | None, reader: str | None = None) -> dict:
     try:
-        ex, model_rows, backend, secs, notes = await run_in_threadpool(extract, path)
+        ex, model_rows, backend, secs, notes = await run_in_threadpool(extract, path, reader)
     except ExtractError as e:
         raise HTTPException(502, f"Could not read the photo: {e}")
     table, flags = checks(ex, model_rows)
@@ -86,16 +86,18 @@ def league_page(league_id: str):
 
 @app.get("/api/health")
 def health():
-    from .extract import PRIMARY, SECOND
+    from .extract import PRIMARY, READERS, SECOND
     dual = not os.environ.get("SNAP_BACKEND") and os.environ.get("OPENROUTER_API_KEY")
     readers = f"{PRIMARY.split('/')[-1]} + {SECOND.split('/')[-1]}" if dual else os.environ.get("SNAP_BACKEND", "GPT-6 Astra")
     return {"ok": True, "backend": os.environ.get("SNAP_BACKEND", "openrouter" if dual else "astra"), "readers": readers,
+            "choices": [{"id": k, **v} for k, v in READERS.items()] if dual else [], "primary": PRIMARY,
+            "second": SECOND.split("/")[-1] if dual else None,
             "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and (os.environ.get("EC_TOKEN") or os.environ.get("EC_TOKEN_CMD")) else "dry-run",
             "voice": bool(os.environ.get("ELEVENLABS_API_KEY"))}
 
 
 @app.post("/api/snap")
-async def snap(image: UploadFile = File(...), leagueId: str | None = Form(None)):
+async def snap(image: UploadFile = File(...), leagueId: str | None = Form(None), reader: str | None = Form(None)):
     data = await image.read()
     if not data:
         raise HTTPException(400, "The photo is empty")
@@ -106,17 +108,17 @@ async def snap(image: UploadFile = File(...), leagueId: str | None = Form(None))
         suffix = ".jpg"
     path = store.images_dir() / f"{uuid.uuid4().hex[:12]}{suffix}"
     path.write_bytes(data)
-    return await _run(path, leagueId)
+    return await _run(path, leagueId, reader)
 
 
 @app.post("/api/sample")
-async def sample(leagueId: str | None = Form(None), kind: str = Form("board")):
+async def sample(leagueId: str | None = Form(None), kind: str = Form("board"), reader: str | None = Form(None)):
     src = SAMPLES.get(kind)
     if src is None:
         raise HTTPException(400, f"No sample called {kind}")
     path = store.images_dir() / f"sample-{uuid.uuid4().hex[:8]}.jpg"
     path.write_bytes(src.read_bytes())
-    return await _run(path, leagueId)
+    return await _run(path, leagueId, reader)
 
 
 @app.get("/api/images/{name}")

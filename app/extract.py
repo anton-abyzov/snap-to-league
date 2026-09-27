@@ -146,6 +146,14 @@ BACKENDS = {"astra": astra, "openrouter": openrouter, "gemini": gemini, "fixture
 
 
 PRIMARY = os.environ.get("SNAP_PRIMARY_MODEL", "google/gemini-3.8-flash")
+# Readers an organizer can pick. Open-weight models are marked; costs are per photo from scripts/bench.py.
+READERS = {
+    "google/gemini-3.8-flash": {"label": "Gemini 3.8 Flash", "open": False, "cost": 0.005},
+    "z-ai/glm-5.3-flash": {"label": "GLM 5.3 Flash", "open": True, "cost": 0.001},
+    "anthropic/claude-sonnet-5": {"label": "Claude Sonnet 5", "open": False, "cost": 0.018},
+    "openai/gpt-6-astra": {"label": "GPT-6 Astra", "open": False, "cost": 0.032},
+    "qwen/qwen3.8-flash": {"label": "Qwen 3.8 Flash", "open": True, "cost": 0.0013},
+}
 SECOND = os.environ.get("SNAP_SECOND_MODEL", "openai/gpt-6-astra")
 
 
@@ -174,7 +182,7 @@ def _read(name: str, image: Path, model: str | None = None) -> tuple[Extraction,
     return _parse(BACKENDS[name](image))
 
 
-def extract(image: Path) -> tuple[Extraction, list[Row], str, float, list[str]]:
+def extract(image: Path, reader: str | None = None) -> tuple[Extraction, list[Row], str, float, list[str]]:
     """Read the photo. Returns extraction, model table, reader name, seconds and second-reader notes.
 
     With SNAP_BACKEND unset and an OpenRouter key, the main reader and a second reader run side by side;
@@ -183,17 +191,18 @@ def extract(image: Path) -> tuple[Extraction, list[Row], str, float, list[str]]:
     """
     t0 = time.monotonic()
     chosen = os.environ.get("SNAP_BACKEND")
+    primary = reader if reader in READERS else PRIMARY
     if not chosen and os.environ.get("OPENROUTER_API_KEY"):
         from concurrent.futures import ThreadPoolExecutor
         with ThreadPoolExecutor(2) as pool:
-            main_job = pool.submit(_read, "openrouter", image, PRIMARY)
-            second_job = pool.submit(_read, "openrouter", image, SECOND) if SECOND else None
+            main_job = pool.submit(_read, "openrouter", image, primary)
+            second_job = pool.submit(_read, "openrouter", image, SECOND) if SECOND and SECOND != primary else None
             try:
                 ex, rows = main_job.result()
-                name = PRIMARY.split("/")[-1]
+                name = primary.split("/")[-1]
             except (ExtractError, ValueError, KeyError, httpx.HTTPError) as e:
                 if not second_job:
-                    raise ExtractError(f"{PRIMARY}: {e}")
+                    raise ExtractError(f"{primary}: {e}")
                 ex, rows = second_job.result()
                 return ex, rows, SECOND.split("/")[-1], round(time.monotonic() - t0, 1), []
             notes: list[str] = []
