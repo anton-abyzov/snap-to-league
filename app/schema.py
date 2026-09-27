@@ -89,6 +89,19 @@ class Row(BaseModel):
 class Extraction(BaseModel):
     competition: str = "Untitled cup"
     sport: str = "soccer"
+    table: list["Row"] = Field(default_factory=list)  # a standings table read as-is (screenshot of a league site)
+
+    @field_validator("competition", "sport", mode="before")
+    @classmethod
+    def _text(cls, v, info):
+        if v is None or not str(v).strip():
+            return "Untitled cup" if info.field_name == "competition" else "other"
+        return str(v).strip()
+
+    @field_validator("teams", "rules_notes", "uncertain", mode="before")
+    @classmethod
+    def _list(cls, v):
+        return [x for x in (v or []) if x]
     teams: list[str] = Field(default_factory=list)
     matches: list[Match] = Field(default_factory=list)
     rules_notes: list[str] = Field(default_factory=list)
@@ -111,3 +124,6 @@ class Snap(BaseModel):
     modelStandings: list[Row] = Field(default_factory=list)
     standings: list[Row] = Field(default_factory=list)
     flags: list[Flag] = Field(default_factory=list)
+
+
+Extraction.model_rebuild()

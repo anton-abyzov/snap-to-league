@@ -6,6 +6,7 @@ from the played group matches and any difference becomes a flag on the review sc
 from __future__ import annotations
 
 import difflib
+import re
 from collections import Counter
 
 from .schema import Extraction, Flag, Match, Row
@@ -47,8 +48,11 @@ def checks(ex: Extraction, model_rows: list[Row]) -> tuple[list[Row], list[Flag]
     table = compute(ex.matches, ex.teams)
 
     names = sorted({t for m in ex.matches for t in (m.home, m.away)} | set(ex.teams))
+    digits = re.compile(r"\d+")
     for i, a in enumerate(names):
         for b in names[i + 1:]:
+            if a != b and digits.sub("#", a.casefold()) == digits.sub("#", b.casefold()):
+                continue  # "Team 1" and "Team 2" are numbered, not misspelled
             if a.casefold() == b.casefold() or difflib.SequenceMatcher(None, a.casefold(), b.casefold()).ratio() >= 0.8:
                 flags.append(Flag(level="warn", message=f'"{a}" and "{b}" look like the same team', source="check"))
 

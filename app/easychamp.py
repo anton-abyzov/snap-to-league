@@ -110,7 +110,8 @@ def build_payload(league: dict) -> dict:
     lid = league["id"]
     sport = sport_kind(league.get("sport"))
     matches = [Match.model_validate(m) for m in league["matches"]]
-    names = list(dict.fromkeys(league.get("teams", []) + [t for m in matches for t in (m.home, m.away)]))
+    names = list(dict.fromkeys(league.get("teams", []) + [t for m in matches for t in (m.home, m.away)]
+                               + [r["team"] for r in league.get("table", [])]))
     team_id = {n: f"snap:{lid}:team:{slug(n)}" for n in names}
 
     def player(team: str, name: str) -> dict:
@@ -162,6 +163,12 @@ def build_payload(league: dict) -> dict:
             knockout.append(m)
 
     stages = []
+    if not matches and names:  # a standings photo: the teams arrive now, results as games are played
+        groups = {}
+        stages.append({"Id": f"snap:{lid}:stage:groups", "Name": "Group stage", "Type": "league", "Order": 1,
+                       "RoundCount": 1, "TeamCount": len(names), "GroupCount": 1,
+                       "Groups": [{"Id": f"snap:{lid}:group:a", "Name": "Group A", "TeamIds": [team_id[n] for n in names],
+                                   "FixturesCount": 0, "Fixtures": []}]})
     if groups:
         stages.append({
             "Id": f"snap:{lid}:stage:groups", "Name": "Group stage", "Type": "league", "Order": 1,

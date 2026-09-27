@@ -78,7 +78,10 @@ def _run(job: dict, paths: list[Path], league: dict | None) -> None:
         teams=combined["teams"], matches=combined["matches"],
         rules_notes=[n for _, ex, _ in read for n in ex.rules_notes],
         uncertain=list(dict.fromkeys(u for _, ex, _ in read for u in ex.uncertain)),
+        table=next((ex.table for _, ex, _ in read if ex.table), []),
     )
+    if not extraction.teams and extraction.table:
+        extraction.teams = [r.team for r in extraction.table]
     table, flags = checks(extraction, [])
     for i, _, notes in read:
         tag = f"Photo {i + 1}: " if len(paths) > 1 else ""

@@ -191,6 +191,7 @@ class LeagueIn(BaseModel):
     matches: list[Match]
     snapIds: list[str] = []
     jobId: str | None = None
+    table: list[dict] = []
 
 
 def corrections(job: dict | None, final: list[Match]) -> int:
@@ -213,7 +214,7 @@ def save_league(body: LeagueIn, request: Request):
     ex = Extraction(competition=body.name, sport=body.sport, teams=body.teams, matches=body.matches)
     table, flags = checks(ex, [])
     job = jobs.get(body.jobId) if body.jobId else None
-    doc = {"id": lid, "name": body.name, "sport": body.sport, "teams": body.teams,
+    doc = {"id": lid, "name": body.name, "sport": body.sport, "teams": body.teams, "table": body.table,
            "matches": [m.model_dump() for m in body.matches],
            "snapIds": list(dict.fromkeys(prev.get("snapIds", []) + body.snapIds)),
            "jobIds": list(dict.fromkeys(prev.get("jobIds", []) + ([body.jobId] if body.jobId else []))),

@@ -7,6 +7,7 @@ Rules:
 - Brackets: every pairing drawn in a bracket is one match. Use stage "quarterfinal", "semifinal" or "final" when the round is one of those, otherwise "knockout". Put the round label in "round" as written, or "Round 1", "Round 2" and so on counting from the left; for double elimination use "Winners R1", "Losers R2", "Grand Final". "winner" is the name written in the next round (or circled, ticked or highlighted); leave it null if the pairing has not been played.
 - Entrants can be players (gamer tags) or teams; list them all in "teams".
 - Scorers: if the record lists who scored for a match (for example "Goals: Smith 2, Lee 71'"), add them to that match's "goals" as {"player", "side": "home" or "away", "count", "minute"}. Leave "goals" empty when no scorers are written.
+- Standings only: if the photo shows a league table but no individual games, put each row in "table" as {"team", "P", "W", "D", "L", "GF", "GA", "Pts"} (use null for a column that is not shown) and leave "matches" empty.
 - The photo may be a screenshot of another app (Challonge, start.gg, a league website, a spreadsheet, a group chat); read it the same way.
 - group is the group label if the board has one (for example "A"), otherwise null.
 - when and venue are copied as written ("Sun 10am", "Field 2"), otherwise null.
@@ -15,4 +16,4 @@ Rules:
 - Do not run any commands.
 
 Answer ONLY with compact JSON (no indentation) in exactly this shape:
-{"extracted": {"competition": "...", "sport": "...", "teams": ["..."], "matches": [{"home": "...", "away": "...", "homeScore": 0, "awayScore": 0, "status": "played", "when": null, "venue": null, "stage": "group", "group": null, "round": null, "winner": null, "goals": []}], "rules_notes": ["..."], "uncertain": ["..."]}}
+{"extracted": {"competition": "...", "sport": "...", "teams": ["..."], "matches": [{"home": "...", "away": "...", "homeScore": 0, "awayScore": 0, "status": "played", "when": null, "venue": null, "stage": "group", "group": null, "round": null, "winner": null, "goals": []}], "rules_notes": ["..."], "uncertain": ["..."], "table": []}}

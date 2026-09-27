@@ -143,7 +143,7 @@ const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } },
 };
-const state = { files: [], samples: [], league: null, job: null, matches: [], teams: [] };
+const state = { files: [], samples: [], league: null, job: null, matches: [], teams: [], table: [] };
 let health = {};
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
@@ -281,7 +281,7 @@ function loadJob(job) {
       : `<div class="change muted">Nothing new on these photos.</div>`;
     $("changes-box").hidden = false;
   } else {
-    state.matches = ex.matches; state.teams = ex.teams;
+    state.matches = ex.matches; state.teams = ex.teams; state.table = ex.table || [];
     $("name").value = ex.competition;
     const sp = (ex.sport || "other").toLowerCase();
     if (![...$("sport").options].some((o) => o.value === sp)) $("sport").add(new Option(sp[0].toUpperCase() + sp.slice(1), sp), 0);
@@ -319,8 +319,9 @@ function renderMatches() {
 function renderTable() {
   const rows = computeStandings(state.matches, state.teams);
   const br = bracketHtml(state.matches);
-  $("table-title").textContent = rows.length && br ? "Table and bracket" : br ? "Bracket" : "Table";
-  $("table").innerHTML = (rows.length ? standingsTable(rows) : "") + br;
+  const read = !rows.length && !br && state.table && state.table.length;
+  $("table-title").textContent = rows.length && br ? "Table and bracket" : br ? "Bracket" : read ? "Table as read from the photo" : "Table";
+  $("table").innerHTML = (rows.length ? standingsTable(rows) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
 }
 $("matches").addEventListener("input", (e) => {
   const box = e.target.closest(".match"); const f = e.target.dataset.f;
@@ -353,7 +354,7 @@ $("publish").addEventListener("click", async () => {
   try {
     const matches = state.matches.filter((m) => m.home && m.away);
     let r = await fetch("/api/leagues", { method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, jobId: state.job?.id }) });
+      body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, jobId: state.job?.id, table: state.table || [] }) });
     if (!r.ok) throw new Error((await r.json()).detail || "Could not save the league");
     state.league = await r.json();
     r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST", headers: { "x-publish-pin": $("pin").value || "" } });

@@ -280,3 +280,21 @@ def test_rate_limit(tmp_path, monkeypatch):
     monkeypatch.setenv("SNAP_PHOTOS_PER_HOUR", "2")
     assert c.post("/api/jobs", data={"samples": "board,bracket"}).status_code == 200
     assert c.post("/api/jobs", data={"samples": "board"}).status_code == 429
+
+
+def test_null_competition_and_table_only_reads():
+    ex, _ = _parse('{"extracted": {"competition": null, "sport": null, "teams": [], "matches": [], '
+                   '"table": [{"team": "Hawks", "P": 3, "W": 2, "D": 1, "L": 0, "Pts": 7}]}}')
+    assert ex.competition == "Untitled cup" and ex.table[0].team == "Hawks"
+    with pytest.raises(ExtractError):
+        _parse('{"extracted": {"competition": "x", "matches": []}}')
+    p = easychamp.build_payload({"id": "t", "name": "x", "sport": "soccer", "teams": [], "matches": [],
+                                 "table": [{"team": "Hawks"}, {"team": "Lions"}]})
+    group = p["League"]["Champs"][0]["Stages"][0]["Groups"][0]
+    assert len(group["TeamIds"]) == 2 and group["Fixtures"] == []
+
+
+def test_numbered_team_names_are_not_flagged():
+    ex = Extraction(matches=[Match(home=f"Team Name{i}", away=f"Team Name{i + 4}") for i in range(1, 5)])
+    _, flags = checks(ex, [])
+    assert not any("look like the same team" in f.message for f in flags)

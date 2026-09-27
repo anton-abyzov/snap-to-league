@@ -19,6 +19,7 @@ import time
 from pathlib import Path
 
 import httpx
+from pydantic import ValidationError
 from PIL import Image, ImageOps
 
 from .schema import Extraction, Row
@@ -50,10 +51,13 @@ def _parse(text: str) -> tuple[Extraction, list[Row]]:
     data = json.loads(text[start:end + 1])
     if "error" in data and "extracted" not in data:
         raise ExtractError(f"model declined: {data['error']}")
-    ex = Extraction.model_validate(data.get("extracted", data))
-    if not ex.matches:
-        raise ExtractError("no matches found on the photo: " + "; ".join(ex.uncertain)[:200])
-    rows = [Row.model_validate(r) for r in data.get("standings", [])]
+    try:
+        ex = Extraction.model_validate(data.get("extracted", data))
+        rows = [Row.model_validate(r) for r in data.get("standings", []) if isinstance(r, dict)]
+    except ValidationError as e:
+        raise ExtractError(f"the read did not fit the league format: {str(e)[:200]}")
+    if not ex.matches and not ex.table:
+        raise ExtractError("no matches or table found on the photo: " + "; ".join(ex.uncertain)[:200])
     return ex, rows
 
 
