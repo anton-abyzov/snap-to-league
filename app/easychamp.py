@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os
 import re
+import time
 import shlex
 import subprocess
 from datetime import datetime, timedelta, timezone
@@ -258,7 +259,11 @@ def publish(league: dict) -> dict:
     result = r.json() if r.headers.get("content-type", "").startswith("application/json") else r.text[:500]
     out = {"mode": "live", "status": r.status_code, "result": result, "payload": payload}
     if r.status_code == 200:
-        out["links"] = find_links(league, headers)
+        for attempt in range(4):  # the new league can take a moment to appear in search
+            out["links"] = find_links(league, headers)
+            if out["links"].get("competition"):
+                break
+            time.sleep(1.5)
     return out
 
 
