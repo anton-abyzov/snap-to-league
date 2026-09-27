@@ -22,3 +22,11 @@ Screenshots were taken headless from the running app (`scripts/capture_evidence.
 | Score7 knockout, phone width | 3 results | 3 |
 | start.gg standings | 14 rows | 14, in order |
 | LeagueRepublic table | 16 rows | 16, in order |
+
+## Group stage with players
+
+| | |
+|---|---|
+| Two-group whiteboard: a table per group, scorers with minutes (Gemini read in 5.3 s) | ![](evidence/12-review-groups-desktop.jpg) |
+| GPT-6 Astra's background check agreed | ![](evidence/13-check-banner-desktop.jpg) |
+| Published: EasyChamp match page with Rivera 4' 31', Chen 18', Okafor 40' | ![](evidence/11-easychamp-match-scorers.jpg) |
