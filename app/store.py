@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -21,6 +22,13 @@ class _Files:
         p = self.dir / f"{id_}.json"
         return json.loads(p.read_text()) if p.exists() else None
 
+    def find_by_name(self, name: str) -> dict | None:
+        for p in self.dir.glob("*.json"):
+            doc = json.loads(p.read_text())
+            if doc.get("name", "").casefold() == name.casefold():
+                return doc
+        return None
+
 
 class _Mongo:
     def __init__(self, kind: str):
@@ -32,6 +40,12 @@ class _Mongo:
 
     def get(self, id_: str) -> dict | None:
         doc = self.col.find_one({"_id": id_})
+        if doc:
+            doc.pop("_id", None)
+        return doc
+
+    def find_by_name(self, name: str) -> dict | None:
+        doc = self.col.find_one({"name": {"$regex": f"^{re.escape(name)}$", "$options": "i"}})
         if doc:
             doc.pop("_id", None)
         return doc

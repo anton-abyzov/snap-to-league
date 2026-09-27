@@ -148,3 +148,17 @@ def test_bracket_rounds_named_and_ordered():
     fx = p["League"]["Champs"][0]["Stages"][0]["Groups"][0]["Fixtures"]
     assert [f["MatchDayName"] for f in fx] == ["quarterfinal"] * 4 + ["semifinal"] * 2 + ["final"]
     assert [f["Order"] for f in fx] == list(range(9, 16))
+
+
+def test_same_name_reuses_league(tmp_path, monkeypatch):
+    monkeypatch.setenv("SNAP_BACKEND", "fixture")
+    monkeypatch.setenv("SNAP_DATA", str(tmp_path))
+    import importlib
+    from app import main, store
+    importlib.reload(store)
+    importlib.reload(main)
+    c = TestClient(main.app)
+    ms = [{"home": "A", "away": "B", "homeScore": 1, "awayScore": 0, "status": "played"}]
+    a = c.post("/api/leagues", json={"name": "Night Cup", "matches": ms}).json()
+    b = c.post("/api/leagues", json={"name": "night cup", "matches": ms}).json()
+    assert a["id"] == b["id"]

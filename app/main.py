@@ -134,7 +134,9 @@ class LeagueIn(BaseModel):
 
 @app.post("/api/leagues")
 def save_league(body: LeagueIn):
-    lid = body.id or uuid.uuid4().hex[:10]
+    # same competition name means the same league, so a fresh session never publishes a twin
+    same = None if body.id else leagues.find_by_name(body.name)
+    lid = body.id or (same or {}).get("id") or uuid.uuid4().hex[:10]
     prev = leagues.get(lid) or {}
     ex = Extraction(competition=body.name, sport=body.sport, teams=body.teams, matches=body.matches)
     table, flags = checks(ex, [])
