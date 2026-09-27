@@ -298,3 +298,12 @@ def test_numbered_team_names_are_not_flagged():
     ex = Extraction(matches=[Match(home=f"Team Name{i}", away=f"Team Name{i + 4}") for i in range(1, 5)])
     _, flags = checks(ex, [])
     assert not any("look like the same team" in f.message for f in flags)
+
+
+def test_numbered_names_never_merge():
+    from app.merge import canonical_names, combine
+    m = canonical_names(["Team Name1", "Team Name2", "Lions U12", "Lions U14", "Hawks", "hawks"])
+    assert m["Team Name1"] != m["Team Name2"] and m["Lions U12"] != m["Lions U14"] and m["hawks"] == m["Hawks"]
+    c = combine([[Match(home=f"Team Name{i}", away=f"Team Name{i + 4}", homeScore=1, awayScore=0, status="played",
+                        stage="quarterfinal", round="Round 1") for i in range(1, 5)]])
+    assert len(c["matches"]) == 4

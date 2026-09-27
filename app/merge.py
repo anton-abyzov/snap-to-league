@@ -28,6 +28,8 @@ def similar(a: str, b: str) -> float:
         return 0.0
     if na == nb:
         return 1.0
+    if re.sub(r"\d+", "#", na) == re.sub(r"\d+", "#", nb) or re.sub(r"\D", "", na) != re.sub(r"\D", "", nb):
+        return 0.0  # "Team 1" and "Team 2", or "U12" and "U14", are different teams
     return difflib.SequenceMatcher(None, na, nb).ratio()
 
 
