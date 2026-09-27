@@ -4,7 +4,7 @@
 
 Snap to League imports photos of scoresheets, whiteboards and brackets, or screenshots of results. Review the extracted teams and scores, correct mistakes, then publish supported game competitions through [EasyChamp](https://easychamp.com). Placement-based contests have their own shareable Snap board.
 
-[Try the demo](https://snap.easychamp.com) · [Watch the 110-second demo](https://www.youtube.com/watch?v=KYboiI2Xmfw) · [Submission draft](docs/DEVPOST.md) · [Campaign assets and release status](docs/campaign/RELEASE.md)
+[Try the demo](https://snap.easychamp.com) · [Watch the 110-second demo](https://www.youtube.com/watch?v=-ZdivkQQo9k) · [ShellHacks submission](https://devpost.com/software/snap-to-league) · [Campaign assets and release status](docs/campaign/RELEASE.md)
 
 Built for ShellHacks 2026. **EasyChamp is a pre-existing platform**; this project adds photo import, review, reconciliation and its publishing integration. The current public demo runs through a Cloudflare Worker and a tunnel to a development Mac. Availability depends on that host and tunnel; this is a hackathon demo.
 

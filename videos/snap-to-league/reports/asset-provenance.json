@@ -23,10 +23,75 @@
     "cloned_voice": false
   },
   "footage": {
-    "source": "User-recorded ShellHacks footage, September 26\u201327, 2026",
+    "source": "User-recorded ShellHacks footage, September 26–27, 2026",
     "stock": false,
     "ai_generated": false,
-    "originals": "Private verified SanDisk archive; never committed"
+    "originals": "Private verified SanDisk archive; never committed",
+    "cutaways": [
+      {
+        "id": "recovered-9062-camera-move-v2",
+        "source_take": "IMG_9062.MOV",
+        "source_sha256": "e791a8c69d69985121b8ad4e3c76e1b239d4d64d5365c7ebf5f59d161595e574",
+        "sdr_proxy_sha256": "26be158107d2ef1fa44e51686006e07b58eff9ad0cf999a9801c0dd9c54b215a",
+        "source_in_seconds": 4.15,
+        "source_out_seconds_exclusive": 6.55,
+        "timeline": "landscape",
+        "film_in_seconds": 11,
+        "film_out_seconds_exclusive": 13.4,
+        "duration_seconds": 2.4,
+        "frame_rate": 30,
+        "frames": 72,
+        "picture": "Real camera push-in with background parallax; founder holds paper and phone.",
+        "audio": "Source muted. Existing take 9045 narration continues unchanged; this is a cutaway, not a lip-synced speaking take.",
+        "color_space": "BT.709 SDR",
+        "conversion": "Native macOS avconvert HDR-to-SDR proxy; no HDR retagging.",
+        "framing": {
+          "source_rectangle": [
+            0,
+            0,
+            1920,
+            1080
+          ],
+          "fit": "contain",
+          "landscape_box": [
+            700,
+            168,
+            1132,
+            692
+          ],
+          "limitation": "Paper edge naturally reaches the original left border late in the move; no extra crop applied."
+        },
+        "privacy": {
+          "target": "visible badge card only",
+          "method": "Tracked feathered Gaussian blur",
+          "blur_sigma_pixels": 28,
+          "mask_margin_pixels": 15,
+          "mask_feather_sigma_pixels": 3,
+          "interpolation": "Linear between 11 manually measured keyframes; card exits naturally below frame.",
+          "safe_clip_sha256": "9bb7878828e6813bf810ac8106ca413f33a11732214df2b91ea953d7ca20c498"
+        },
+        "grade": {
+          "method": "Conservative shadow and midtone curve, fixed black/white endpoints, original white balance retained.",
+          "ffmpeg_filter": "curves=master='0/0 0.04/0.065 0.10/0.18 0.25/0.40 0.50/0.63 0.75/0.83 0.92/0.95 1/1',scale=out_color_matrix=bt709:out_range=tv,format=yuv420p",
+          "no_generated_imagery": true
+        },
+        "derivative": "9062-drift-safe-graded.mp4",
+        "derivative_sha256": "6e27d005033b4582691835ea4c50163d32f0bc7b7a19c0c3f1d8ad6e631762d9",
+        "verification": {
+          "whole_clip_decode": "passed",
+          "badge_frames_inspected": 12,
+          "matched_grading_frames_inspected": 3,
+          "picture_base_boundary_times_seconds": [
+            11,
+            12.2,
+            13.366667,
+            13.4
+          ],
+          "scope": "Derived clip and editorial picture base; final v2 encode and publication require their own receipts."
+        },
+        "distribution": "Raw originals, derived footage inputs and private frame audits remain excluded from the public Git tree."
+      }
+    ]
   },
   "fonts": [
     {

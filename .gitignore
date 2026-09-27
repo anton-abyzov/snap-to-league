@@ -33,3 +33,7 @@ videos/**/.private/
 videos/**/reports/*.log
 videos/**/frame.md
 videos/**/caption-skin.json
+
+# Local render caches and pre-polish timing audit contain workstation paths.
+videos/**/editorial/*.audio-cache.json
+videos/**/reports/timeline-polish-before.json

@@ -1,12 +1,15 @@
 {
-  "input_i": "-20.59",
-  "input_tp": "-5.06",
-  "input_lra": "12.90",
-  "input_thresh": "-31.21",
-  "output_i": "-15.46",
+  "input_i": "-20.67",
+  "input_tp": "-5.09",
+  "input_lra": "11.90",
+  "input_thresh": "-31.19",
+  "output_i": "-15.37",
   "output_tp": "-1.80",
-  "output_lra": "12.20",
-  "output_thresh": "-25.89",
+  "output_lra": "11.10",
+  "output_thresh": "-25.74",
   "normalization_type": "dynamic",
-  "target_offset": "1.46"
+  "target_offset": "1.37",
+  "measurement_stage": "pre-normalization",
+  "final_method": "static-gain-and-192kHz-limiter",
+  "final_gain_db": 6.67
 }

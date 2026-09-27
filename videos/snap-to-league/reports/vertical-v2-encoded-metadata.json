@@ -1,0 +1,19 @@
+{
+  "file": "snap-to-league-vertical-v2-1080p.mp4",
+  "sha256": "3bde85ac5eb46f64d8878bb11d13dce2c01c56c615191dc6b3682f64c0e6dfd4",
+  "bytes": 26219809,
+  "durationSeconds": 36.5,
+  "loudness": {
+    "input_i": "-14.46",
+    "input_tp": "-1.81",
+    "input_lra": "8.10",
+    "input_thresh": "-25.06",
+    "output_i": "-15.25",
+    "output_tp": "-2.36",
+    "output_lra": "7.10",
+    "output_thresh": "-25.75",
+    "normalization_type": "dynamic",
+    "target_offset": "1.25"
+  },
+  "decodePassed": true
+}

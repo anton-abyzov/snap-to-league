@@ -1,37 +1,63 @@
 """Generate independent landscape and portrait HyperFrames compositions."""
 from pathlib import Path
 import json,html
-from build_edit import LAND,VERT,captions
+from build_edit import LAND,VERT,captions,chapter_dark
 
 P=Path(__file__).resolve().parents[1]
 
 def build(name,seq,dur,w,h):
  captions(name,seq)
  portrait=name=='vertical'
- scenes=[];anim=[]
+ scenes=[];anim=[];wipes=[]
  for i,s in enumerate(seq):
   start,length,a,at,pic,style,title,sub=s
-  dark=style in ('phone','end') or pic in ('group','bracket')
+  dark=chapter_dark(name,start)
   color='#FAFAFA' if dark else '#22263B'
   klass='narrow' if style in ('wide','proof') else ''
   if style=='end':klass+=' finale'
-  lines=''.join(f'<span>{html.escape(t)}</span>' for t in title.split('\n'))
+  lines=''.join(f'<span class="line-mask"><span class="title-line">{html.escape(t)}</span></span>' for t in title.split('\n'))
   label='SHELLHACKS 2026' if i<4 else ('TRY IT YOURSELF' if style=='end' else 'SNAP TO LEAGUE')
   text=f'<div class="scene-body {klass}" style="color:{color}"><div class="eyebrow">{label}</div><h1 id="title-{i}">{lines}</h1><div class="marker"><svg viewBox="0 0 300 18"><path id="mark-{i}" d="M3 11 C70 3 163 12 292 6" fill="none" stroke="#8186F1" stroke-width="11" stroke-linecap="round"/></svg></div><p class="sub">{html.escape(sub)}</p>'
   if pic in ('import','review'):
    text+='<div class="steps"><b>PHOTO</b><span>→</span><b>AI CHECK</b><span>→</span><b>YOUR REVIEW</b></div>'
   if style=='end':
-   text+='<div class="cta">TRY SNAP TO LEAGUE <span>↗</span></div><p class="provenance">Built at ShellHacks on the existing EasyChamp platform.</p>'
+   text+=f'<div class="cta"><div id="cta-fill-{i}" class="cta-fill"></div><span class="cta-label">TRY SNAP TO LEAGUE</span><span class="arrow">↗</span></div><p class="provenance">Built at ShellHacks on the existing EasyChamp platform.</p>'
   if pic=='update' and not portrait:
    text+='<p class="provenance">Built at ShellHacks: photo import + review. Pre-existing: EasyChamp publishing platform.</p>'
   if i==11 and not portrait:
    text+='<div class="voice-bars" aria-hidden="true">'+''.join(f'<i style="height:{v}px"></i>' for v in [24,48,82,58,112,80,42,64,92,48,28])+'</div>'
   text+='</div>'
+  if portrait:
+   fx,fy,fw,fh=(60,700,960,700) if style=='end' else (60,550,960,960)
+  else:
+   fx,fy,fw,fh=(566,164,1266,700) if style in ('wide','proof') else (700,168,1132,692)
+   if style=='end':fx,fy,fw,fh=(1060,180,772,660)
+  # Editorial frame only: real screens never tilt, zoom or simulate an action.
+  frame_color='#A4A7FF' if dark else '#595ECC'
+  text+=f'<div class="photo-frame" style="left:{fx}px;top:{fy}px;width:{fw}px;height:{fh}px"><svg viewBox="0 0 {fw} {fh}" preserveAspectRatio="none"><rect id="frame-{i}" x="1" y="1" width="{fw-2}" height="{fh-2}" pathLength="1" fill="none" stroke="{frame_color}" stroke-width="2"/></svg></div>'
   scenes.append(f'<section id="scene-{i}" class="clip scene" data-start="{start}" data-duration="{length}" data-track-index="2">{text}</section>')
-  # One clear entry; long holds keep proof readable. First frame retains the hook.
+  # Opaque masks avoid washed-out half-visible title lines. Captions remain still.
   if i>0:
-   anim.append(f'tl.fromTo("#title-{i} span",{{y:30,opacity:0,rotation:1.2}},{{y:0,opacity:1,rotation:0,duration:.5,stagger:.065,ease:"back.out(1.25)",immediateRender:false}},{start});')
+   anim.append(f'tl.set("#title-{i} .title-line",{{yPercent:108}},{start});')
+   anim.append(f'tl.fromTo("#title-{i} .title-line",{{yPercent:108}},{{yPercent:0,duration:.48,stagger:.055,ease:"power3.out",immediateRender:false}},{start+.10});')
+  anim.append(f'tl.set("#mark-{i}",{{strokeDasharray:310,strokeDashoffset:310}},{start});')
   anim.append(f'tl.fromTo("#mark-{i}",{{strokeDasharray:310,strokeDashoffset:310}},{{strokeDashoffset:0,duration:.5,ease:"power2.out",immediateRender:false}},{start+.15});')
+  anim.append(f'tl.set("#frame-{i}",{{strokeDasharray:1,strokeDashoffset:1}},{start});')
+  anim.append(f'tl.fromTo("#frame-{i}",{{strokeDasharray:1,strokeDashoffset:1}},{{strokeDashoffset:0,duration:.55,ease:"power2.out",autoRound:false,immediateRender:false}},{start+.12});')
+  if style=='end':
+   anim.append(f'tl.set("#scene-{i} .sub",{{y:12,opacity:0}},{start});')
+   anim.append(f'tl.fromTo("#scene-{i} .sub",{{y:12,opacity:0}},{{y:0,opacity:1,duration:.3,ease:"power2.out",immediateRender:false}},{start+.25});')
+   anim.append(f'tl.set("#cta-fill-{i}",{{scaleX:0}},{start});')
+   anim.append(f'tl.fromTo("#cta-fill-{i}",{{scaleX:0}},{{scaleX:1,duration:.3,ease:"power2.out",immediateRender:false}},{start+.45});')
+  if i==11 and not portrait:
+   # Finite decorative rhythm; not a claimed waveform or voice activity display.
+   anim.append(f'tl.fromTo("#scene-{i} .voice-bars i",{{scaleY:.45}},{{scaleY:1,duration:.38,stagger:.045,ease:"sine.inOut",repeat:9,yoyo:true,immediateRender:false}},{start+.3});')
+ transitions={7.2:.34,17.62:.42,30.15:.52} if portrait else {23.98:.34,41.69:.46,55.9:.46,76:.46,88.78:.46,104:.60}
+ for j,(cut,length) in enumerate(transitions.items()):
+  lead=min(.23,length/2);tail=length-lead;begin=cut-lead
+  wipes.append(f'<div class="clip transition" data-start="{begin:.3f}" data-duration="{length}" data-track-index="4"><div id="curtain-{j}" class="curtain"></div></div>')
+  anim.append(f'tl.fromTo("#curtain-{j}",{{xPercent:-100,skewX:-7}},{{xPercent:0,skewX:-7,duration:{lead},ease:"power2.in",immediateRender:false}},{begin});')
+  anim.append(f'tl.to("#curtain-{j}",{{xPercent:100,duration:{tail},ease:"power2.out"}},{cut});')
  caps=json.loads((P/'editorial'/f'{name}-captions.json').read_text())
  chtml=[]
  for i,c in enumerate(caps):
@@ -46,14 +72,16 @@ def build(name,seq,dur,w,h):
  .scene{pointer-events:none}.scene-body{position:absolute;left:86px;top:180px;width:550px}
  .eyebrow{font-size:23px;font-weight:700;letter-spacing:3.4px;margin-bottom:42px}
  h1{font-family:ArchivoBlack,sans-serif;font-weight:900;font-size:76px;line-height:1.04;letter-spacing:-3px;width:100%;text-wrap:balance}
- h1 span{display:block}.marker{width:260px;height:22px;margin:29px 0 30px}.marker svg{width:100%;height:100%}
+ h1 span{display:block}.line-mask{overflow:hidden;padding-bottom:.07em;margin-bottom:-.07em}.title-line{will-change:transform}.marker{width:260px;height:22px;margin:29px 0 30px}.marker svg{width:100%;height:100%}
  .sub{font-size:28px;line-height:1.38;max-width:530px;font-weight:400}
  .narrow{width:425px} .narrow h1{font-size:66px;letter-spacing:-2px}.narrow .sub{font-size:26px}
  .steps{display:flex;gap:13px;align-items:center;margin-top:35px;font-size:15px;letter-spacing:1px;white-space:nowrap}
  .steps b{border:1px solid #8186F1;padding:10px 9px;border-radius:5px}
  .provenance{font-size:20px;line-height:1.4;margin-top:38px;max-width:570px}
  .finale{width:890px;top:174px}.finale h1{font-size:97px;letter-spacing:-3px}.finale .sub{font-size:48px;font-weight:700;letter-spacing:-1px;max-width:900px}
- .cta{display:inline-flex;gap:28px;align-items:center;background:#8186F1;color:#151729;padding:20px 26px;margin-top:32px;font-size:23px;font-weight:700;border-radius:10px}.cta span{font-size:30px}
+ .cta{position:relative;display:inline-flex;gap:28px;align-items:center;color:#151729;padding:20px 26px;margin-top:32px;font-size:23px;font-weight:700;border-radius:10px;overflow:hidden}.cta-fill{position:absolute;inset:0;background:#8186F1;transform-origin:left center}.cta-label,.cta .arrow{position:relative}.cta .arrow{font-size:30px}
+ .photo-frame{position:absolute;pointer-events:none;box-shadow:0 18px 36px #10142618}.photo-frame svg{display:block;width:100%;height:100%}
+ .transition{pointer-events:none;z-index:4;overflow:hidden}.curtain{position:absolute;top:0;bottom:0;left:-16%;width:132%;background:#595ECC;border-right:8px solid #A4A7FF}
  .cap-track{inset:auto 72px 84px;height:95px;display:flex;align-items:center;justify-content:center;z-index:5}
  .caption{font-size:43px;line-height:1.16;color:#fff;background:#151729;padding:13px 27px;border-radius:12px;font-weight:700;text-align:center;max-width:1650px;box-shadow:0 4px 24px #0002}
  .brand{position:absolute;left:86px;top:55px;height:48px;display:flex;align-items:center;font-weight:700;font-size:26px;letter-spacing:.3px;color:#FAFAFA;background:#595ECC;border-radius:6px;padding:11px 17px;z-index:8}
@@ -75,7 +103,7 @@ def build(name,seq,dur,w,h):
  <div id="root" data-composition-id="{name}" data-start="0" data-duration="{dur}" data-width="{w}" data-height="{h}" data-fps="30">
  <video id="{name}-picture" class="clip base" data-start="0" data-duration="{dur}" data-track-index="0" src="assets/footage/{name}-base.mp4" muted playsinline></video>
  <audio id="{name}-final-mix" data-start="0" data-duration="{dur}" data-track-index="1" src="assets/audio/{name}-final.wav"></audio>
- {''.join(scenes)}{''.join(chtml)}
+ {''.join(scenes)}{''.join(wipes)}{''.join(chtml)}
  <div class="brand"><em>EASYCHAMP</em> SNAP TO LEAGUE</div><div class="folio">SHELLHACKS / 2026</div><div id="progress" class="progress"></div>
  </div><script>const tl=gsap.timeline({{paused:true}});{''.join(anim)}
  tl.fromTo("#progress",{{scaleX:0}},{{scaleX:1,duration:{dur},ease:"none"}},0);
