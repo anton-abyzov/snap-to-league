@@ -86,6 +86,11 @@ def league_page(league_id: str):
     return FileResponse(STATIC / "league.html")
 
 
+# changes whenever the page files change, so an open tab can tell it is out of date and reload
+VERSION = __import__("hashlib").sha1(b"".join((STATIC / f).read_bytes() for f in
+                                               ("index.html", "app.css", "standings.js", "league.html"))).hexdigest()[:10]
+
+
 @app.get("/api/health")
 def health():
     from .extract import PRIMARY, READERS, SECOND
@@ -97,7 +102,7 @@ def health():
             "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and (os.environ.get("EC_TOKEN") or os.environ.get("EC_TOKEN_CMD")) else "dry-run",
             "pin": bool(os.environ.get("SNAP_PUBLISH_PIN")), "maxPhotos": safety.MAX_PHOTOS,
             "gemini": "google" if os.environ.get("GEMINI_API_KEY") else ("openrouter" if dual else None),
-            "voice": bool(os.environ.get("ELEVENLABS_API_KEY"))}
+            "voice": bool(os.environ.get("ELEVENLABS_API_KEY")), "version": VERSION}
 
 
 @app.get("/api/stats")

@@ -197,6 +197,14 @@ fetch("/api/health").then((r) => r.json()).then((h) => {
   $("pin-box").hidden = !h.pin;
   $("pin").value = store.get("pin", "");
 }).catch(() => {});
+// A tab left open on a phone keeps old code. When the app is updated, reload it, but only while idle.
+setInterval(async () => {
+  try {
+    const h = await (await fetch("/api/health", { cache: "no-store" })).json();
+    const idle = !state.files.length && !state.samples.length && (!state.job || state.job.status !== "reading") && $("review").hidden;
+    if (health.version && h.version && h.version !== health.version && idle) location.reload();
+  } catch (e) { /* offline for a moment */ }
+}, 30000);
 $("reader").addEventListener("change", () => store.set("reader", $("reader").value));
 $("pin").addEventListener("change", () => store.set("pin", $("pin").value));
 
@@ -348,9 +356,9 @@ function startJob(attempt = 0) {
     document.querySelectorAll(".shot .bar-p").forEach((b) => { b.style.width = `${Math.round(run.upload * 100)}%`; });
   };
   const retry = () => {
-    if (attempt >= 2) return false;
+    if (attempt >= 4) return false;
     $("tray-title").textContent = "Connection dropped, trying again";
-    setTimeout(() => startJob(attempt + 1), 1500 * (attempt + 1));
+    setTimeout(() => startJob(attempt + 1), 2000 * (attempt + 1));
     return true;
   };
   xhr.onload = () => {
@@ -371,6 +379,11 @@ async function poll(id) {
     const r = await fetch(`/api/jobs/${id}`);
     const job = await r.json();
     if (id !== state.polling) return;
+    if (r.status === 404 && (state.files.length || state.samples.length)) {
+      // the app restarted and forgot this import; the photos are still on the phone, so send them again
+      state.polling = null; $("tray-title").textContent = "The app restarted, sending the photos again";
+      return setTimeout(() => startJob(1), 1500);
+    }
     if (!r.ok) return fail(job.detail || "Lost the import");
     state.job = job;
     run.done = job.photos.filter((p) => p.status === "done" || p.status === "error").length;
