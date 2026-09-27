@@ -61,7 +61,7 @@ async function load() {
     league = next; lastSeen = next;
     render();
     if (announcer && news.length) {
-      const rows = computeStandings(league.matches, league.teams);
+      const rows = computeStandings(league.matches, league.teams, league.sport);
       speak(`Result update. ${news.join(" ")} ${rows.length ? `${rows[0].team} lead with ${rows[0].Pts} points.` : ""}`);
     }
     $("error").hidden = true;
@@ -76,9 +76,9 @@ function render() {
   const results = league.matches.filter((m) => m.status === "played").map((m) => `<span><b>FT</b> ${esc(m.home)} ${m.homeScore ?? ""}-${m.awayScore ?? ""} ${esc(m.away)}</span>`);
   if (results.length) { $("ticker-track").innerHTML = results.concat(results).join(""); $("ticker").hidden = false; }
   $("updated").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
-  const rows = computeStandings(league.matches, league.teams);
+  const rows = computeStandings(league.matches, league.teams, league.sport);
   const read = !rows.length && (league.table || []).length ? league.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) })) : null;
-  $("table").innerHTML = read ? standingsTable(read) : groupTablesHtml(groupTables(league.matches, league.teams));
+  $("table").innerHTML = read ? standingsTable(read) : groupTablesHtml(groupTables(league.matches, league.teams, league.sport));
   $("table-panel").hidden = !rows.length && !read;
   const sc = topScorers(league.matches);
   $("scorers-panel").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);

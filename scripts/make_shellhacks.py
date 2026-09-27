@@ -119,8 +119,31 @@ def smash(out: Path):
     rough(img, 63, -2.8, 1.1).save(out / "shellhacks-smash.jpg", quality=72)
 
 
+def hoops(out: Path):
+    """3x3 basketball, first to 21, on a whiteboard: a basketball group stage."""
+    img = Image.new("RGB", (1500, 1150), (240, 241, 243))
+    d = ImageDraw.Draw(img)
+    t = ImageFont.truetype(MARKER, 60)
+    r = ImageFont.truetype(MARKER, 44)
+    n = ImageFont.truetype(HAND, 30)
+    d.text((60, 35), "3x3 HOOPS  -  ShellHacks Rec Center run", fill=(200, 80, 10), font=t)
+    d.text((60, 110), "first to 21 - win by 2 - FIU Rec Center court 2", fill=(110, 110, 110), font=n)
+    games = [("Big O Notation", "21", "Dunk Coders", "17"), ("Fast Breakpoints", "19", "Hoops & Loops", "21"),
+             ("Big O Notation", "21", "Hoops & Loops", "12"), ("Dunk Coders", "21", "Fast Breakpoints", "18"),
+             ("Big O Notation", "15", "Fast Breakpoints", "21"), ("Dunk Coders", "", "Hoops & Loops", "")]
+    y = 190
+    for h, hs, a, as_ in games:
+        s = f"{hs} - {as_}" if hs else "  v  "
+        d.text((80 + random.randint(-6, 6), y), f"{h}   {s}   {a}", fill=(25, 25, 35), font=r)
+        if not hs:
+            d.text((110, y + 58), "Sun 12:30am  court 2", fill=(20, 110, 60), font=n)
+        y += 130
+    rough(img, 71, -1.6).save(out / "shellhacks-hoops.jpg", quality=74)
+
+
 if __name__ == "__main__":
     folder = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     groups(folder)
     knockout(folder)
     smash(folder)
+    hoops(folder)

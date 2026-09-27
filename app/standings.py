@@ -12,9 +12,16 @@ from collections import Counter
 from .schema import Extraction, Flag, Match, Row
 
 WIN, DRAW = 3, 1
+# Points for a win, draw and loss by sport, matching EasyChamp's standings rules (basketball is FIBA's 2-1).
+POINTS = {"basketball": (2, 0, 1), "nba2k": (2, 0, 1)}
 
 
-def compute(matches: list[Match], teams: list[str] | None = None) -> list[Row]:
+def points_for(sport: str | None) -> tuple[int, int, int]:
+    return POINTS.get((sport or "").casefold(), (WIN, DRAW, 0))
+
+
+def compute(matches: list[Match], teams: list[str] | None = None, sport: str | None = None) -> list[Row]:
+    win, draw, loss = points_for(sport)
     if not any(m.stage == "group" for m in matches):
         return []  # a pure bracket has no table
     rows: dict[str, Row] = {t: Row(team=t) for t in (teams or [])}
@@ -32,12 +39,13 @@ def compute(matches: list[Match], teams: list[str] | None = None) -> list[Row]:
             row.GA += ga
             if gf > ga:
                 row.W += 1
-                row.Pts += WIN
+                row.Pts += win
             elif gf == ga:
                 row.D += 1
-                row.Pts += DRAW
+                row.Pts += draw
             else:
                 row.L += 1
+                row.Pts += loss
     for r in rows.values():
         r.GD = r.GF - r.GA
     return sorted(rows.values(), key=lambda r: (-r.Pts, -r.GD, -r.GF, r.team.casefold()))
@@ -45,7 +53,7 @@ def compute(matches: list[Match], teams: list[str] | None = None) -> list[Row]:
 
 def checks(ex: Extraction, model_rows: list[Row]) -> tuple[list[Row], list[Flag]]:
     flags: list[Flag] = [Flag(level="warn", message=u, source="astra") for u in ex.uncertain]
-    table = compute(ex.matches, ex.teams)
+    table = compute(ex.matches, ex.teams, ex.sport)
 
     names = sorted({t for m in ex.matches for t in (m.home, m.away)} | set(ex.teams))
     digits = re.compile(r"\d+")

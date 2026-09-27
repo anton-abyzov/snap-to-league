@@ -352,3 +352,10 @@ def test_numbered_semis_and_grand_final_map_to_bracket_rounds():
     p = easychamp.build_payload({"id": "k", "name": "x", "sport": "soccer", "teams": [], "matches": [m.model_dump() for m in ms]})
     fx = p["League"]["Champs"][0]["Stages"][0]["Groups"][0]["Fixtures"]
     assert [f["MatchDayName"] for f in fx] == ["semifinal", "semifinal", "final", "3rd_place_playoff"]
+
+
+def test_basketball_points_are_two_for_a_win_one_for_a_loss():
+    ms = [Match(home="A", away="B", homeScore=21, awayScore=17, status="played")]
+    t = {r.team: r.Pts for r in compute(ms, sport="basketball")}
+    assert t == {"A": 2, "B": 1}
+    assert {r.team: r.Pts for r in compute(ms)} == {"A": 3, "B": 0}

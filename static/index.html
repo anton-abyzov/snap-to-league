@@ -41,6 +41,7 @@
         <span class="muted">No board handy?</span>
         <button class="linkbtn" data-sample="shellhacks-groups" type="button">ShellHacks Break Cup</button>
         <button class="linkbtn" data-sample="shellhacks-smash" type="button">Midnight Smash</button>
+        <button class="linkbtn" data-sample="shellhacks-hoops" type="button">3x3 basketball</button>
         <button class="linkbtn" data-sample="groups" type="button">a two-group cup</button>
         <button class="linkbtn" data-sample="matchcard" type="button">a match card</button>
         <button class="linkbtn" data-sample="bracket" type="button">a bracket</button>
@@ -96,7 +97,7 @@
           <label class="field">Competition<input id="name" autocomplete="off"></label>
           <label class="field">Sport or game<select id="sport">
             <option value="soccer">Soccer</option><option value="futsal">Futsal</option><option value="basketball">Basketball</option>
-            <option value="volleyball">Volleyball</option><option value="padel">Padel</option><option value="pickleball">Pickleball</option>
+            <option value="volleyball">Volleyball</option><option value="padel">Padel</option><option value="pickleball">Pickleball</option><option value="hockey">Ice hockey</option>
             <option value="smash">Smash</option><option value="fifa">FIFA / EA FC</option><option value="esports">Other esports</option><option value="other">Other</option>
           </select></label>
         </div>
@@ -351,13 +352,13 @@ function renderMatches() {
   renderTable();
 }
 function renderTable() {
-  const rows = computeStandings(state.matches, state.teams);
+  const rows = computeStandings(state.matches, state.teams, $("sport").value);
   const br = bracketHtml(state.matches);
   const read = !rows.length && !br && state.table && state.table.length;
   $("table-title").textContent = rows.length && br ? "Table and bracket" : br ? "Bracket" : read ? "Table as read from the photo" : "Table";
   const sc = topScorers(state.matches);
   $("scorers-box").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);
-  $("table").innerHTML = (rows.length ? groupTablesHtml(groupTables(state.matches, state.teams)) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
+  $("table").innerHTML = (rows.length ? groupTablesHtml(groupTables(state.matches, state.teams, $("sport").value)) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
 }
 $("matches").addEventListener("input", (e) => {
   const box = e.target.closest(".match"); const f = e.target.dataset.f;
@@ -371,6 +372,7 @@ $("matches").addEventListener("input", (e) => {
   if (f === "stage") return renderMatches();
   renderTable();
 });
+$("sport").addEventListener("change", renderTable);
 $("matches").addEventListener("click", (e) => {
   if (e.target.dataset.del === undefined) return;
   state.matches.splice(+e.target.dataset.del, 1); renderMatches();

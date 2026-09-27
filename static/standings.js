@@ -1,6 +1,9 @@
 // Same rules as app/standings.py: group stage only, 3 for a win, 1 for a draw,
 // sorted by points, goal difference, goals for, then name.
-export function computeStandings(matches, teams = []) {
+const POINTS = { basketball: [2, 0, 1], nba2k: [2, 0, 1] }; // win, draw, loss; others 3-1-0
+
+export function computeStandings(matches, teams = [], sport = "") {
+  const [WIN, DRAW, LOSS] = POINTS[(sport || "").toLowerCase()] || [3, 1, 0];
   if (!matches.some((m) => m.stage === "group")) return [];
   const rows = new Map();
   const row = (t) => {
@@ -15,7 +18,7 @@ export function computeStandings(matches, teams = []) {
     if (m.status !== "played" || hs === null || as === null) continue;
     for (const [r, gf, ga] of [[h, hs, as], [a, as, hs]]) {
       r.P++; r.GF += gf; r.GA += ga;
-      if (gf > ga) { r.W++; r.Pts += 3; } else if (gf === ga) { r.D++; r.Pts += 1; } else { r.L++; }
+      if (gf > ga) { r.W++; r.Pts += WIN; } else if (gf === ga) { r.D++; r.Pts += DRAW; } else { r.L++; r.Pts += LOSS; }
     }
   }
   const out = [...rows.values()];
@@ -24,13 +27,13 @@ export function computeStandings(matches, teams = []) {
 }
 
 // One table per group when the board has groups ("Group A", "Group B"); otherwise one table.
-export function groupTables(matches, teams = []) {
+export function groupTables(matches, teams = [], sport = "") {
   const labels = [...new Set(matches.filter((m) => m.stage === "group").map((m) => m.group || ""))];
   if (labels.length <= 1) {
-    const rows = computeStandings(matches, teams);
+    const rows = computeStandings(matches, teams, sport);
     return rows.length ? [{ label: labels[0] ? `Group ${labels[0]}` : "", rows }] : [];
   }
-  return labels.sort().map((g) => ({ label: g ? `Group ${g}` : "Other games", rows: computeStandings(matches.filter((m) => m.stage !== "group" || (m.group || "") === g)) }));
+  return labels.sort().map((g) => ({ label: g ? `Group ${g}` : "Other games", rows: computeStandings(matches.filter((m) => m.stage !== "group" || (m.group || "") === g), [], sport) }));
 }
 
 export function groupTablesHtml(tables) {
