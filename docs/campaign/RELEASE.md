@@ -2,17 +2,17 @@
 
 **Status: Devpost submitted; polished v2 YouTube demo published and verified.** Landscape is 110 seconds, vertical is 36.5 seconds. Both final renders passed runtime/layout checks and independent visual and spoken-content review. See [quality receipt](../../videos/snap-to-league/reports/final-quality-v2.json). Devpost submission receipt: [accepted entry](../../videos/snap-to-league/reports/devpost-submission.json).
 
-Published [GitHub release](https://github.com/anton-abyzov/snap-to-league/releases/tag/snap-to-league-shellhacks-2026), backed by source commit `ec45c2e1aab59f4c2195e2469220516b6854fe73`. All six asset sizes and SHA-256 digests match the local verified files. See [release receipt](../../videos/snap-to-league/reports/github-release.json).
+Published [GitHub release](https://github.com/anton-abyzov/snap-to-league/releases/tag/snap-to-league-shellhacks-2026-v2), backed by source commit `4f31f2904a736fae0d106b3874b9eb88011c6a3b`. All six asset sizes and SHA-256 digests match the local verified files. See [release receipt](../../videos/snap-to-league/reports/github-release-v2.json).
 
 ## Deliverables
 
 | Asset | Target | Verified final file / URL |
 |---|---|---|
-| Judge / YouTube demonstration | Landscape, 105–115s target; 120s hard maximum | [snap-to-league-landscape-1080p.mp4](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-landscape-1080p.mp4) — 1920×1080, 30fps, 110s |
-| Shorts / Reels / TikTok demonstration | Independently composed vertical, 34–40s target | [snap-to-league-vertical-1080p.mp4](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-vertical-1080p.mp4) — 1080×1920, 30fps, 36.5s |
+| Judge / YouTube demonstration | Landscape, 105–115s target; 120s hard maximum | [snap-to-league-landscape-v2-1080p.mp4](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026-v2/snap-to-league-landscape-v2-1080p.mp4) — 1920×1080, 30fps, 110s |
+| Shorts / Reels / TikTok demonstration | Independently composed vertical, 34–40s target | [snap-to-league-vertical-v2-1080p.mp4](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026-v2/snap-to-league-vertical-v2-1080p.mp4) — 1080×1920, 30fps, 36.5s |
 | Captions | Match final delivered speech | [Landscape SRT](../../videos/snap-to-league/landscape.srt) · [Vertical SRT](../../videos/snap-to-league/vertical.srt) |
-| Cover image | Real paper/phone relationship, legible title | [snap-to-league-cover.png](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-cover.png) — extracted from the verified final endcard |
-| Public source | [anton-abyzov/snap-to-league](https://github.com/anton-abyzov/snap-to-league) | Merged and pushed: `ec45c2e` ([PR #1](https://github.com/anton-abyzov/snap-to-league/pull/1)) |
+| Cover image | Real paper/phone relationship, legible title | [snap-to-league-cover-v2.png](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026-v2/snap-to-league-cover-v2.png) — extracted from the verified final endcard |
+| Public source | [anton-abyzov/snap-to-league](https://github.com/anton-abyzov/snap-to-league) | V2 source pushed: `4f31f29` ([PR #3](https://github.com/anton-abyzov/snap-to-league/pull/3)); release pins the exact source commit |
 | Devpost | [ShellHacks 2026](https://shellhacks-2026.devpost.com/) | [Submitted: Snap to League](https://devpost.com/software/snap-to-league) |
 
 ## Publication ledger
@@ -28,7 +28,9 @@ Published [GitHub release](https://github.com/anton-abyzov/snap-to-league/releas
 
 AI-related YouTube content belongs on **Anton Abyzov: AI Power**, not Abyzov World. Check channel identity immediately before publishing. Suggested copy and a seven-day plan are in [CAMPAIGN.md](CAMPAIGN.md); neither constitutes a scheduled campaign.
 
-YouTube receipt: [channel, visibility and guest playback](../../videos/snap-to-league/reports/youtube-publication.json). Devpost confirmed `SUBMITTED`, 5/5 steps complete, with Anton and Anna listed. The polished video uses the same110-second script, recovered camera movement, smoother motion graphics and a revised soundtrack mix. See [motion notes](MOTION-POLISH.md).
+YouTube receipt: [channel, visibility and guest playback](../../videos/snap-to-league/reports/youtube-publication.json). Devpost confirmed `SUBMITTED`, 5/5 steps complete, with Anton and Anna listed. The polished video uses the same 110-second script, recovered camera movement, smoother motion graphics and a revised soundtrack mix. See [motion notes](MOTION-POLISH.md).
+
+Fresh anonymous [Devpost readback](../../videos/snap-to-league/reports/devpost-public-readback.json) confirms both teammates, ShellHacks submission, current v2 embed, GitHub, and real gallery/thumbnail.
 
 ## Final checks
 

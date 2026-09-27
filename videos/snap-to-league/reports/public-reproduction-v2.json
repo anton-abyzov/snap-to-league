@@ -1,0 +1,328 @@
+{
+  "checkedUtc": "2026-09-27T08:09:47.952348+00:00",
+  "source": {
+    "repository": "https://github.com/anton-abyzov/snap-to-league",
+    "commit": "4f31f2904a736fae0d106b3874b9eb88011c6a3b",
+    "method": "git archive into a newly created temporary directory; no working-tree files overlaid",
+    "project": "videos/snap-to-league"
+  },
+  "steps": [
+    {
+      "step": "npm ci",
+      "exitCode": 0,
+      "seconds": 1.0
+    },
+    {
+      "step": "setup runtime",
+      "exitCode": 0,
+      "seconds": 0.04
+    },
+    {
+      "step": "fetch-release-media",
+      "command": [
+        "python3",
+        "scripts/fetch_release_media.py"
+      ],
+      "exitCode": 0,
+      "seconds": 3.22
+    },
+    {
+      "step": "landscape-check",
+      "command": [
+        "npx",
+        "--yes",
+        "hyperframes@0.8.79",
+        "check",
+        "--json"
+      ],
+      "exitCode": 0,
+      "seconds": 38.48
+    },
+    {
+      "step": "vertical-check",
+      "command": [
+        "npx",
+        "--yes",
+        "hyperframes@0.8.79",
+        "check",
+        "portrait",
+        "--json"
+      ],
+      "exitCode": 0,
+      "seconds": 26.66
+    }
+  ],
+  "runtime": {
+    "node": "v22.20.0",
+    "npm": "10.9.3",
+    "python": "Python 3.9.21",
+    "ffmpeg": "ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers",
+    "gh": "gh version 2.88.1 (2026-03-12)"
+  },
+  "browser": {
+    "headless": true,
+    "PWDEBUG": "0",
+    "PLAYWRIGHT_HTML_OPEN": "never",
+    "implementationVerified": "HyperFrames0.8.79 runBrowserCheck calls openSettledCompositionPage, whose puppeteer launch explicitly sets headless:true. No preview or headed command invoked.",
+    "cliVersion": "0.8.79",
+    "cliSha256": "35b991b7d357159eaadc71ba689cd3ed3aa2329a4f181d91b5ac8f2dc65bb1c5"
+  },
+  "mediaRestoration": {
+    "releaseTag": "snap-to-league-shellhacks-2026-v2",
+    "zipSha256": "891f74c7f6c5211e274acc5d359d890767cf383bd16a9b3cf5b8d50d0afb0f88",
+    "verifiedMembers": {
+      "landscape-editorial.mp4": "e20f8be4e6cd532a916bb9fb76c320db7ed1c22b81ad04eec8e7dea5e188d024",
+      "vertical-editorial.mp4": "99c9fc17e58fa874d90660ffd61c0103157222532c6c6019422ae0193466527f",
+      "EDITABLE-MEDIA-LICENSE.txt": "97e008395fdae1d7f63eb417e3e4abf09e07ffa6aa7b1c42881b6212756bbc88"
+    },
+    "helper": "scripts/fetch_release_media.py",
+    "helperCompleted": true,
+    "privateOriginalsDownloaded": false,
+    "localPrivateTracksCopied": false,
+    "authenticationScope": "The shipped helper uses gh release download with local CLI configuration; independent anonymous asset HTTP checks are recorded in github-release-v2.json."
+  },
+  "restoredMedia": [
+    {
+      "path": "assets/footage/landscape-base.mp4",
+      "bytes": 30091273,
+      "sha256": "cd5b362cc8e6adb30082bcf150bac2f42231452289eca2d7979b5622d7b91a67",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1"
+          }
+        ],
+        "format": {
+          "duration": "110.000000"
+        }
+      }
+    },
+    {
+      "path": "assets/audio/landscape-final.wav",
+      "bytes": 21123150,
+      "sha256": "d0bdb31cdec136366666628c9cd8f1b530a2a3580e3f51b977213ef19296202b",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "pcm_s16le",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "110.016000"
+        }
+      }
+    },
+    {
+      "path": "assets/footage/vertical-base.mp4",
+      "bytes": 11944887,
+      "sha256": "d7c1fd2f63f057417e2c389cd340ddbd0ba6e986a8c1e23fd5f7a8c5a7a331bb",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          }
+        ],
+        "format": {
+          "duration": "36.499674"
+        }
+      }
+    },
+    {
+      "path": "assets/audio/vertical-final.wav",
+      "bytes": 7004238,
+      "sha256": "85e3f4dba5e162938d7867834b26fca1984671936e13c95560553ae00e40e0e2",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "pcm_s16le",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "36.480000"
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "aspect": "landscape",
+      "exitCode": 0,
+      "ok": true,
+      "strict": false,
+      "sections": {
+        "lint": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 76,
+          "infoCount": 0,
+          "findingCodes": {
+            "studio_missing_editable_id": 6,
+            "gsap_timeline_set_initial_hide": 1,
+            "timeline_track_too_dense": 3,
+            "nested_structure_needs_subcomposition": 66
+          }
+        },
+        "runtime": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 0,
+          "findingCodes": {}
+        },
+        "layout": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 1,
+          "duration": 110,
+          "samples": [
+            6.111,
+            18.333,
+            30.556,
+            42.778,
+            55,
+            67.222,
+            79.444,
+            91.667,
+            103.889
+          ],
+          "findingCodes": {
+            "container_overflow": 1
+          }
+        },
+        "motion": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 0,
+          "enabled": false,
+          "samples": 0,
+          "findingCodes": {}
+        },
+        "contrast": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 0,
+          "enabled": true,
+          "checked": 36,
+          "passed": 36,
+          "samples": [
+            6.111,
+            30.556,
+            55,
+            79.444,
+            103.889
+          ],
+          "findingCodes": {}
+        }
+      }
+    },
+    {
+      "aspect": "vertical",
+      "exitCode": 0,
+      "ok": true,
+      "strict": false,
+      "sections": {
+        "lint": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 34,
+          "infoCount": 0,
+          "findingCodes": {
+            "studio_missing_editable_id": 3,
+            "gsap_timeline_set_initial_hide": 1,
+            "timeline_track_too_dense": 2,
+            "nested_structure_needs_subcomposition": 28
+          }
+        },
+        "runtime": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 0,
+          "findingCodes": {}
+        },
+        "layout": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 3,
+          "duration": 36.5,
+          "samples": [
+            2.028,
+            6.083,
+            10.139,
+            14.194,
+            18.25,
+            22.306,
+            26.361,
+            30.417,
+            34.472
+          ],
+          "findingCodes": {
+            "container_overflow": 3
+          }
+        },
+        "motion": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 0,
+          "enabled": false,
+          "samples": 0,
+          "findingCodes": {}
+        },
+        "contrast": {
+          "ok": true,
+          "errorCount": 0,
+          "warningCount": 0,
+          "infoCount": 0,
+          "enabled": true,
+          "checked": 36,
+          "passed": 36,
+          "samples": [
+            2.028,
+            10.139,
+            18.25,
+            26.361,
+            34.472
+          ],
+          "findingCodes": {}
+        }
+      }
+    }
+  ],
+  "result": "Public-source reproduction smoke passed for both compositions with default non-strict checks.",
+  "limitations": [
+    "No full render was requested or performed.",
+    "Checks retained76 landscape and34 portrait lint warnings: Studio editable IDs, nested subcompositions, dense tracks and initial timeline marker-hide state. They are not zero-warning approvals.",
+    "Motion assertions were disabled; this smoke does not replace encoded-file visual/audio QA.",
+    "Layout reports only informational clipping findings for masked motion; no layout/runtime errors or warnings."
+  ],
+  "scope": "Only temporary checkout/runtime/media plus new verification receipts were written; live composition and media files were not modified."
+}

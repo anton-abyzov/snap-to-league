@@ -1,0 +1,70 @@
+{
+  "checkedUtc": "2026-09-27T08:04:40.997567+00:00",
+  "url": "https://devpost.com/software/snap-to-league",
+  "httpStatus": 200,
+  "documentTitle": "Snap to League | Devpost",
+  "projectTitle": "Snap to League",
+  "method": {
+    "browser": "Chromium",
+    "headless": true,
+    "context": "Fresh anonymous context without saved login state",
+    "accountOrSubmissionWrites": false
+  },
+  "video": {
+    "expectedId": "-ZdivkQQo9k",
+    "observedEmbedIds": [
+      "-ZdivkQQo9k"
+    ],
+    "embedUrl": "https://www.youtube.com/embed/-ZdivkQQo9k",
+    "embedTitle": "Snap to League — Paper Results to Live Competitions | ShellHacks 2026",
+    "submissionHistoryMatches": true,
+    "scope": "Verified Devpost embed and submission-history references; this receipt is not a separate YouTube playback audit."
+  },
+  "creators": [
+    {
+      "displayName": "Anton Abyzov",
+      "profileUrl": "https://devpost.com/anton-abyzov"
+    },
+    {
+      "displayName": "Анна Абызова",
+      "profileUrl": "https://devpost.com/abyzovann"
+    }
+  ],
+  "teamText": "Anton Abyzov and Anna Abyzova",
+  "repositoryUrl": "https://github.com/anton-abyzov/snap-to-league",
+  "demoUrl": "https://snap.easychamp.com/",
+  "submission": {
+    "visibleLabel": "SUBMITTED TO",
+    "hackathonTitle": "ShellHacks 2026",
+    "hackathonUrl": "https://shellhacks-2026.devpost.com/",
+    "submissionHistoryVisible": true
+  },
+  "gallery": {
+    "imageUrl": "https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/005/399/398/datas/gallery.jpg",
+    "alt": "Snap to League – screenshot 1",
+    "width": 806,
+    "height": 504,
+    "loaded": true,
+    "caption": "Real Gemini extraction and editable review — demo data.",
+    "visuallyVerified": "Actual matches, standings and editable review controls with labeled demo data."
+  },
+  "openGraphImage": {
+    "url": "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/005/399/372/datas/medium.png",
+    "httpStatus": 200,
+    "contentType": "image/png",
+    "width": 333,
+    "height": 222,
+    "loaded": true,
+    "placeholder": false,
+    "visuallyVerified": "Actual Snap to League application screenshot."
+  },
+  "privateEvidence": {
+    "pageScreenshot": "final-v2.png",
+    "pageScreenshotSha256": "959b2c80afce7f9c4097efb247d624cbf3013ba19b7107c23beb0ac989c8fbd6",
+    "galleryScreenshot": "final-v2-gallery.png",
+    "thumbnailScreenshot": "final-v2-og-image.png",
+    "screenshotsCommitted": false
+  },
+  "result": "All requested public-page readback checks passed.",
+  "redaction": "Only project facts and canonical public URLs retained; no cookies, auth state, tracking query strings, emails or private filesystem paths."
+}
