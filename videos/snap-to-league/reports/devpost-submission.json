@@ -1,0 +1,19 @@
+{
+  "state": "SUBMITTED",
+  "url": "https://devpost.com/software/snap-to-league",
+  "hackathon": "ShellHacks 2026",
+  "submissionId": 1199516,
+  "team": [
+    "Anton Abyzov",
+    "Anna Abyzova"
+  ],
+  "verifiedAt": "2026-09-27T07:51:43.274164+00:00",
+  "confirmation": "Project submitted! Continue to edit your project until the hackathon deadline: September 27, 2026 at 11:00am EDT.",
+  "repository": "https://github.com/anton-abyzov/snap-to-league",
+  "video": "https://www.youtube.com/watch?v=-ZdivkQQo9k",
+  "verification": "Authenticated Devpost success banner and published project page; team and repository readback.",
+  "thumbnail": "Real Snap bracket screenshot; native browser upload visually verified",
+  "anonymousVerification": "HTTP200, both teammates, GitHub link and YouTube iframe verified in fresh headless Chromium context",
+  "revision": "v2",
+  "gallery": "One real extraction/review screenshot, explicitly captioned demo data."
+}

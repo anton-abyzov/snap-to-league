@@ -45,6 +45,10 @@ VERT=[
  (30.15,6.35,None,0,'9051','end','PLAY THE GAME.\nKEEP THE STORY.','snap.easychamp.com'),
 ]
 
+def chapter_dark(name,start):
+ """Editorial chapter color is independent of the real picture's source."""
+ return start>=17.62 if name=='vertical' else (55.9<=start<76 or start>=104)
+
 def command(args):
  p=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
  if p.returncode:raise RuntimeError(' '.join(map(str,args[:7]))+'\n'+p.stderr[-5000:])
@@ -78,7 +82,7 @@ def picture(job):
  W,H=(1920,1080) if name=='landscape' else (1080,1920)
  # 30fps boundaries are consistently rounded, preventing cumulative AV drift.
  n=round((t+dur)*30)-round(t*30); seconds=n/30
- dark=style in ('phone','end') or pic in ('group','bracket')
+ dark=chapter_dark(name,t)
  bg='0x191C31' if dark else '0xF6F6FA'
  if name=='landscape':
   box=(700,168,1132,692) if style not in ('wide','proof') else (566,164,1266,700)
@@ -87,9 +91,11 @@ def picture(job):
   box=(60,550,960,960)
   if style=='end':box=(60,700,960,700)
  src,ss,still,crop=source_info(s)
+ insert=F/'9062-drift-safe-graded.mp4' if name=='landscape' and i==3 else None
+ insert_info=None if insert is None else {'source':str(insert),'mtime_ns':insert.stat().st_mtime_ns,'size':insert.stat().st_size,'sha256':hashlib.sha256(insert.read_bytes()).hexdigest(),'duration':2.4,'crop':None}
  out=E/f'{name}-{i:02d}.mp4'
  cache=out.with_suffix('.cache.json')
- signature=hashlib.sha256(json.dumps({'source':str(src),'mtime_ns':src.stat().st_mtime_ns,'size':src.stat().st_size,'start':ss,'crop':crop,'box':box,'scene':s,'aspect':name,'recipe':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},sort_keys=True).encode()).hexdigest()
+ signature=hashlib.sha256(json.dumps({'source':str(src),'mtime_ns':src.stat().st_mtime_ns,'size':src.stat().st_size,'start':ss,'crop':crop,'box':box,'scene':s,'aspect':name,'insert':insert_info,'recipe':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},sort_keys=True).encode()).hexdigest()
  if out.exists() and cache.exists() and json.loads(cache.read_text()).get('signature')==signature:return str(out)
  args=['ffmpeg','-y','-v','error','-filter_complex_threads','2']
  if still:args+=['-loop','1']
@@ -115,8 +121,13 @@ def picture(job):
  if name=='landscape' and i==0:
   args+=['-ss','57.16','-i',str(F/'9049-sdr.mp4')]
   filt=f'[0:v]{chain}[shot];[1:v][shot]overlay={x}:{y}:shortest=1[first];[2:v]crop=1560:950:360:0,scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg},setsar=1,fps=30,setpts=PTS-STARTPTS[proof];[first][proof]overlay={x}:{y}:enable=gte(t\\,1):shortest=1,format=yuv420p[v]'
+ if insert is not None:
+  # The silent real camera move covers film 11.0-13.4; paper and voice keep their timing.
+  # Contain the full frame so the face and both props survive; badge blur is baked into the asset.
+  args+=['-i',str(insert)]
+  filt=f'[0:v]{chain}[shot];[1:v][shot]overlay={x}:{y}:shortest=1[paper];[2:v]scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg},setsar=1,fps=30,trim=duration=2.4,setpts=PTS-STARTPTS[drift];[paper][drift]overlay={x}:{y}:enable=lt(t\\,2.4):eof_action=pass:repeatlast=0,format=yuv420p[v]'
  args+=['-filter_complex',filt,'-map','[v]','-an','-frames:v',str(n),'-c:v','libx264','-preset','fast','-crf','17','-threads','4','-color_primaries','bt709','-color_trc','bt709','-colorspace','bt709',str(out)]
- command(args);cache.write_text(json.dumps({'signature':signature})+'\n');print(out.name,flush=True);return str(out)
+ command(args);cache.write_text(json.dumps({'signature':signature,'insert':insert_info})+'\n');print(out.name,flush=True);return str(out)
 
 def words(s):
  t,dur,a,at,*_=s
@@ -135,22 +146,64 @@ def words(s):
  d=json.loads((TRANS/f'139APPLE_IMG_{a}-scribe-v2.json').read_text())
  return [{'text':w['text'],'start':max(t,t+w['start']-at),'end':min(t+dur,t+w['end']-at)} for w in d['words'] if w['type']=='word' and w['start']>=at-.01 and w['end']<=at+dur+.01]
 
+def _audio_sha256(path):
+ import hashlib
+ digest=hashlib.sha256()
+ with Path(path).open('rb') as source:
+  for block in iter(lambda:source.read(1024*1024),b''):digest.update(block)
+ return digest.hexdigest()
+
+def _audio_bed_envelope(name):
+ # dB ramps affect music only; narration and caption positions stay fixed.
+ windows={
+  'landscape':[(42,49,1.5,.4),(50,55.5,1,.4),
+               (83.78,88.78,-.5,.4),(98.2,108,2,.4)],
+  'vertical':[(15.25,17.5,-1,.25),(24.7,26.3,-1.5,.25),(30.3,34.5,1.5,.25)],
+ }[name]
+ curves=[]
+ for start,end,gain,ramp in windows:
+  curves.append(f'if(lt(t,{start}),0,if(lt(t,{start+ramp}),{gain}*(t-{start})/{ramp},if(lt(t,{end-ramp}),{gain},if(lt(t,{end}),{gain}*({end}-t)/{ramp},0))))')
+ return "volume='pow(10,("+'+'.join(curves)+")/20)':eval=frame"
+
 def make_audio(name,seq,total):
- tracks=[]
+ import hashlib,math
+ tracks=[];source_hashes={}
+ ffmpeg_version=command(['ffmpeg','-version']).splitlines()[0]
  for i,s in enumerate(seq):
   t,dur,a,at,*_=s
   if a=='9056':dur=min(dur,3.15)
   if not a:continue
   out=E/f'{name}-voice-{i:02d}.wav';tracks.append((out,t))
-  if out.exists():continue
   syn=a.startswith('bridge');src=A/f'{a}.mp3' if syn else F/f'{a}-sdr.mp4'
   ss=0 if syn else at-OFF.get(a,0)
   # Minimal noise reduction for venue speech; retain real in-product audio.
-  filters='highpass=f=85,lowpass=f=11000,'
+  filters=f'atrim=duration={dur},asetpts=PTS-STARTPTS,highpass=f=85,lowpass=f=11000,'
   if not syn:filters+='afftdn=nf=-30:nr=7,'
   filters+='loudnorm=I=-17:TP=-2:LRA=9,aresample=48000,afade=t=in:d=0.008'
   if syn:filters+=',adelay=250|250'
-  command(['ffmpeg','-y','-v','error','-ss',str(ss),'-i',str(src),'-t',str(dur),'-af',filters,'-ar','48000','-ac','2',str(out)])
+  # Bound the existing 250ms bridge delay without shifting scene/caption timing.
+  filters+=f',atrim=duration={dur}'
+  if src not in source_hashes:source_hashes[src]=_audio_sha256(src)
+  recipe={'source_sha256':source_hashes[src],'source_start':ss,'duration':dur,
+          'filters':filters,'tail_fade_seconds':.02,'tail_method':'measured-second-pass',
+          'sample_rate':48000,'channels':2,'ffmpeg':ffmpeg_version}
+  signature=hashlib.sha256(json.dumps(recipe,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+  cache=out.with_suffix('.audio-cache.json')
+  if out.exists() and cache.exists():
+   try:
+    saved=json.loads(cache.read_text())
+    if saved.get('signature')==signature and saved.get('output_sha256')==_audio_sha256(out):continue
+   except (OSError,ValueError):pass
+  # Fade the measured processed fragment, rather than a scene's padded duration.
+  # A second pass avoids reverse/PTS behavior silencing delayed synthetic speech.
+  working=out.with_name(out.stem+'.unfaded.wav')
+  command(['ffmpeg','-y','-v','error','-ss',str(ss),'-i',str(src),'-t',str(dur),'-af',filters,'-ar','48000','-ac','2',str(working)])
+  length=float(command(['ffprobe','-v','error','-show_entries','format=duration','-of','default=nw=1:nk=1',str(working)]))
+  if length<=0:raise RuntimeError(f'Empty speech fragment: {out.name}')
+  tail=f'afade=t=out:st={max(0,length-.02):.6f}:d=0.02'
+  command(['ffmpeg','-y','-v','error','-i',str(working),'-af',tail,'-ar','48000','-ac','2',str(out)])
+  working.unlink()
+  cache.write_text(json.dumps({'signature':signature,'recipe':recipe,'output_sha256':_audio_sha256(out)},indent=2)+'\n')
  args=['ffmpeg','-y','-v','error','-filter_complex_threads','2']
  for f,_ in tracks:args+=['-i',str(f)]
  fl=[]
@@ -159,13 +212,22 @@ def make_audio(name,seq,total):
  voice=A/f'{name}-voice.wav'
  command(args+['-filter_complex',';'.join(fl),'-map','[voice]','-ar','48000','-ac','2',str(voice)])
  # Licensed bed, stable instrumental section. Static spectral carve plus speech-triggered duck.
- # A true-peak-safe integrated normalization happens in a measured second pass.
+ # Measured static gain preserves bed envelopes; an oversampled limiter catches peaks.
  mix=A/f'{name}-mix-pre.wav'
- fl=f'[0:a]asplit=2[v][sc];[1:a]atrim=start=32:duration={total},asetpts=PTS-STARTPTS,highpass=f=50,equalizer=f=1800:t=q:w=0.7:g=-5,equalizer=f=350:t=q:w=1:g=-2,volume=0.13,afade=t=in:d=0.5,afade=t=out:st={total-2}:d=2[bed];[bed][sc]sidechaincompress=threshold=0.015:ratio=10:attack=10:release=450:makeup=1[duck];[v][duck]amix=inputs=2:normalize=0:duration=first,acompressor=threshold=0.18:ratio=3:attack=3:release=100:knee=2.8:makeup=1[m]'
+ envelope=_audio_bed_envelope(name)
+ fl=f'[0:a]asplit=2[v][sc];[1:a]atrim=start=32:duration={total},asetpts=PTS-STARTPTS,highpass=f=50,equalizer=f=1800:t=q:w=0.7:g=-5,equalizer=f=350:t=q:w=1:g=-2,volume=0.13,{envelope},afade=t=in:d=0.5,afade=t=out:st={total-2}:d=2[bed];[bed][sc]sidechaincompress=threshold=0.015:ratio=10:attack=10:release=650:makeup=1[duck];[v][duck]amix=inputs=2:normalize=0:duration=first,acompressor=threshold=0.18:ratio=3:attack=3:release=100:knee=2.8:makeup=1[m]'
  command(['ffmpeg','-y','-v','error','-i',str(voice),'-i',str(A/'deep-urban.mp3'),'-filter_complex',fl,'-map','[m]','-ar','48000','-ac','2',str(mix)])
  args=['ffmpeg','-hide_banner','-i',str(mix),'-af','loudnorm=I=-14:TP=-1.8:LRA=20:print_format=json','-f','null','-']
- r=subprocess.run(args,capture_output=True,text=True);j=json.JSONDecoder().raw_decode(r.stderr[r.stderr.rfind('{'):])[0];(P/'reports'/f'{name}-mix-measurement.json').write_text(json.dumps(j,indent=2))
- norm='loudnorm=I=-14:TP=-1.8:LRA=20:linear=true:'+':'.join(f'{a}={j[b]}' for a,b in [('measured_I','input_i'),('measured_TP','input_tp'),('measured_LRA','input_lra'),('measured_thresh','input_thresh'),('offset','target_offset')])
+ r=subprocess.run(args,capture_output=True,text=True)
+ if r.returncode:raise RuntimeError(f'Audio measurement failed: {name}')
+ j=json.JSONDecoder().raw_decode(r.stderr[r.stderr.rfind('{'):])[0]
+ gain_db=-14-float(j['input_i'])
+ if not math.isfinite(gain_db):raise RuntimeError(f'Non-finite audio loudness: {name}')
+ j.update(measurement_stage='pre-normalization',final_method='static-gain-and-192kHz-limiter',final_gain_db=round(gain_db,3))
+ (P/'reports'/f'{name}-mix-measurement.json').write_text(json.dumps(j,indent=2))
+ # Dynamic loudnorm fallback can undo deliberate bed reductions in speech gaps.
+ # Compensated limiter latency retains original narration/caption synchronization.
+ norm=f'volume={gain_db:.3f}dB,aresample=192000,alimiter=limit=0.794328:attack=5:release=100:level=false:latency=true,aresample=48000'
  command(['ffmpeg','-y','-v','error','-i',str(mix),'-af',norm,'-ar','48000','-ac','2',str(A/f'{name}-final.wav')])
 
 def captions(name,seq):

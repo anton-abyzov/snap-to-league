@@ -1,0 +1,21 @@
+{
+  "file": "snap-to-league-landscape-v2-1080p.mp4",
+  "sha256": "4826cdff2a7295fc66124a49120e746c8c36e5cc041ce7ae72ea7da641799bc8",
+  "bytes": 66706022,
+  "durationSeconds": 110.0,
+  "width": 1920,
+  "height": 1080,
+  "loudness": {
+    "input_i": "-14.43",
+    "input_tp": "-1.71",
+    "input_lra": "11.60",
+    "input_thresh": "-24.89",
+    "output_i": "-15.23",
+    "output_tp": "-1.98",
+    "output_lra": "11.20",
+    "output_thresh": "-25.58",
+    "normalization_type": "dynamic",
+    "target_offset": "1.23"
+  },
+  "decodePassed": true
+}

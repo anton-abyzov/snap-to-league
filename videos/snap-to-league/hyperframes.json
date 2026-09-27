@@ -15,6 +15,16 @@
       "name": "marker-highlight",
       "type": "hyperframes:component",
       "target": "compositions/components/marker-highlight.html"
+    },
+    {
+      "name": "directional-wipe",
+      "type": "hyperframes:component",
+      "target": "compositions/components/directional-wipe.html"
+    },
+    {
+      "name": "caption-clip-wipe",
+      "type": "hyperframes:component",
+      "target": "compositions/components/caption-clip-wipe.html"
     }
   ]
 }

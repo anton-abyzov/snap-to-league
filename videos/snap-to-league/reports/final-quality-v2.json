@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "revision": "v2",
+  "devpostUrl": "https://devpost.com/software/snap-to-league",
+  "authoring": "HyperFrames 0.8.79 and GSAP 3.15.0",
+  "motionSkill": "anton-abyzov/vskill/motion-graphics-promo 1.1.0",
+  "landscape": {
+    "file": "snap-to-league-landscape-v2-1080p.mp4",
+    "sha256": "4826cdff2a7295fc66124a49120e746c8c36e5cc041ce7ae72ea7da641799bc8",
+    "bytes": 66706022,
+    "durationSeconds": 110.0,
+    "decodePassed": true,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "loudnessLUFS": -14.43,
+    "truePeakDBTP": -1.71,
+    "loudnessRangeLU": 11.6,
+    "hyperframesCheckPassed": true,
+    "runtimeErrors": 0,
+    "layoutErrors": 0,
+    "contrastWarnings": 0,
+    "captions": "unchanged from reviewed v1; 41 landscape and18portrait cues",
+    "audioReview": "Source speech retained, both synthetic bridges and actual in-product readout verified; removed winner sentence absent."
+  },
+  "vertical": {
+    "file": "snap-to-league-vertical-v2-1080p.mp4",
+    "sha256": "3bde85ac5eb46f64d8878bb11d13dce2c01c56c615191dc6b3682f64c0e6dfd4",
+    "bytes": 26219809,
+    "durationSeconds": 36.5,
+    "decodePassed": true,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "loudnessLUFS": -14.46,
+    "truePeakDBTP": -1.81,
+    "loudnessRangeLU": 8.1,
+    "hyperframesCheckPassed": true,
+    "runtimeErrors": 0,
+    "layoutErrors": 0,
+    "contrastWarnings": 0,
+    "captions": "unchanged from reviewed v1; 41 landscape and18portrait cues",
+    "audioReview": "Source speech retained, both synthetic bridges and actual in-product readout verified; removed winner sentence absent."
+  },
+  "verifiedAt": "2026-09-27T07:58:00.315618+00:00",
+  "independentVisualReview": {
+    "status": "passed",
+    "scope": "All 26 scene starts at six temporal samples each; full-resolution camera privacy, captions, light/dark contrast, live proof and both CTAs.",
+    "highFindings": 0,
+    "criticalFindings": 0,
+    "minorNote": "Portrait CTA lower edge meets picture border without text occlusion."
+  }
+}

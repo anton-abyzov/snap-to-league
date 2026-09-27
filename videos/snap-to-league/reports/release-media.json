@@ -1,10 +1,10 @@
 {
-  "tag": "snap-to-league-shellhacks-2026",
+  "tag": "snap-to-league-shellhacks-2026-v2",
   "repository": "anton-abyzov/snap-to-league",
-  "zip_sha256": "b7517e756309efba1c9d079b7f881d6ef0bb52c9c193b584311f37970ac79d5e",
+  "zip_sha256": "891f74c7f6c5211e274acc5d359d890767cf383bd16a9b3cf5b8d50d0afb0f88",
   "members": {
-    "landscape-editorial.mp4": "22b077bb84dbfdc9b11150aebb8b02ebfefa309a8e38d4333e4cbd4e886d4088",
-    "vertical-editorial.mp4": "40c677b19a3ab8c5f120e3effa1a0e21eef2a9f00cce723ea0dfcae86c6be2dc",
+    "landscape-editorial.mp4": "e20f8be4e6cd532a916bb9fb76c320db7ed1c22b81ad04eec8e7dea5e188d024",
+    "vertical-editorial.mp4": "99c9fc17e58fa874d90660ffd61c0103157222532c6c6019422ae0193466527f",
     "EDITABLE-MEDIA-LICENSE.txt": "97e008395fdae1d7f63eb417e3e4abf09e07ffa6aa7b1c42881b6212756bbc88"
   }
 }

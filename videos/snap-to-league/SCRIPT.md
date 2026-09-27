@@ -9,7 +9,8 @@ Registration eligibility: user confirmed registered and eligible; no further reg
 | 00.00–02.40 | 2.40 | 9043 00.80–03.20 | Anton's genuine World Cup Miami line. Start with his face/paper, caption hook `YOUR LEAGUE. STILL ON PAPER?`; thumbnail result appears as a brief inset by 2s, not a fabricated transition. |
 | 02.40–07.80 | 5.40 | 9043 05.80–11.20 | Genuine office cups, school leagues and hackathon examples. Necessary context: subsequent “they” refers to local/amateur play, not FIFA World Cup scorekeeping. Cut “Everybody” before this clip. |
 | 07.80–11.00 | 3.20 | 9045 30.14–33.34 | Genuine paper-results pain. Cut to paper filling frame. Caption the actual spoken phrase, no population statistics. |
-| 11.00–19.98 | 8.98 | 9045 35.52–44.50 | Genuine inspiration + invitation to look. Use a tighter handwriting cutaway while keeping Anton audio; the original wide presenter framing exposed the badge. Title `Snap to League` settles once. |
+| 11.00–13.40 | 2.40 | 9045 35.52–37.92 audio; 9062 04.15–06.55 picture | Recovered real camera push-in with background parallax, paper and phone. Take 9062 is silent; continuous take 9045 narration remains underneath. Full frame is contained, the visible badge is tracked and blurred, and a conservative shadow lift improves readability. Title `Snap to League` settles once. |
+| 13.40–19.98 | 6.58 | 9045 37.92–44.50 audio; continuing 9051 handwriting picture | Return to the existing handwriting cutaway on its original timeline. Genuine inspiration + invitation to look continues without a speech edit. |
 | 19.98–23.98 | 4.00 | 9049 11.60–15.60 audio | Genuine library/live-capture choice over a cropped handwriting cutaway. Omit earlier domain pronunciation. |
 | 23.98–34.40 | 10.42 | 9049 15.60–26.02, muted | Actual selection/upload/processing evidence. Bridge A below. If these frames do not show correct state, substitute exact verified capture, not reenacted UI. Label time compression if processing shortened. |
 | 34.40–37.90 | 3.50 | 9049 49.85–53.35 | Genuine “Look at this” + Panthers/Shellhacks match. Let voice and visible result align. |
@@ -59,12 +60,14 @@ The vertical shows one real transformation, one breadth proof, one distinctive a
 
 ## Production decisions after independent source review
 
-- Crop presenter footage above badge level. Use paper close-up over the paper-results line. Original audio remains unchanged in meaning.
+- Crop presenter footage above badge level, except the recovered 9062 cutaway at 11.00–13.40, whose visible badge receives a tracked blur. This cutaway preserves the full frame; paper close-ups remain over the surrounding paper-results lines. Original spoken content and caption timing remain unchanged.
 - Replace the physical photo-picker shot with a genuine live app capture using labeled demo data; personal gallery thumbnails never enter the final cut.
 - Clean screen captures and original event footage depict distinct demo datasets. Their labels make that boundary visible. Previously published EasyChamp outputs are labeled as such.
 - Original in-product readout is heard from take 9049, not replaced by promotional TTS. Browser capture alone did not prove audible playback; endpoint audio and original recording provide separate evidence.
 - Silent endcard uses paper close-up and graphic CTA; unrelated venue television speech is excluded.
 - Licensed instrumental: Deep Urban, Eugenio Mininni / Mixkit. Low speech-ducked bed, no lyrics.
 - Master: 1920×1080, 30fps, 110 seconds. Separate vertical: 1080×1920, 30fps, 36.5 seconds.
+
+The v2 motion pass adds masked headline entrances, drawn picture frames, selected violet chapter wipes and a staged CTA. The recovered 9062 shot appears only in the landscape cut. These are editorial treatments, not a new product interaction or a lip-synced presenter take. The picture and narration still distinguish original event demos, fresh labeled demo captures and previously published examples. See [MOTION-POLISH.md](../../docs/campaign/MOTION-POLISH.md) for the exact skill reference and implemented motion settings; final v2 encode verification is recorded separately from this script.
 
 Final readability correction: the dark physical knockout take is replaced by a clearly labeled, separate live Snap bracket capture. Original take 9056 speech stops at 20.25s after “the bracket”; “and the winner” is removed because this separate sample final is unplayed. The editorial beat remains 5.02s, with a stable silent proof hold. Source is an actual app screenshot, never reconstructed UI.

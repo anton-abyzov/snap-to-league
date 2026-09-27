@@ -1,6 +1,6 @@
 # Campaign release record
 
-**Status: public GitHub release published and verified.** Landscape is 110 seconds, vertical is 36.5 seconds. Both final renders passed runtime/layout checks and independent visual and spoken-content review. See [quality receipt](../../videos/snap-to-league/reports/final-quality.json). No Devpost submission is established by this document.
+**Status: Devpost submitted; polished v2 YouTube demo published and verified.** Landscape is 110 seconds, vertical is 36.5 seconds. Both final renders passed runtime/layout checks and independent visual and spoken-content review. See [quality receipt](../../videos/snap-to-league/reports/final-quality-v2.json). Devpost submission receipt: [accepted entry](../../videos/snap-to-league/reports/devpost-submission.json).
 
 Published [GitHub release](https://github.com/anton-abyzov/snap-to-league/releases/tag/snap-to-league-shellhacks-2026), backed by source commit `ec45c2e1aab59f4c2195e2469220516b6854fe73`. All six asset sizes and SHA-256 digests match the local verified files. See [release receipt](../../videos/snap-to-league/reports/github-release.json).
 
@@ -13,13 +13,13 @@ Published [GitHub release](https://github.com/anton-abyzov/snap-to-league/releas
 | Captions | Match final delivered speech | [Landscape SRT](../../videos/snap-to-league/landscape.srt) · [Vertical SRT](../../videos/snap-to-league/vertical.srt) |
 | Cover image | Real paper/phone relationship, legible title | [snap-to-league-cover.png](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-cover.png) — extracted from the verified final endcard |
 | Public source | [anton-abyzov/snap-to-league](https://github.com/anton-abyzov/snap-to-league) | Merged and pushed: `ec45c2e` ([PR #1](https://github.com/anton-abyzov/snap-to-league/pull/1)) |
-| Devpost | [ShellHacks 2026](https://shellhacks-2026.devpost.com/) | `PENDING_SUBMISSION_URL_AND_RECEIPT` |
+| Devpost | [ShellHacks 2026](https://shellhacks-2026.devpost.com/) | [Submitted: Snap to League](https://devpost.com/software/snap-to-league) |
 
 ## Publication ledger
 
 | Destination | Intended account | State / public URL |
 |---|---|---|
-| YouTube landscape demo | Anton Abyzov: AI Power — @antonabyzov | [Unlisted, guest playback verified](https://www.youtube.com/watch?v=KYboiI2Xmfw) |
+| YouTube landscape demo | Anton Abyzov: AI Power — @antonabyzov | [Unlisted, guest playback verified](https://www.youtube.com/watch?v=-ZdivkQQo9k) |
 | YouTube Short | Anton Abyzov: AI Power — @antonabyzov | `NOT_PUBLISHED` |
 | Instagram Reel | Verify selected account before posting | `NOT_PUBLISHED` |
 | TikTok | Verify selected account before posting | `NOT_PUBLISHED` |
@@ -28,7 +28,7 @@ Published [GitHub release](https://github.com/anton-abyzov/snap-to-league/releas
 
 AI-related YouTube content belongs on **Anton Abyzov: AI Power**, not Abyzov World. Check channel identity immediately before publishing. Suggested copy and a seven-day plan are in [CAMPAIGN.md](CAMPAIGN.md); neither constitutes a scheduled campaign.
 
-YouTube receipt: [channel, visibility and guest playback](../../videos/snap-to-league/reports/youtube-publication.json). Devpost remains unsubmitted pending authenticated account access and verified teammate identity.
+YouTube receipt: [channel, visibility and guest playback](../../videos/snap-to-league/reports/youtube-publication.json). Devpost confirmed `SUBMITTED`, 5/5 steps complete, with Anton and Anna listed. The polished video uses the same110-second script, recovered camera movement, smoother motion graphics and a revised soundtrack mix. See [motion notes](MOTION-POLISH.md).
 
 ## Final checks
 
