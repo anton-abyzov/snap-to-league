@@ -79,7 +79,7 @@
       <span class="clock" id="clock" hidden>0 s</span>
     </div>
     <div class="strip" id="strip"></div>
-    <div class="progress" id="progress" hidden><i></i></div>
+    <div class="progress" id="progress" role="progressbar" aria-label="Import progress" aria-valuemin="0" aria-valuemax="100" hidden><i></i></div>
     <div class="actions">
       <button class="btn" id="read" type="button">Read photos</button>
       <button class="linkbtn" id="clear" type="button">Start over</button>
@@ -237,7 +237,7 @@ function renderTray(job) {
   $("tray-title").textContent = job ? (job.status === "done" ? "Photos read" : "Reading photos") : "Photos";
   const cells = photos.map((u, i) => {
     const p = job && job.photos[i];
-    const label = !p ? "Ready" : p.status === "queued" ? "Waiting" : p.status === "reading" ? "Reading..." :
+    const label = !p ? (job ? "Uploading" : "Ready") : p.status === "queued" ? "Waiting" : p.status === "reading" ? "Reading..." :
       p.status === "done" ? `${p.matches} matches · ${p.seconds} s` : "Could not read";
     return shotHtml(i, u, p ? p.status : "", label, !job && i < state.files.length);
   });
@@ -251,11 +251,40 @@ $("strip").addEventListener("click", (e) => {
 });
 $("read").addEventListener("click", () => startJob());
 
-let timer;
-function startClock() {
-  const t0 = Date.now(); $("clock").hidden = false;
-  clearInterval(timer);
-  timer = setInterval(() => { $("clock").textContent = `${Math.round((Date.now() - t0) / 1000)} s`; }, 250);
+// ---------- progress: one clock per import, honest phases, no layout jumps ----------
+const run = { t0: 0, phase: "", upload: 0, readStart: 0, photos: 0, done: 0, raf: 0 };
+function startRun(n) {
+  if (!run.t0) run.t0 = performance.now();
+  Object.assign(run, { phase: "upload", upload: 0, photos: n, done: 0 });
+  $("progress").hidden = false; $("clock").hidden = false;
+  cancelAnimationFrame(run.raf);
+  const tick = () => { paintProgress(); if (run.phase !== "done" && run.phase !== "failed") run.raf = requestAnimationFrame(tick); };
+  run.raf = requestAnimationFrame(tick);
+}
+function paintProgress() {
+  const now = performance.now(), total = (now - run.t0) / 1000;
+  let pct = 0, label = "";
+  if (run.phase === "upload") {
+    pct = 2 + 23 * run.upload;
+    label = run.upload < 1 ? `Uploading ${run.photos} photo${run.photos > 1 ? "s" : ""} · ${Math.round(run.upload * 100)}%` : "Upload done, reading";
+  } else if (run.phase === "read") {
+    const t = (now - run.readStart) / 1000, expected = 6 + 2.5 * Math.max(0, run.photos - 1);
+    const guess = 1 - Math.exp(-t / expected);                   // eases toward 95%, never claims done
+    pct = Math.min(95, 25 + 70 * Math.max(guess, run.done / Math.max(1, run.photos)));
+    label = run.photos > 1 ? `Reading ${run.photos} photos · ${run.done} done` : "Reading the photo";
+  } else if (run.phase === "done") { pct = 100; label = "Read"; }
+  $("progress").firstElementChild.style.width = `${pct.toFixed(1)}%`;
+  $("progress").setAttribute("aria-valuenow", Math.round(pct));
+  $("clock").textContent = `${total < 10 ? total.toFixed(1) : Math.round(total)} s`;
+  if (label) $("tray-title").textContent = label;
+}
+function endRun(phase) {
+  run.phase = phase; paintProgress(); cancelAnimationFrame(run.raf);
+  if (phase === "done" || phase === "failed") run.t0 = 0;
+}
+function keepInView(el) {
+  const r = el.getBoundingClientRect();
+  if (r.top < 60 || r.top > innerHeight * 0.6) el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
 }
 
 function startJob(attempt = 0) {
@@ -264,18 +293,18 @@ function startJob(attempt = 0) {
   if (state.samples.length) form.append("samples", state.samples.join(","));
   if (state.league) form.append("leagueId", state.league.id);
   if ($("reader-box").classList.contains("ready")) form.append("reader", $("reader").value);
-  $("error").hidden = true; $("progress").hidden = false; $("read").disabled = true;
-  show("capture"); $("capture").hidden = true; $("steps").hidden = true;
-  renderTray({ status: "reading", photos: [] });
-  startClock();
+  $("error").hidden = true; $("read").disabled = true;
+  $("review").hidden = true; $("done").hidden = true;
+  const n = state.files.length + state.samples.length;
+  if (!attempt) renderTray({ status: "reading", photos: [] });
+  startRun(n);
+  keepInView($("tray"));
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "/api/jobs");
   xhr.upload.onprogress = (e) => {
     if (!e.lengthComputable) return;
-    const pct = Math.round((e.loaded / e.total) * 100);
-    $("progress").firstElementChild.style.width = `${pct * 0.3}%`;
-    document.querySelectorAll(".shot .bar-p").forEach((b) => { b.style.width = `${pct}%`; });
-    $("tray-title").textContent = pct < 100 ? `Uploading ${pct}%` : "Reading photos";
+    run.upload = e.loaded / e.total;
+    document.querySelectorAll(".shot .bar-p").forEach((b) => { b.style.width = `${Math.round(run.upload * 100)}%`; });
   };
   const retry = () => {
     if (attempt >= 2) return false;
@@ -288,6 +317,7 @@ function startJob(attempt = 0) {
     try { body = JSON.parse(xhr.responseText); } catch (e) { /* not json */ }
     if ([502, 503, 504, 520, 522, 524].includes(xhr.status) && retry()) return;
     if (xhr.status >= 300) return fail(body.detail || (xhr.status >= 500 ? "The app did not answer. Check the connection and tap Read again." : `Upload failed (${xhr.status})`));
+    run.upload = 1; run.phase = "read"; run.readStart = performance.now();
     state.job = body; poll(body.id);
   };
   xhr.onerror = () => { if (!retry()) fail("The upload did not reach the app. Check the Wi-Fi and tap Read again."); };
@@ -300,22 +330,24 @@ async function poll(id) {
     const job = await r.json();
     if (!r.ok) return fail(job.detail || "Lost the import");
     state.job = job;
-    const n = job.photos.length, finished = job.photos.filter((p) => p.status === "done" || p.status === "error").length;
-    $("progress").firstElementChild.style.width = `${30 + (70 * finished) / Math.max(1, n)}%`;
-    renderTray(job);
+    run.done = job.photos.filter((p) => p.status === "done" || p.status === "error").length;
+    if (state.loaded !== job.id) renderTray(job);
     if (job.status === "reading") return setTimeout(() => poll(id), 700);
-    clearInterval(timer); $("read").disabled = false;
+    $("read").disabled = false;
     if (job.status === "error") return fail("None of the photos could be read. Try a closer, straighter photo in good light.");
-    if (!state.loaded || state.loaded !== job.id) { state.loaded = job.id; loadJob(job); }
-    else renderFlags(job);
+    if (state.loaded !== job.id) {
+      endRun("done");
+      $("tray-title").textContent = `Read ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s`;
+      state.loaded = job.id; loadJob(job);
+    } else renderFlags(job);
     if (job.checking && !job.checking.finished) setTimeout(() => poll(id), 900);
   } catch (e) { setTimeout(() => poll(id), 1500); }
 }
 
 function fail(msg) {
-  clearInterval(timer); $("read").disabled = false;
+  endRun("failed"); $("read").disabled = false;
   $("error").textContent = msg; $("error").hidden = false;
-  $("capture").hidden = false; $("steps").hidden = false;
+  keepInView($("error"));
 }
 
 // ---------- review ----------
@@ -339,7 +371,7 @@ function loadJob(job) {
   $("meta").textContent = `${ex.matches.length} matches from ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s · ${readers}`;
   renderFlags(job);
   renderMatches(); show("review");
-  $("review").scrollIntoView({ behavior: "smooth", block: "start" });
+  keepInView($("review"));
 }
 
 function renderFlags(job) {
@@ -442,7 +474,7 @@ $("publish").addEventListener("click", async () => {
   } catch (e) { $("error").textContent = e.message; $("error").hidden = false; }
   finally { $("publish").disabled = false; }
 });
-$("again").addEventListener("click", () => { state.files = []; state.samples = []; renderTray(); show("capture"); $("steps").hidden = false; });
+$("again").addEventListener("click", () => { state.files = []; state.samples = []; renderTray(); show("capture"); keepInView($("capture")); });
 
 function remember(entry) {
   const list = store.get("imports", []).filter((x) => x.id !== entry.id);
