@@ -1,0 +1,88 @@
+{
+  "assets": [
+    {
+      "contentType": "application/zip",
+      "createdAt": "2026-09-27T07:17:47Z",
+      "digest": "sha256:b7517e756309efba1c9d079b7f881d6ef0bb52c9c193b584311f37970ac79d5e",
+      "downloadCount": 0,
+      "id": "RA_kwDOUtcggc4jTvqS",
+      "label": "",
+      "name": "editable-media.zip",
+      "size": 48048849,
+      "state": "uploaded",
+      "updatedAt": "2026-09-27T07:17:52Z",
+      "url": "https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/editable-media.zip"
+    },
+    {
+      "contentType": "application/x-subrip",
+      "createdAt": "2026-09-27T07:17:47Z",
+      "digest": "sha256:8ea70147a9483b752e7c89c2c9d1678719589027040cddfcfbb1dfd67e519cbe",
+      "downloadCount": 0,
+      "id": "RA_kwDOUtcggc4jTvqP",
+      "label": "",
+      "name": "landscape.srt",
+      "size": 2324,
+      "state": "uploaded",
+      "updatedAt": "2026-09-27T07:17:47Z",
+      "url": "https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/landscape.srt"
+    },
+    {
+      "contentType": "image/png",
+      "createdAt": "2026-09-27T07:17:47Z",
+      "digest": "sha256:c0b14c6416e69254e5421f641d6355f99ea78a97bf53db934654828a5ab0074e",
+      "downloadCount": 0,
+      "id": "RA_kwDOUtcggc4jTvqL",
+      "label": "",
+      "name": "snap-to-league-cover.png",
+      "size": 723553,
+      "state": "uploaded",
+      "updatedAt": "2026-09-27T07:17:47Z",
+      "url": "https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-cover.png"
+    },
+    {
+      "contentType": "video/mp4",
+      "createdAt": "2026-09-27T07:17:47Z",
+      "digest": "sha256:4de10199f7670b0d62b6a97aa9fb57879fcb3be3ae24532efe718722c8441068",
+      "downloadCount": 0,
+      "id": "RA_kwDOUtcggc4jTvqQ",
+      "label": "",
+      "name": "snap-to-league-landscape-1080p.mp4",
+      "size": 61266616,
+      "state": "uploaded",
+      "updatedAt": "2026-09-27T07:17:53Z",
+      "url": "https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-landscape-1080p.mp4"
+    },
+    {
+      "contentType": "video/mp4",
+      "createdAt": "2026-09-27T07:17:47Z",
+      "digest": "sha256:c5977fcd709de0802ff4222ec9073f1619caf79fd276da938ce02ccd69e8a971",
+      "downloadCount": 0,
+      "id": "RA_kwDOUtcggc4jTvqI",
+      "label": "",
+      "name": "snap-to-league-vertical-1080p.mp4",
+      "size": 23578487,
+      "state": "uploaded",
+      "updatedAt": "2026-09-27T07:17:50Z",
+      "url": "https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-vertical-1080p.mp4"
+    },
+    {
+      "contentType": "application/x-subrip",
+      "createdAt": "2026-09-27T07:17:48Z",
+      "digest": "sha256:67aed80022513e0984cee5d038c44e719801952879df1530cf385f355678dcda",
+      "downloadCount": 0,
+      "id": "RA_kwDOUtcggc4jTvqh",
+      "label": "",
+      "name": "vertical.srt",
+      "size": 965,
+      "state": "uploaded",
+      "updatedAt": "2026-09-27T07:17:48Z",
+      "url": "https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/vertical.srt"
+    }
+  ],
+  "isDraft": false,
+  "tagName": "snap-to-league-shellhacks-2026",
+  "targetCommitish": "ec45c2e1aab59f4c2195e2469220516b6854fe73",
+  "url": "https://github.com/anton-abyzov/snap-to-league/releases/tag/snap-to-league-shellhacks-2026",
+  "verifiedAt": "2026-09-27T07:20:00Z",
+  "check": "GitHub-uploaded asset sizes and SHA-256 digests match local verified files; all assets state uploaded."
+}

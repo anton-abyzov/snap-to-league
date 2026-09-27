@@ -1,31 +1,34 @@
 # Campaign release record
 
-**Status: final video files verified; publication pending.** Landscape is 110 seconds, vertical is 36.5 seconds. Both final renders passed runtime/layout checks and independent visual and spoken-content review. See [quality receipt](../../videos/snap-to-league/reports/final-quality.json). No Devpost submission is established by this document.
+**Status: public GitHub release published and verified.** Landscape is 110 seconds, vertical is 36.5 seconds. Both final renders passed runtime/layout checks and independent visual and spoken-content review. See [quality receipt](../../videos/snap-to-league/reports/final-quality.json). No Devpost submission is established by this document.
 
-Planned GitHub release tag: `snap-to-league-shellhacks-2026`. The tag and final URLs are not confirmed until publication readback.
+Published [GitHub release](https://github.com/anton-abyzov/snap-to-league/releases/tag/snap-to-league-shellhacks-2026), backed by source commit `ec45c2e1aab59f4c2195e2469220516b6854fe73`. All six asset sizes and SHA-256 digests match the local verified files. See [release receipt](../../videos/snap-to-league/reports/github-release.json).
 
 ## Deliverables
 
 | Asset | Target | Verified final file / URL |
 |---|---|---|
-| Judge / YouTube demonstration | Landscape, 105–115s target; 120s hard maximum | `snap-to-league-landscape-1080p.mp4` — 1920×1080, 30fps, 110s |
-| Shorts / Reels / TikTok demonstration | Independently composed vertical, 34–40s target | `snap-to-league-vertical-1080p.mp4` — 1080×1920, 30fps, 36.5s |
+| Judge / YouTube demonstration | Landscape, 105–115s target; 120s hard maximum | [snap-to-league-landscape-1080p.mp4](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-landscape-1080p.mp4) — 1920×1080, 30fps, 110s |
+| Shorts / Reels / TikTok demonstration | Independently composed vertical, 34–40s target | [snap-to-league-vertical-1080p.mp4](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-vertical-1080p.mp4) — 1080×1920, 30fps, 36.5s |
 | Captions | Match final delivered speech | [Landscape SRT](../../videos/snap-to-league/landscape.srt) · [Vertical SRT](../../videos/snap-to-league/vertical.srt) |
-| Cover image | Real paper/phone relationship, legible title | `snap-to-league-cover.png` — extracted from the verified final endcard |
-| Public source | [anton-abyzov/snap-to-league](https://github.com/anton-abyzov/snap-to-league) | `PENDING_CAMPAIGN_COMMIT_AND_PUSH_VERIFICATION` |
+| Cover image | Real paper/phone relationship, legible title | [snap-to-league-cover.png](https://github.com/anton-abyzov/snap-to-league/releases/download/snap-to-league-shellhacks-2026/snap-to-league-cover.png) — extracted from the verified final endcard |
+| Public source | [anton-abyzov/snap-to-league](https://github.com/anton-abyzov/snap-to-league) | Merged and pushed: `ec45c2e` ([PR #1](https://github.com/anton-abyzov/snap-to-league/pull/1)) |
 | Devpost | [ShellHacks 2026](https://shellhacks-2026.devpost.com/) | `PENDING_SUBMISSION_URL_AND_RECEIPT` |
 
 ## Publication ledger
 
 | Destination | Intended account | State / public URL |
 |---|---|---|
-| YouTube video and Short | Anton Abyzov: AI Power — @antonabyzov | `NOT_PUBLISHED` |
+| YouTube landscape demo | Anton Abyzov: AI Power — @antonabyzov | [Unlisted, guest playback verified](https://www.youtube.com/watch?v=KYboiI2Xmfw) |
+| YouTube Short | Anton Abyzov: AI Power — @antonabyzov | `NOT_PUBLISHED` |
 | Instagram Reel | Verify selected account before posting | `NOT_PUBLISHED` |
 | TikTok | Verify selected account before posting | `NOT_PUBLISHED` |
 | LinkedIn | Verify Anton/EasyChamp destination before posting | `NOT_PUBLISHED` |
 | X | Verify selected account before posting | `NOT_PUBLISHED` |
 
 AI-related YouTube content belongs on **Anton Abyzov: AI Power**, not Abyzov World. Check channel identity immediately before publishing. Suggested copy and a seven-day plan are in [CAMPAIGN.md](CAMPAIGN.md); neither constitutes a scheduled campaign.
+
+YouTube receipt: [channel, visibility and guest playback](../../videos/snap-to-league/reports/youtube-publication.json). Devpost remains unsubmitted pending authenticated account access and verified teammate identity.
 
 ## Final checks
 

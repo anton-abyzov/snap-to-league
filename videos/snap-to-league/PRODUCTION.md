@@ -10,6 +10,7 @@ Requirements: Node, npm, Python 3, FFmpeg and GitHub CLI. Run from this director
 
 ```sh
 npm ci
+node scripts/setup_runtime.mjs
 python3 scripts/fetch_release_media.py
 npm run check
 npm run check:portrait
