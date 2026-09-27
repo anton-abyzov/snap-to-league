@@ -99,6 +99,39 @@ def gemini(image: Path) -> str:
     return r.json()["candidates"][0]["content"]["parts"][0]["text"]
 
 
+LAST_USAGE: dict = {}
+
+
+def openrouter(image: Path) -> str:
+    """Any vision model on OpenRouter (OPENROUTER_MODEL, default openai/gpt-6-astra). Needs OPENROUTER_API_KEY."""
+    key = os.environ.get("OPENROUTER_API_KEY")
+    if not key:
+        raise ExtractError("OPENROUTER_API_KEY is not set")
+    with tempfile.TemporaryDirectory() as tmp:
+        data = base64.b64encode(prepare(image, Path(tmp)).read_bytes()).decode()
+    body = {
+        "model": os.environ.get("OPENROUTER_MODEL", "openai/gpt-6-astra"),
+        "messages": [{"role": "user", "content": [
+            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{data}"}},
+            {"type": "text", "text": PROMPT},
+        ]}],
+        "response_format": {"type": "json_object"},
+        "usage": {"include": True},
+        "max_tokens": int(os.environ.get("OPENROUTER_MAX_TOKENS", "4000")),
+    }
+    effort = os.environ.get("OPENROUTER_EFFORT")
+    if effort:
+        body["reasoning"] = {"effort": effort}
+    r = httpx.post("https://openrouter.ai/api/v1/chat/completions", json=body, timeout=180,
+                   headers={"Authorization": f"Bearer {key}", "X-Title": "Snap to League"})
+    if r.status_code != 200:
+        raise ExtractError(f"openrouter {r.status_code}: {r.text[:300]}")
+    out = r.json()
+    LAST_USAGE.clear()
+    LAST_USAGE.update(out.get("usage") or {})
+    return out["choices"][0]["message"]["content"]
+
+
 def fixture(image: Path) -> str:
     """Offline stand-in: the bracket answer for bracket photos, the board answer otherwise."""
     raw = image.read_bytes()
@@ -108,7 +141,7 @@ def fixture(image: Path) -> str:
     return FIXTURES["board.jpg"].read_text()
 
 
-BACKENDS = {"astra": astra, "gemini": gemini, "fixture": fixture}
+BACKENDS = {"astra": astra, "openrouter": openrouter, "gemini": gemini, "fixture": fixture}
 
 
 def extract(image: Path) -> tuple[Extraction, list[Row], str, float]:
