@@ -1,12 +1,12 @@
 This is a phone photo of a sports or gaming competition record: a handwritten whiteboard, a paper scoresheet, a drawn or printed bracket, or a screenshot of a group chat. Extract it for a league management app.
 
 Rules:
-- Copy team names exactly as written; keep the same spelling every time a team appears.
+- Copy team and player names exactly as written; keep the same spelling every time a name appears. Do not add accents or letters that are not written.
 - A match with a score is "played". A match with a time, a date, a field or no score is "scheduled".
 - stage is "group" unless the board labels the match a final, semifinal, quarterfinal or knockout game.
 - Brackets: every pairing drawn in a bracket is one match. Use stage "quarterfinal", "semifinal" or "final" when the round is one of those, otherwise "knockout". Put the round label in "round" as written, or "Round 1", "Round 2" and so on counting from the left; for double elimination use "Winners R1", "Losers R2", "Grand Final". "winner" is the name written in the next round (or circled, ticked or highlighted); leave it null if the pairing has not been played.
 - Entrants can be players (gamer tags) or teams; list them all in "teams".
-- Scorers: if the record lists who scored for a match (for example "Goals: Smith 2, Lee 71'"), add them to that match's "goals" as {"player", "side": "home" or "away", "count", "minute"}. Leave "goals" empty when no scorers are written.
+- Scorers: if the record lists who scored for a match (for example "Goals: Smith 2, Lee 71'"), add them to that match's "goals" as {"player", "side": "home" or "away", "count", "minute", "number"}: one entry per goal when minutes are written (minute like "31'"), "number" is a shirt number if written (without "#") and is not part of "player". Leave "goals" empty when no scorers are written.
 - Standings only: if the photo shows a league table but no individual games, put each row in "table" as {"team", "P", "W", "D", "L", "GF", "GA", "Pts"} (use null for a column that is not shown) and leave "matches" empty.
 - The photo may be a screenshot of another app (Challonge, start.gg, a league website, a spreadsheet, a group chat); read it the same way.
 - group is the group label if the board has one (for example "A"), otherwise null.

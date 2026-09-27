@@ -18,6 +18,12 @@
     <a class="brand" href="/" aria-label="Snap to League home"><span class="ec">EasyChamp</span><span class="name">Snap <i>to</i> League</span></a>
     <div class="chips" id="chips"></div>
   </header>
+  <div class="ticker" aria-hidden="true"><div class="ticker-track">
+    <span><b>FT</b> Miami Heatwave 3-1 Doral United</span><span><b>QF</b> Kirbo 2-0 NeoZ</span><span><b>FT</b> Wynwood Wolves 4-0 Brickell FC</span>
+    <span><b>FT</b> Lions 3-1 Sharks</span><span><b>SF</b> Ganonz 2-1 Shellby</span><span><b>FT</b> Palmetto Rays 3-2 Pinecrest SC</span>
+    <span><b>FT</b> Miami Heatwave 3-1 Doral United</span><span><b>QF</b> Kirbo 2-0 NeoZ</span><span><b>FT</b> Wynwood Wolves 4-0 Brickell FC</span>
+    <span><b>FT</b> Lions 3-1 Sharks</span><span><b>SF</b> Ganonz 2-1 Shellby</span><span><b>FT</b> Palmetto Rays 3-2 Pinecrest SC</span>
+  </div></div>
 
   <!-- 1. capture -->
   <section id="capture" class="hero" aria-labelledby="h1">
@@ -33,16 +39,23 @@
       </div>
       <div class="actions small">
         <span class="muted">No board handy?</span>
-        <button class="linkbtn" data-sample="board" type="button">Try a group table</button>
+        <button class="linkbtn" data-sample="groups" type="button">Try a two-group cup</button>
+        <button class="linkbtn" data-sample="matchcard" type="button">a match card</button>
         <button class="linkbtn" data-sample="bracket" type="button">a bracket</button>
         <button class="linkbtn" data-sample="sheet1,sheet2" type="button">two scoresheets</button>
       </div>
       <p id="league-note" class="muted small" hidden></p>
     </div>
     <div class="hero-art" aria-hidden="true">
-      <img src="/static/sample-bracket.jpg" alt="">
-      <div class="scan"></div>
-      <div class="bug"><span>QF</span><span>Kirbo 2 · 0 NeoZ</span></div>
+      <div class="photo"><img src="/static/sample-groups.jpg" alt=""><div class="scan"></div><span class="tag">Whiteboard</span></div>
+      <div class="board">
+        <div class="board-head"><span class="live">Live</span>Miami Rec Futsal Cup · Group A</div>
+        <div class="row" style="--i:0"><b>1</b><span>Miami Heatwave</span><em>6</em></div>
+        <div class="row" style="--i:1"><b>2</b><span>Coral Kings</span><em>1</em></div>
+        <div class="row" style="--i:2"><b>3</b><span>Little Havana</span><em>1</em></div>
+        <div class="row" style="--i:3"><b>4</b><span>Doral United</span><em>0</em></div>
+        <div class="board-foot">Rivera 3 goals · 4' 22' 31'</div>
+      </div>
     </div>
   </section>
 
@@ -88,6 +101,7 @@
           <div class="kicker">What these photos change</div>
           <div class="changes" id="changes"></div>
         </div>
+        <div class="checking" id="checking" hidden><span class="dot"></span><span id="checking-text"></span></div>
         <div class="flags" id="flags"></div>
         <div class="panel-head"><h2>Matches</h2><span class="muted small" id="meta"></span></div>
         <div class="matches" id="matches"></div>
@@ -96,6 +110,7 @@
       <div class="panel">
         <h2 id="table-title">Table</h2>
         <div class="tablebox" id="table"></div>
+        <div id="scorers-box" hidden><h2>Scorers</h2><div class="tablebox" id="scorers"></div></div>
         <label class="field" id="pin-box" hidden>EasyChamp publish PIN
           <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Leave empty to save a shareable board only">
         </label>
@@ -110,6 +125,7 @@
 
   <!-- 3. published -->
   <section id="done" class="panel done" hidden>
+    <div class="stamp" aria-hidden="true">Full time</div>
     <div class="kicker" id="done-kicker">Published</div>
     <h2 id="done-title">League is live</h2>
     <p id="done-text"></p>
@@ -136,7 +152,7 @@
 </main>
 
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText, topScorers, scorersTable } from "/static/standings.js";
 
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -149,7 +165,7 @@ let health = {};
 fetch("/api/health").then((r) => r.json()).then((h) => {
   health = h;
   $("chips").innerHTML = [
-    [`Reader: ${h.readers}`, true],
+    [h.second ? `${(h.choices.find((c) => c.id === h.primary) || {}).label || h.readers} · ${h.second} check` : `Reader: ${h.readers}`, true],
     [h.gemini === "google" ? "Gemini API" : "", !!h.gemini],
     [h.publish === "live" ? "EasyChamp live" : "EasyChamp dry run", h.publish === "live"],
     [h.voice ? "ElevenLabs voice" : "", h.voice],
@@ -192,7 +208,7 @@ function shotHtml(i, url, status, label, removable) {
     <div class="bar-p" style="width:0"></div><figcaption class="state">${esc(label)}</figcaption></figure>`;
 }
 function renderTray(job) {
-  const photos = state.files.map((f) => f.url).concat(state.samples.map((s) => `/static/sample-${s === "board" || s === "bracket" ? s : s}.jpg`));
+  const photos = state.files.map((f) => f.url).concat(state.samples.map((s) => `/static/sample-${s}.jpg`));
   $("tray").hidden = !photos.length;
   $("read").textContent = photos.length === 1 ? "Read 1 photo" : `Read ${photos.length} photos`;
   $("read").hidden = !!job || !!state.samples.length;
@@ -261,7 +277,9 @@ async function poll(id) {
     if (job.status === "reading") return setTimeout(() => poll(id), 700);
     clearInterval(timer); $("read").disabled = false;
     if (job.status === "error") return fail("None of the photos could be read. Try a closer, straighter photo in good light.");
-    loadJob(job);
+    if (!state.loaded || state.loaded !== job.id) { state.loaded = job.id; loadJob(job); }
+    else renderFlags(job);
+    if (job.checking && !job.checking.finished) setTimeout(() => poll(id), 900);
   } catch (e) { setTimeout(() => poll(id), 1500); }
 }
 
@@ -290,15 +308,27 @@ function loadJob(job) {
   }
   const readers = [...new Set(job.photos.map((p) => p.reader).filter(Boolean))].join(", ");
   $("meta").textContent = `${ex.matches.length} matches from ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s · ${readers}`;
-  const label = { astra: "The reader is unsure", second: "Second reader disagrees", merge: "Photos disagree", match: "Name matched", check: "Check" };
-  $("flags").innerHTML = job.flags.map((f) => `<div class="flag ${f.level}"><span class="card"></span><div><small>${label[f.source] || "Check"}</small>${esc(f.message)}</div></div>`).join("");
+  renderFlags(job);
   renderMatches(); show("review");
   $("review").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function renderFlags(job) {
+  const label = { astra: "The reader is unsure", second: "Second reader disagrees", merge: "Photos disagree", match: "Name matched", check: "Check" };
+  $("flags").innerHTML = job.flags.map((f, i) => `<div class="flag ${f.level}" style="--i:${i}"><span class="card"></span><div><small>${label[f.source] || "Check"}</small>${esc(f.message)}</div></div>`).join("");
+  const c = job.checking;
+  $("checking").hidden = !c;
+  if (c) {
+    $("checking").classList.toggle("finished", !!c.finished);
+    $("checking-text").textContent = !c.finished ? `${c.model} is double-checking every result (${c.done} of ${c.total} photos)`
+      : c.differences ? `${c.model} read ${c.differences} result${c.differences > 1 ? "s" : ""} differently; see the cards below`
+      : `${c.model} agrees with every result`;
+  }
+}
+
 function renderMatches() {
   $("matches").innerHTML = state.matches.map((m, i) => `
-    <div class="match" data-i="${i}">
+    <div class="match" data-i="${i}" style="--i:${i}">
       <input aria-label="Home" data-f="home" value="${esc(m.home)}">
       <input aria-label="Home score" class="score" data-f="homeScore" inputmode="numeric" value="${m.homeScore ?? ""}">
       <span class="dash">-</span>
@@ -321,6 +351,8 @@ function renderTable() {
   const br = bracketHtml(state.matches);
   const read = !rows.length && !br && state.table && state.table.length;
   $("table-title").textContent = rows.length && br ? "Table and bracket" : br ? "Bracket" : read ? "Table as read from the photo" : "Table";
+  const sc = topScorers(state.matches);
+  $("scorers-box").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);
   $("table").innerHTML = (rows.length ? standingsTable(rows) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
 }
 $("matches").addEventListener("input", (e) => {

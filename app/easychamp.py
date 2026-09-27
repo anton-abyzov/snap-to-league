@@ -121,7 +121,10 @@ def build_payload(league: dict) -> dict:
     for m in matches:
         for g in m.goals:
             team = m.home if g.side == "home" else m.away
-            roster.setdefault(team, {})[slug(g.player)] = player(team, g.player)
+            member = {"Player": player(team, g.player)}
+            if g.number and g.number.isdigit():
+                member["JerseyNumber"] = int(g.number)
+            roster.setdefault(team, {})[slug(g.player)] = member
 
     start = datetime.now(TZ).replace(second=0, microsecond=0) - timedelta(hours=3)
 
@@ -216,7 +219,7 @@ def build_payload(league: dict) -> dict:
                 "SportKindName": sport, "StartDate": (today - timedelta(days=1)).isoformat(), "EndDate": (today + timedelta(days=7)).isoformat(),
                 "FixturesCount": len(matches),
                 "Teams": [{"Id": team_id[n], "Name": n, "SportKindName": sport,
-                           "TeamMembers": [{"Player": p} for p in roster.get(n, {}).values()]} for n in names],
+                           "TeamMembers": list(roster.get(n, {}).values())} for n in names],
                 "Stages": stages,
             }],
         },

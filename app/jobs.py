@@ -1,12 +1,14 @@
 """Import jobs: several photos read in parallel, with progress the phone can poll.
 
 A job goes queued -> reading -> done (or error). Each photo has its own status, reader and time, so
-the review screen can show a live carousel while the readers work. When every photo is read, the
-matches are combined (merge.combine), checked (standings.checks) and, for an existing league,
-compared with what is saved (merge.review).
+the review screen can show a live carousel while the readers work. As soon as the main reader has
+read every photo, the matches are combined (merge.combine), checked (standings.checks) and, for an
+existing league, compared with what is saved (merge.review). The second reader keeps checking in the
+background and adds a card wherever it reads a result differently.
 """
 from __future__ import annotations
 
+import os
 import threading
 import time
 import uuid
@@ -14,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from . import store
-from .extract import extract
+from . import extract as extract_mod
 from .merge import combine, review
 from .schema import Extraction, Flag, Match
 from .standings import checks
@@ -45,29 +47,93 @@ def get(job_id: str) -> dict | None:
     return job or store.collection("jobs").get(job_id)
 
 
-def _run(job: dict, paths: list[Path], league: dict | None) -> None:
-    t0 = time.monotonic()
-    results: list[tuple[int, Extraction, list[str]] | None] = [None] * len(paths)
+def _plan(reader: str | None) -> tuple[str | None, str | None]:
+    """Main reader and background checker for this import, or (None, None) for the single-reader modes."""
+    if os.environ.get("SNAP_BACKEND") or not os.environ.get("OPENROUTER_API_KEY"):
+        return None, None
+    main = reader if reader in extract_mod.READERS else extract_mod.PRIMARY
+    second = extract_mod.SECOND if extract_mod.SECOND and extract_mod.SECOND != main else None
+    return main, second
 
-    def one(i: int, path: Path):
+
+def _run(job: dict, paths: list[Path], league: dict | None) -> None:
+    """Show the main reader's result as soon as it is in; the second reader checks in the background."""
+    t0 = time.monotonic()
+    main, second = _plan(job["reader"])
+    results: list[tuple[int, Extraction, list[str]] | None] = [None] * len(paths)
+    checks_pending: list = []
+
+    def read_main(i: int, path: Path):
         photo = job["photos"][i]
         photo["status"] = "reading"
+        t = time.monotonic()
         try:
-            ex, _rows, backend, secs, notes = extract(path, job["reader"])
-            photo.update(status="done", seconds=secs, matches=len(ex.matches), reader=backend,
-                         competition=ex.competition, sport=ex.sport)
+            if main:
+                ex, _rows = extract_mod._read("openrouter", path, main)
+                name, notes = main.split("/")[-1], []
+            else:
+                ex, _rows, name, _secs, notes = extract_mod.extract(path, job["reader"])
+            photo.update(status="done", seconds=round(time.monotonic() - t, 1), matches=len(ex.matches),
+                         reader=name, competition=ex.competition, sport=ex.sport)
             results[i] = (i, ex, notes)
-        except Exception as e:  # one unreadable photo must not sink the others  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001  one unreadable photo must not sink the others
             photo.update(status="error", error=str(e)[:200])
 
-    for future in [PHOTOS.submit(one, i, p) for i, p in enumerate(paths)]:
+    def read_second(i: int, path: Path):
+        try:
+            return extract_mod._read("openrouter", path, second)[0]
+        except Exception:  # noqa: BLE001  the check is optional
+            return None
+
+    second_jobs = {i: PHOTOS.submit(read_second, i, p) for i, p in enumerate(paths)} if second else {}
+    for future in [PHOTOS.submit(read_main, i, p) for i, p in enumerate(paths)]:
         future.result()
+
+    # a photo the main reader could not read falls back to the checker's read
+    for i, photo in enumerate(job["photos"]):
+        if results[i] is None and i in second_jobs:
+            other = second_jobs[i].result()
+            if other is not None and (other.matches or other.table):
+                name = second.split("/")[-1]
+                photo.update(status="done", matches=len(other.matches), reader=name, error=None,
+                             seconds=round(time.monotonic() - t0, 1))
+                results[i] = (i, other, [f"{main.split('/')[-1]} could not read this photo; showing {name}'s read"])
+                second_jobs.pop(i)
+
     read = [r for r in results if r]
     if not read:
         job.update(status="error", seconds=round(time.monotonic() - t0, 1))
         _save(job)
         return
+    _finish(job, read, paths, league, t0)
+    if not second_jobs:
+        _save(job)
+        return
 
+    # background check: add cards as each second opinion arrives
+    job["checking"] = {"model": second.split("/")[-1], "done": 0, "total": len(second_jobs), "differences": 0}
+    for photo in job["photos"]:
+        photo["check"] = "pending" if photo["status"] == "done" else None
+    _save(job)
+    for i, fut in second_jobs.items():
+        other = fut.result()
+        photo = job["photos"][i]
+        if other is None:
+            photo["check"] = "failed"
+        else:
+            base = next(ex for j, ex, _ in read if j == i) if any(j == i for j, _, _ in read) else None
+            notes = extract_mod.disagreements(base, other, second.split("/")[-1]) if base else []
+            tag = f"Photo {i + 1}: " if len(paths) > 1 else ""
+            job["flags"] += [Flag(level="warn", message=tag + n, source="second").model_dump() for n in notes]
+            photo["check"] = "differs" if notes else "agrees"
+            job["checking"]["differences"] += len(notes)
+        job["checking"]["done"] += 1
+    job["checking"]["finished"] = True
+    job["seconds_checked"] = round(time.monotonic() - t0, 1)
+    _save(job)
+
+
+def _finish(job: dict, read: list, paths: list[Path], league: dict | None, t0: float) -> None:
     known_teams = [t for m in (league or {}).get("matches", []) for t in (m["home"], m["away"])]
     known_players = [g["player"] for m in (league or {}).get("matches", []) for g in m.get("goals", [])]
     combined = combine([ex.matches for _, ex, _ in read], known_teams, known_players)
@@ -99,8 +165,6 @@ def _run(job: dict, paths: list[Path], league: dict | None) -> None:
         for before, after in job["review"]["renamed"].items():
             job["flags"].append(Flag(level="info", source="match",
                                      message=f'Matched "{before}" to {after} in {league["name"]}').model_dump())
-    _save(job)
-
 
 
 def _save(job: dict) -> None:

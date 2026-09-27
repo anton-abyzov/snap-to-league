@@ -13,6 +13,12 @@ class Goal(BaseModel):
     side: Literal["home", "away"]
     count: int = 1
     minute: Optional[str] = None
+    number: Optional[str] = None
+
+    @field_validator("minute", "number", mode="before")
+    @classmethod
+    def _str(cls, v):
+        return None if v in (None, "") else str(v).strip().lstrip("#")
 
     @field_validator("player")
     @classmethod

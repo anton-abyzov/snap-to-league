@@ -307,3 +307,31 @@ def test_numbered_names_never_merge():
     c = combine([[Match(home=f"Team Name{i}", away=f"Team Name{i + 4}", homeScore=1, awayScore=0, status="played",
                         stage="quarterfinal", round="Round 1") for i in range(1, 5)]])
     assert len(c["matches"]) == 4
+
+
+def test_second_reader_checks_in_background(tmp_path, monkeypatch):
+    c, _ = _client(tmp_path, monkeypatch)
+    monkeypatch.delenv("SNAP_BACKEND", raising=False)
+    monkeypatch.setenv("OPENROUTER_API_KEY", "test")
+    import time as _t
+    from app import extract as ext
+    board, _ = _parse((FIX / "board_extract.json").read_text())
+    other = board.model_copy(deep=True)
+    other.matches[0].homeScore = 7
+
+    def fake_read(name, image, model=None):
+        if model == ext.SECOND:
+            _t.sleep(0.4)  # the checker is slower than the main reader
+            return other, []
+        return board, []
+    monkeypatch.setattr(ext, "_read", fake_read)
+    job = c.post("/api/jobs", data={"samples": "board"}).json()
+    first = _wait(c, job["id"])
+    assert first["status"] == "done" and len(first["extraction"]["matches"]) == 7
+    for _ in range(100):
+        j = c.get(f"/api/jobs/{job['id']}").json()
+        if (j.get("checking") or {}).get("finished"):
+            break
+        _t.sleep(0.05)
+    assert j["photos"][0]["check"] == "differs"
+    assert any(f["source"] == "second" and "7-1" in f["message"] for f in j["flags"])

@@ -31,7 +31,7 @@ export function num(v) {
 
 export function standingsTable(rows, through = 2) {
   const head = `<thead><tr><th class="pos">#</th><th class="team">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead>`;
-  const body = rows.map((r, i) => `<tr class="${i < through ? "through" : ""}"><td class="pos">${i + 1}</td><td class="team">${esc(r.team)}</td><td>${r.P}</td><td>${r.W}</td><td>${r.D}</td><td>${r.L}</td><td>${r.GF}</td><td>${r.GA}</td><td>${r.GD > 0 ? "+" : ""}${r.GD}</td><td class="pts">${r.Pts}</td></tr>`).join("");
+  const body = rows.map((r, i) => `<tr class="${i < through ? "through" : ""}" style="--i:${i}"><td class="pos">${i + 1}</td><td class="team">${esc(r.team)}</td><td>${r.P}</td><td>${r.W}</td><td>${r.D}</td><td>${r.L}</td><td>${r.GF}</td><td>${r.GA}</td><td>${r.GD > 0 ? "+" : ""}${r.GD}</td><td class="pts">${r.Pts}</td></tr>`).join("");
   return `<table class="st">${head}<tbody>${body}</tbody></table>`;
 }
 
@@ -96,7 +96,29 @@ export async function speak(text) {
 
 export function goalsText(m) {
   if (!m.goals || !m.goals.length) return "";
-  const side = (s) => m.goals.filter((g) => g.side === s).map((g) => `${g.player}${g.count > 1 ? ` ${g.count}` : ""}${g.minute ? ` ${g.minute}'` : ""}`).join(", ");
+  const side = (s) => m.goals.filter((g) => g.side === s).map((g) => `${g.player}${g.count > 1 ? ` ${g.count}` : ""}${g.minute ? ` ${g.minute}${g.minute.includes("'") ? "" : "'"}` : ""}`).join(", ");
   const h = side("home"), a = side("away");
   return `Goals: ${h || "none"}${a ? ` / ${a}` : ""}`;
+}
+
+// Scorers across every game: goals, games scored in, and the minutes when written.
+export function topScorers(matches) {
+  const rows = new Map();
+  for (const m of matches) {
+    for (const g of m.goals || []) {
+      const team = g.side === "home" ? m.home : m.away;
+      const key = `${g.player.toLowerCase()}|${team.toLowerCase()}`;
+      if (!rows.has(key)) rows.set(key, { player: g.player, team, number: g.number || "", goals: 0, games: new Set(), minutes: [] });
+      const r = rows.get(key);
+      r.goals += g.count || 1; r.games.add(`${m.home}|${m.away}`);
+      if (g.minute) r.minutes.push(`${g.minute}${g.minute.includes("'") ? "" : "'"} v ${g.side === "home" ? m.away : m.home}`);
+    }
+  }
+  return [...rows.values()].sort((a, b) => b.goals - a.goals || a.player.localeCompare(b.player));
+}
+
+export function scorersTable(rows) {
+  if (!rows.length) return "";
+  return `<table class="st scorers"><thead><tr><th class="pos">#</th><th class="team">Player</th><th class="team">Team</th><th>G</th><th class="team">When</th></tr></thead><tbody>${rows.map((r, i) =>
+    `<tr style="--i:${i}"><td class="pos">${i + 1}</td><td class="team">${r.number ? `<span class="shirt">${esc(r.number)}</span>` : ""}${esc(r.player)}</td><td class="team muted-cell">${esc(r.team)}</td><td class="pts">${r.goals}</td><td class="team muted-cell">${esc(r.minutes.join(", "))}</td></tr>`).join("")}</tbody></table>`;
 }

@@ -15,9 +15,13 @@
   </header>
   <h1 id="name">League</h1>
   <p class="muted" id="sub"></p>
+  <div class="ticker" aria-hidden="true" id="ticker" hidden><div class="ticker-track" id="ticker-track"></div></div>
   <section class="panel" id="bracket-panel" hidden><h2>Bracket</h2><div id="bracket"></div></section>
   <div class="grid2">
-    <section class="panel" id="table-panel"><h2>Standings</h2><div class="tablebox" id="table"></div></section>
+    <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+      <section class="panel" id="table-panel"><h2>Standings</h2><div class="tablebox" id="table"></div></section>
+      <section class="panel" id="scorers-panel" hidden><h2>Top scorers</h2><div class="tablebox" id="scorers"></div></section>
+    </div>
     <section class="panel"><h2>Matches</h2><div class="board" id="board"></div></section>
   </div>
   <div class="actions">
@@ -28,7 +32,7 @@
   <p class="err" id="error" hidden role="alert"></p>
 </main>
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText, topScorers, scorersTable } from "/static/standings.js";
 const $ = (id) => document.getElementById(id);
 const id = location.pathname.split("/").pop();
 let league;
@@ -69,11 +73,15 @@ function render() {
   $("name").textContent = league.name;
   const played = league.matches.filter((m) => m.status === "played").length;
   $("sub").textContent = `${league.sport[0].toUpperCase()}${league.sport.slice(1)} · ${played} of ${league.matches.length} matches played`;
+  const results = league.matches.filter((m) => m.status === "played").map((m) => `<span><b>FT</b> ${esc(m.home)} ${m.homeScore ?? ""}-${m.awayScore ?? ""} ${esc(m.away)}</span>`);
+  if (results.length) { $("ticker-track").innerHTML = results.concat(results).join(""); $("ticker").hidden = false; }
   $("updated").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
   const rows = computeStandings(league.matches, league.teams);
   const read = !rows.length && (league.table || []).length ? league.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) })) : null;
   $("table").innerHTML = standingsTable(read || rows);
   $("table-panel").hidden = !rows.length && !read;
+  const sc = topScorers(league.matches);
+  $("scorers-panel").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);
   const br = bracketHtml(league.matches);
   $("bracket").innerHTML = br;
   $("bracket-panel").hidden = !br;
