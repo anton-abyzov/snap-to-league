@@ -1,0 +1,2296 @@
+{
+  "capturedAt": "2026-09-27T06:35:28.484769+00:00",
+  "headless": true,
+  "mockedResponses": false,
+  "newEasyChampPublications": 0,
+  "assets": [
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-board-before.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:34:24.728215+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 148671,
+      "sha256": "5f63f37f810694a5423e705138d0ab6db6cd47f6efd26324ce0faeefd9e5306e"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-board-update.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:34:24.808793+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 158975,
+      "sha256": "6354ba5f8666f66bea041f4c901a18936d1c153bb6cd5a9c95c0c1db1a3c414c"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/01-home-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:27.598699+00:00",
+      "claim": "Live product, guest session, Gemini selected.",
+      "bytes": 1267568,
+      "sha256": "f71e68afcd22e23c4bde620dc716508ba38dfb8b3a2c02e1cf17319fd07b2b96"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/02-upload-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:28.985631+00:00",
+      "claim": "Actual synthetic board selected for upload.",
+      "bytes": 802496,
+      "sha256": "5d3ccd0e3eae418708827829e07d97f09d5c44affc426d31bce570d233a9ceee"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/03-reading-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:30.075968+00:00",
+      "claim": "Actual live Gemini import in progress; wait is recorded in real time.",
+      "bytes": 765642,
+      "sha256": "d51703fd50eaddcae2aea37876feaf0f026066699afe3dd8853a2a0a66d9963a"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/04-review-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:36.838648+00:00",
+      "claim": "Actual extracted matches and name-match warning.",
+      "bytes": 810638,
+      "sha256": "955966736bc1f5c3488f10fefed81a861f55e2074e5218f403974aec6cfff9d9"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/04-review-phone-full.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:37.187544+00:00",
+      "claim": "Full actual review with synthetic data.",
+      "bytes": 1122077,
+      "sha256": "6461e5a42ba326256624192cbabb1e73cdf17addb3dd97e105dab4ff5c797c2c"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/05-warning-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:38.282883+00:00",
+      "claim": "Actual review flags; organizers can edit extracted entries.",
+      "bytes": 809678,
+      "sha256": "ab4f2accd827d85f17d549e4e977b59ea95d51f10f65a977a7d30d547fe164d9"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/06-editable-score-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:39.371590+00:00",
+      "claim": "User edits demo score in real review UI (temporary demonstration).",
+      "bytes": 812789,
+      "sha256": "22c257239d1ac20506feb32c5a566007cbe581d05d3d45a93bd638e82359193c"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/07-table-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:41.065265+00:00",
+      "claim": "Actual table recomputed from extracted results.",
+      "bytes": 756816,
+      "sha256": "0de5f18032124812631c92a99c37924a399e560faf800b804a290e2f20e5e51d"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/08-readout-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:45.113082+00:00",
+      "claim": "Real in-product Read out action. Check MP3 receipt for provider response.",
+      "bytes": 775543,
+      "sha256": "96aaa0e6f38cd4fb1faee2f211e44a61418fcf9424a29a7f1a81b99f6b437eca"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/09-update-upload-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:46.413815+00:00",
+      "claim": "Next photo added to existing unsaved draft; no EasyChamp write.",
+      "bytes": 844166,
+      "sha256": "cf1e384c269f2c0a300576327359655763beedbe6eaa5561851e8174af5df86e"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/10-update-comparison-phone.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:55.933503+00:00",
+      "claim": "Actual newer-photo comparison shows changed scheduled match.",
+      "bytes": 806043,
+      "sha256": "34b04b908df469e6460ed90aa75c38ca9da9908a76dff2445cb3677f1d4b1381"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/10-update-comparison-phone-full.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:34:56.266107+00:00",
+      "claim": "Full actual update comparison.",
+      "bytes": 1118873,
+      "sha256": "25f8ea46cb07d20fa7301ea04ad209dec9a759c6f91bf57249eec7c4ea49d8aa"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/11-trivia-desktop.png",
+      "source": "https://snap.easychamp.com/l/ae486173f3",
+      "capturedAt": "2026-09-27T06:35:24.418851+00:00",
+      "claim": "Existing Snap trivia podium only; not EasyChamp placement publishing.",
+      "bytes": 508134,
+      "sha256": "caa93ca5db5142e12c4951fd1cf77d46f6b35b3c5455dde31875024e12f2ffff"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/12-trivia-desktop-detail.png",
+      "source": "https://snap.easychamp.com/l/ae486173f3",
+      "capturedAt": "2026-09-27T06:35:26.786959+00:00",
+      "claim": "Actual lower portion of existing live trivia demo.",
+      "bytes": 508134,
+      "sha256": "caa93ca5db5142e12c4951fd1cf77d46f6b35b3c5455dde31875024e12f2ffff"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/trivia-desktop-live.webm",
+      "source": "https://snap.easychamp.com/l/ae486173f3",
+      "capturedAt": "2026-09-27T06:35:28.458271+00:00",
+      "claim": "Actual existing live page recording; no new competition published.",
+      "viewport": "1440x900",
+      "bytes": 851451,
+      "sha256": "e92cf5962d065170894a1bc75f0e20221d66d18a47f374ec343825ead6ea0db8"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/11-group-desktop-v2.png",
+      "source": "https://shellhacks-panther-pit-break-c.at.easychamp.com/champ/3b4dfb25-4fa3-4124-8e73-5afc6f4abd75?leagueId=bdacf0d3-04c0-43c3-bbe7-e16d32ce6a84&tabs=standings",
+      "capturedAt": "2026-09-27T06:37:54.421082+00:00",
+      "claim": "Actual existing EasyChamp demo rendered through public edge with identifying QA User-Agent.",
+      "bytes": 179873,
+      "sha256": "6e35d652628b02546572a33dcc774fc0e0962937d003e46c632425b10c4d41f3",
+      "usable": true,
+      "httpStatus": 200,
+      "userAgent": "EasyChampShellHacksDemo/2026 (authorized product recording)"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/12-group-desktop-detail-v2.png",
+      "source": "https://shellhacks-panther-pit-break-c.at.easychamp.com/champ/3b4dfb25-4fa3-4124-8e73-5afc6f4abd75?leagueId=bdacf0d3-04c0-43c3-bbe7-e16d32ce6a84&tabs=standings",
+      "capturedAt": "2026-09-27T06:37:57.013675+00:00",
+      "claim": "Actual existing EasyChamp demo lower content.",
+      "bytes": 273832,
+      "sha256": "c6268031185351826225806310916c002448763563aa997656897e6da00acdac",
+      "usable": true,
+      "httpStatus": 200,
+      "userAgent": "EasyChampShellHacksDemo/2026 (authorized product recording)"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/group-desktop-live-v2.webm",
+      "source": "https://shellhacks-panther-pit-break-c.at.easychamp.com/champ/3b4dfb25-4fa3-4124-8e73-5afc6f4abd75?leagueId=bdacf0d3-04c0-43c3-bbe7-e16d32ce6a84&tabs=standings",
+      "capturedAt": "2026-09-27T06:37:58.976959+00:00",
+      "claim": "Continuous real headless recording; existing demo, no new publishing.",
+      "bytes": 880980,
+      "sha256": "92bd796568d75391d7b99ab615b11076541b01f3db41c107faa3ed3c1d51ce46",
+      "usable": true,
+      "httpStatus": 200,
+      "userAgent": "EasyChampShellHacksDemo/2026 (authorized product recording)"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/11-bracket-desktop-v2.png",
+      "source": "https://shellhacks-midnight-smash--dem.at.easychamp.com/champ/b04bac02-216e-4492-bcdf-0ac2a4ef0881?leagueId=451698a7-7593-4277-8d9f-acfe04c92ea0&tabs=knockout",
+      "capturedAt": "2026-09-27T06:38:06.560055+00:00",
+      "claim": "Actual existing EasyChamp demo rendered through public edge with identifying QA User-Agent.",
+      "bytes": 83586,
+      "sha256": "3252bec5c73114da93d630b28bcf793c335cd63db47a5ed0dff21d45d083942c",
+      "usable": true,
+      "httpStatus": 200,
+      "userAgent": "EasyChampShellHacksDemo/2026 (authorized product recording)"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/12-bracket-desktop-detail-v2.png",
+      "source": "https://shellhacks-midnight-smash--dem.at.easychamp.com/champ/b04bac02-216e-4492-bcdf-0ac2a4ef0881?leagueId=451698a7-7593-4277-8d9f-acfe04c92ea0&tabs=knockout",
+      "capturedAt": "2026-09-27T06:38:09.161791+00:00",
+      "claim": "Actual existing EasyChamp demo lower content.",
+      "bytes": 254665,
+      "sha256": "198f97b230c5a8ad09c4997b091cbaf699879c56686b23573526bd41f5a5d6d8",
+      "usable": true,
+      "httpStatus": 200,
+      "userAgent": "EasyChampShellHacksDemo/2026 (authorized product recording)"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/bracket-desktop-live-v2.webm",
+      "source": "https://shellhacks-midnight-smash--dem.at.easychamp.com/champ/b04bac02-216e-4492-bcdf-0ac2a4ef0881?leagueId=451698a7-7593-4277-8d9f-acfe04c92ea0&tabs=knockout",
+      "capturedAt": "2026-09-27T06:38:11.099075+00:00",
+      "claim": "Continuous real headless recording; existing demo, no new publishing.",
+      "bytes": 720921,
+      "sha256": "8038d8d2bf5e45337d3f158ca955bf0ba3f360b7b6238ac41767e7dc04d2c4c8",
+      "usable": true,
+      "httpStatus": 200,
+      "userAgent": "EasyChampShellHacksDemo/2026 (authorized product recording)"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/13-elevenlabs-board-readout.png",
+      "source": "https://snap.easychamp.com/l/b766d1be06",
+      "capturedAt": "2026-09-27T06:38:17.585380+00:00",
+      "claim": "Actual Read out action on existing synthetic demo board. Audio proof linked separately.",
+      "bytes": 418440,
+      "sha256": "63311bf65d900a3be380cc275e1c2bdaca8026608c8fd721029b7078ce5634b2"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/elevenlabs-board-readout-live.webm",
+      "source": "https://snap.easychamp.com/l/b766d1be06",
+      "capturedAt": "2026-09-27T06:38:24.531985+00:00",
+      "claim": "Actual product Read out interaction. Browser recording silent; use actual captured provider MP3.",
+      "bytes": 943521,
+      "sha256": "b6ee73fd284a0f2921fac410dc8dcd16a79801a7f4b45ae5009e01892268d6cd"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/group-desktop-live-v2.mp4",
+      "source": "videos/snap-to-league/assets/proof/group-desktop-live-v2.webm",
+      "capturedAt": "2026-09-27T06:40:56.137867+00:00",
+      "claim": "H264 transcode of real browser recording; no speed or content edits; no audio track.",
+      "derivativeOf": "videos/snap-to-league/assets/proof/group-desktop-live-v2.webm",
+      "bytes": 695603,
+      "sha256": "8d24a9df2191b4c221ccb1863223594dcae4e49dc3970c326f3cfdde422770e0",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "11.080000",
+          "size": "695603"
+        }
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/bracket-desktop-live-v2.mp4",
+      "source": "videos/snap-to-league/assets/proof/bracket-desktop-live-v2.webm",
+      "capturedAt": "2026-09-27T06:40:56.162421+00:00",
+      "claim": "H264 transcode of real browser recording; no speed or content edits; no audio track.",
+      "derivativeOf": "videos/snap-to-league/assets/proof/bracket-desktop-live-v2.webm",
+      "bytes": 388568,
+      "sha256": "9537afa7237387fc9bfb07f60f7d64697f0e1b3a40a666df34699fb003fdd3ba",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "12.120000",
+          "size": "388568"
+        }
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/trivia-desktop-live.mp4",
+      "source": "videos/snap-to-league/assets/proof/trivia-desktop-live.webm",
+      "capturedAt": "2026-09-27T06:40:56.185355+00:00",
+      "claim": "H264 transcode of real browser recording; no speed or content edits; no audio track.",
+      "derivativeOf": "videos/snap-to-league/assets/proof/trivia-desktop-live.webm",
+      "bytes": 509857,
+      "sha256": "65295b89c69935ed1ecc198f4599cd582cfa754ac4281368aeac0b4764ddad04",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "10.320000",
+          "size": "509857"
+        }
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/elevenlabs-board-readout-live.mp4",
+      "source": "videos/snap-to-league/assets/proof/elevenlabs-board-readout-live.webm",
+      "capturedAt": "2026-09-27T06:40:56.208106+00:00",
+      "claim": "H264 transcode of real browser recording; no speed or content edits; no audio track.",
+      "derivativeOf": "videos/snap-to-league/assets/proof/elevenlabs-board-readout-live.webm",
+      "bytes": 661963,
+      "sha256": "438dd3d9b05fd801cb94b119a9de03f3ab96c7dc4dfbbf3cfe98dbcb2f52e5f4",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "13.160000",
+          "size": "661963"
+        }
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/elevenlabs-short-endpoint-check.mp3",
+      "source": "https://snap.easychamp.com/api/speak",
+      "capturedAt": "2026-09-27T06:40:56.228702+00:00",
+      "claim": "Actual provider audio returned via app POST /api/speak. Direct endpoint verification, not extracted from browser video. Exact-board file reuses text from real in-product Read out request.",
+      "requestText": "Snap to League. Golden Panthers lead the group with six points.",
+      "bytes": 54378,
+      "sha256": "e640e14372098f1232b4e30bf6063493cb00bc2d61dfdf51b138fc59a0095d15",
+      "mediaProbe": {
+        "format": {
+          "duration": "3.343673",
+          "size": "54378"
+        }
+      },
+      "usable": true
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/elevenlabs-exact-board-text-endpoint.mp3",
+      "source": "https://snap.easychamp.com/api/speak",
+      "capturedAt": "2026-09-27T06:40:56.249237+00:00",
+      "claim": "Actual provider audio returned via app POST /api/speak. Direct endpoint verification, not extracted from browser video. Exact-board file reuses text from real in-product Read out request.",
+      "requestText": "ShellHacks Panther Pit Break Cup \u00b7 Demo. Standings after 7 games. First, Null Pointers, 6 points. Second, Stack Overflow FC, 4 points. Third, Infinite Loops, 4 points. Fourth, Segfault United, 4 points. Fifth, Merge Conflicts, 1 point. Sixth, Git Pushers, 0 points. Seventh, 404 Not Found, 0 points. Eighth, Rubber Duckies, 0 points. Semifinals results. Segfault United beat Null Pointers 3 to 2. Infinite Loops beat Stack Overflow FC 1 to 0. Next up: 404 Not Found against Git Pushers, Sat 11:30pm on Panther Pit.",
+      "bytes": 592710,
+      "sha256": "fc6411309d235c831b6322d76aedc9e6ead55229149e3fd1efdd98596bfb1d50",
+      "mediaProbe": {
+        "format": {
+          "duration": "36.966168",
+          "size": "592710"
+        }
+      },
+      "usable": true
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-desktop-board-before.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:43:51.777529+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 152138,
+      "sha256": "3589d2e7b1cf708abb2f8c7a0f60545bd536eb8b8ec89b8910fc43467494b4cc",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-desktop-board-update.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:43:51.854055+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 162877,
+      "sha256": "0a21e214c4142ce4940c495a128f635ad0893436055949dea0c44bf98fc69eb2",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/01-home-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:43:54.840004+00:00",
+      "claim": "Live product, guest session, Gemini selected.",
+      "bytes": 821162,
+      "sha256": "060a51a9951b1c5c14190d20573dcb468296b1e8239f612a1ddd104b6406d555",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/02-upload-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:43:56.117871+00:00",
+      "claim": "Actual synthetic board selected for upload.",
+      "bytes": 365667,
+      "sha256": "6425e98594d4d57fd0e144847a1e6f2330e49ed384289fb772bb47a69eb8c0e7",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/03-reading-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:43:57.123023+00:00",
+      "claim": "Actual live Gemini import in progress; wait is recorded in real time.",
+      "bytes": 397940,
+      "sha256": "5308065b19665fb068a5245bdb2f2afee31f25842249642eb6f0560ce816e3a8",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/04-review-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:03.276338+00:00",
+      "claim": "Actual desktop extracted matches and scorers; primary reader normalized name without initial warning.",
+      "bytes": 398217,
+      "sha256": "57ff9af0517809403d1f14727ad1232571c955a0d41248b00ddd6d0b892b2fed",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/04-review-desktop-flow-full.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:03.450210+00:00",
+      "claim": "Full actual review with synthetic data.",
+      "bytes": 507011,
+      "sha256": "7aa2805bee02918fbe939ee32bc13594fd13225aae756f744a9ff211e89d1073",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/06-editable-score-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:04.391361+00:00",
+      "claim": "User edits demo score in real review UI (temporary demonstration).",
+      "bytes": 399481,
+      "sha256": "97a6781251937bbd0049770c186def8c0c24412a5c66072fbc7732b6cd046d77",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/07-table-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:05.957742+00:00",
+      "claim": "Actual table recomputed from extracted results.",
+      "bytes": 398229,
+      "sha256": "33fffc370ef21e5379182bc213909dd4463acb9e683111348f64f828de45e696",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/09-update-upload-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:07.074077+00:00",
+      "claim": "Next photo added to existing unsaved draft; no EasyChamp write.",
+      "bytes": 370071,
+      "sha256": "651f8c222fbcc2e6644a1cd9a5643a373883a6b2892bc0fdac631b7947442a7f",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/10-update-comparison-desktop-flow.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:13.442555+00:00",
+      "claim": "Actual newer-photo comparison shows changed scheduled match.",
+      "bytes": 406654,
+      "sha256": "7c84b79f0dc304c67d3452b2211406a0157a0413176a5506fd5d74eef1174e1d",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/10-update-comparison-desktop-flow-full.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:13.584054+00:00",
+      "claim": "Full actual update comparison.",
+      "bytes": 523737,
+      "sha256": "48dccaa0bfc26df641b3b0d50bb7196e9a581dc2acca2bb6a9a6d2d426e8d139",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/desktop-live-import-and-update.webm",
+      "source": "https://snap.easychamp.com",
+      "capturedAt": "2026-09-27T06:44:15.124050+00:00",
+      "claim": "Continuous actual desktop browser recording of file upload, live AI read, editable score, table and next-photo update; synthetic inputs. No readout action in this capture.",
+      "viewport": "1440x900",
+      "timeline": "videos/snap-to-league/reports/desktop-proof-timeline.json",
+      "bytes": 2538948,
+      "sha256": "2e6a8dd444feb35d14de4ef73c5be9cebaf501597a97c4f2f0c6091cefa90021",
+      "publicLabel": "Fresh live capture \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/14-snap-knockout-desktop.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:27.227065+00:00",
+      "claim": "Actual Snap app bracket sample read, synthetic original sample; distinct from iPhone venue footage.",
+      "bytes": 382319,
+      "sha256": "a76d81239b894a190adf7072ca21e48bd27a5c2037349fe8475f3e8ddeb16a34",
+      "publicLabel": "Built-in bracket sample \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/14-snap-knockout-desktop-full.png",
+      "source": "https://snap.easychamp.com/",
+      "capturedAt": "2026-09-27T06:44:27.383280+00:00",
+      "claim": "Full actual Snap sample review; not newly published to EasyChamp.",
+      "bytes": 565049,
+      "sha256": "970554f4ff09b99621b37b333594d5f756ca90918efd81a402fd9d5d09c49da0",
+      "publicLabel": "Built-in bracket sample \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/snap-knockout-desktop-live.webm",
+      "source": "https://snap.easychamp.com",
+      "capturedAt": "2026-09-27T06:44:29.976879+00:00",
+      "claim": "Actual built-in bracket sample imported through live AI. Synthetic sample names distinct from venue footage.",
+      "viewport": "1440x900",
+      "bytes": 1231158,
+      "sha256": "27b907654fdbdf6fa34974a96c6b0967c9e3e05f355794051edec46f6a508a42",
+      "publicLabel": "Built-in bracket sample \u00b7 demo data"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/desktop-live-import-and-update.mp4",
+      "source": "videos/snap-to-league/assets/proof/desktop-live-import-and-update.webm",
+      "capturedAt": "2026-09-27T06:46:41.770638+00:00",
+      "claim": "H264 transcode of actual desktop browser recording; no speed/content edits, no audio track.",
+      "derivativeOf": "videos/snap-to-league/assets/proof/desktop-live-import-and-update.webm",
+      "bytes": 3650723,
+      "sha256": "5c1de38d0996d039e42b622466365b2b0680c000657dcef4081d7a5f2cdbf706",
+      "mediaProbe": {
+        "format": {
+          "duration": "26.560000",
+          "size": "3650723"
+        }
+      },
+      "frameVerification": {
+        "timesSeconds": [
+          2,
+          12.5,
+          22
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/snap-knockout-desktop-live.mp4",
+      "source": "videos/snap-to-league/assets/proof/snap-knockout-desktop-live.webm",
+      "capturedAt": "2026-09-27T06:46:41.804254+00:00",
+      "claim": "H264 transcode of actual desktop browser recording; no speed/content edits, no audio track.",
+      "derivativeOf": "videos/snap-to-league/assets/proof/snap-knockout-desktop-live.webm",
+      "bytes": 2013254,
+      "sha256": "190e21cc7df1d32838e0a519ba273b79971d7d2439d48de1ddbfbd191ba78602",
+      "mediaProbe": {
+        "format": {
+          "duration": "16.600000",
+          "size": "2013254"
+        }
+      },
+      "frameVerification": {
+        "timesSeconds": [
+          12
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-mobile-clean-before.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:48:09.648243+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 150236,
+      "sha256": "ba1ffa909683d24cd5c3fa4d71a04c5dd27d245c9bdc0e444d5c701873392f42"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-mobile-clean-update.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:48:09.722496+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 160955,
+      "sha256": "9009d5ba3a4cb0f454a372b856094600f7ef5a72a69292c065a51e85892d0af6"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.webm",
+      "source": "https://snap.easychamp.com",
+      "capturedAt": "2026-09-27T06:48:34.304800+00:00",
+      "claim": "Video-only real browser capture of upload, fresh AI read, editable score and next-photo update; no screenshots during recording, no readout action.",
+      "viewport": "430x900@1x",
+      "timeline": "videos/snap-to-league/reports/portrait-clean-timeline.json",
+      "bytes": 2321097,
+      "sha256": "26490d05b4595d547f8a95281e17dc49ee9e6a2dac5e710756caf587e4fcea58",
+      "frameVerification": {
+        "timesSeconds": [
+          6,
+          13,
+          25
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false,
+        "verifiedAt": "2026-09-27T06:51:30.877166+00:00"
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.mp4",
+      "source": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.webm",
+      "capturedAt": "2026-09-27T06:51:30.877605+00:00",
+      "claim": "H264 video-only recording derivative; no content/speed edits. 2x variant uses Lanczos upscale from430x900 to860x1800.",
+      "bytes": 2321307,
+      "sha256": "c87bb908df0f2a97f4e16d24080e4dd6e0b50ef94677bf4e6ec3cd5276017e02",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 430,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "27.400000",
+          "size": "2321307"
+        }
+      },
+      "frameVerification": {
+        "timesSeconds": [
+          6,
+          13,
+          25
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update-2x.mp4",
+      "source": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.webm",
+      "capturedAt": "2026-09-27T06:51:30.900219+00:00",
+      "claim": "H264 video-only recording derivative; no content/speed edits. 2x variant uses Lanczos upscale from430x900 to860x1800.",
+      "bytes": 6439887,
+      "sha256": "acad801321e30f1e43870490f8d64a250b33baa1c39d42d110d3d84a4751f306",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 860,
+            "height": 1800
+          }
+        ],
+        "format": {
+          "duration": "27.400000",
+          "size": "6439887"
+        }
+      },
+      "frameVerification": {
+        "timesSeconds": [
+          6,
+          13,
+          25
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false
+      }
+    }
+  ],
+  "jobs": {
+    "cc751591baca": {
+      "id": "cc751591baca",
+      "status": "done",
+      "created": 1790490869.131903,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 5.4,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "5f63f37f810694a5",
+          "competition": "ShellHacks Proof Cup",
+          "sport": "soccer",
+          "check": "differs"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Proof Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": null,
+            "awayScore": null,
+            "status": "scheduled",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "5v5 soccer"
+        ],
+        "uncertain": [
+          "Team name spelled both 'Roary\\'s Raiders' and 'Roarys Raiders'."
+        ]
+      },
+      "flags": [
+        {
+          "level": "warn",
+          "message": "Team name spelled both 'Roary\\'s Raiders' and 'Roarys Raiders'.",
+          "source": "astra"
+        },
+        {
+          "level": "info",
+          "message": "Read \"Roarys Raiders\" as Roary's Raiders",
+          "source": "match"
+        },
+        {
+          "level": "warn",
+          "message": "A second read saw Golden Panthers v Roary's Raiders as 1-0; check the photo",
+          "source": "second"
+        }
+      ],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 1,
+          "W": 0,
+          "D": 1,
+          "L": 0,
+          "GF": 2,
+          "GA": 2,
+          "GD": 0,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 1,
+          "W": 0,
+          "D": 0,
+          "L": 1,
+          "GF": 1,
+          "GA": 3,
+          "GD": -2,
+          "Pts": 0
+        }
+      ],
+      "review": null,
+      "seconds": 5.4,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 1,
+        "finished": true
+      },
+      "seconds_checked": 13.7,
+      "completedReceiptReadAt": "2026-09-27T06:46:41.770089+00:00"
+    },
+    "c5c7059d2e54": {
+      "id": "c5c7059d2e54",
+      "status": "done",
+      "created": 1790490886.495295,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 5.7,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "6354ba5f8666f66b",
+          "competition": "ShellHacks Proof Cup",
+          "sport": "soccer",
+          "check": "agrees"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Proof Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "A missing apostrophe \u2014 same team",
+          "SYNTHETIC DEMO DATA \u00b7 SEPTEMBER 27, 2026"
+        ],
+        "uncertain": []
+      },
+      "flags": [],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 2,
+          "W": 1,
+          "D": 0,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 3
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        }
+      ],
+      "review": {
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "changes": [
+          {
+            "kind": "result",
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "before": "not played",
+            "after": "2-1"
+          }
+        ],
+        "renamed": {}
+      },
+      "seconds": 5.7,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 0,
+        "finished": true
+      },
+      "seconds_checked": 11.2,
+      "completedReceiptReadAt": "2026-09-27T06:46:41.770412+00:00"
+    },
+    "32f19568140e": {
+      "id": "32f19568140e",
+      "status": "done",
+      "created": 1790491436.227695,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 4.8,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "3589d2e7b1cf708a",
+          "competition": "ShellHacks Desktop Cup",
+          "sport": "soccer",
+          "check": "agrees"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Desktop Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": null,
+            "awayScore": null,
+            "status": "scheduled",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "5v5 soccer"
+        ],
+        "uncertain": []
+      },
+      "flags": [],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 1,
+          "W": 0,
+          "D": 1,
+          "L": 0,
+          "GF": 2,
+          "GA": 2,
+          "GD": 0,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 1,
+          "W": 0,
+          "D": 0,
+          "L": 1,
+          "GF": 1,
+          "GA": 3,
+          "GD": -2,
+          "Pts": 0
+        }
+      ],
+      "review": null,
+      "seconds": 4.8,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 0,
+        "finished": true
+      },
+      "seconds_checked": 12.0,
+      "completedReceiptReadAt": "2026-09-27T06:46:41.770489+00:00"
+    },
+    "f5b2e90c4e0a": {
+      "id": "f5b2e90c4e0a",
+      "status": "done",
+      "created": 1790491447.145351,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 2.7,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "0a21e214c4142ce4",
+          "competition": "ShellHacks Desktop Cup",
+          "sport": "soccer",
+          "check": "differs"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Desktop Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "5v5 soccer",
+          "GROUP A \u00b7 UPDATED BOARD",
+          "A missing apostrophe \u2014 same team",
+          "SYNTHETIC DEMO DATA \u00b7 SEPTEMBER 27, 2026 \u00b7 DESKTOP CAPTURE"
+        ],
+        "uncertain": []
+      },
+      "flags": [
+        {
+          "level": "info",
+          "message": "Read \"Roarys Raiders\" as Roary's Raiders",
+          "source": "match"
+        },
+        {
+          "level": "warn",
+          "message": "A second read saw Golden Panthers v Roary's Raiders as 1-0; check the photo",
+          "source": "second"
+        }
+      ],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 2,
+          "W": 1,
+          "D": 0,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 3
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        }
+      ],
+      "review": {
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "changes": [
+          {
+            "kind": "result",
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "before": "not played",
+            "after": "2-1"
+          }
+        ],
+        "renamed": {}
+      },
+      "seconds": 2.7,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 1,
+        "finished": true
+      },
+      "seconds_checked": 12.6,
+      "completedReceiptReadAt": "2026-09-27T06:46:41.770563+00:00"
+    },
+    "2502352e37c5": {
+      "id": "2502352e37c5",
+      "status": "done",
+      "created": 1790491456.899059,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 7.0,
+          "matches": 7,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "dbd2f7d47d291a13",
+          "competition": "Smash Night Bracket",
+          "sport": "smash",
+          "check": "agrees"
+        }
+      ],
+      "extraction": {
+        "competition": "Smash Night Bracket",
+        "sport": "smash",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "Byte",
+          "Ganonz",
+          "Kirbo",
+          "Lumen",
+          "Marth4",
+          "Neoz",
+          "Pika_Pal",
+          "Shellby"
+        ],
+        "matches": [
+          {
+            "home": "Kirbo",
+            "away": "Neoz",
+            "homeScore": 2,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "quarterfinal",
+            "group": null,
+            "round": "Round 1",
+            "winner": "Kirbo",
+            "goals": []
+          },
+          {
+            "home": "Pika_Pal",
+            "away": "Marth4",
+            "homeScore": 1,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "quarterfinal",
+            "group": null,
+            "round": "Round 1",
+            "winner": "Marth4",
+            "goals": []
+          },
+          {
+            "home": "Shellby",
+            "away": "Byte",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "quarterfinal",
+            "group": null,
+            "round": "Round 1",
+            "winner": "Shellby",
+            "goals": []
+          },
+          {
+            "home": "Lumen",
+            "away": "Ganonz",
+            "homeScore": 0,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "quarterfinal",
+            "group": null,
+            "round": "Round 1",
+            "winner": "Ganonz",
+            "goals": []
+          },
+          {
+            "home": "Kirbo",
+            "away": "Marth4",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "semifinal",
+            "group": null,
+            "round": "Round 2",
+            "winner": "Kirbo",
+            "goals": []
+          },
+          {
+            "home": "Shellby",
+            "away": "Ganonz",
+            "homeScore": 1,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "semifinal",
+            "group": null,
+            "round": "Round 2",
+            "winner": "Ganonz",
+            "goals": []
+          },
+          {
+            "home": "Kirbo",
+            "away": "Ganonz",
+            "homeScore": null,
+            "awayScore": null,
+            "status": "scheduled",
+            "when": "1:30am",
+            "venue": "Setup 2",
+            "stage": "final",
+            "group": null,
+            "round": "FINAL",
+            "winner": null,
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "best of 3"
+        ],
+        "uncertain": []
+      },
+      "flags": [],
+      "standings": [],
+      "review": null,
+      "seconds": 7.0,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 0,
+        "finished": true
+      },
+      "seconds_checked": 11.2,
+      "completedReceiptReadAt": "2026-09-27T06:46:41.770621+00:00"
+    },
+    "3b67326d821c": {
+      "id": "3b67326d821c",
+      "status": "done",
+      "created": 1790491693.6544,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 5.3,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "ba1ffa909683d24c",
+          "competition": "ShellHacks Mobile Cup",
+          "sport": "soccer",
+          "check": "agrees"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Mobile Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": null,
+            "awayScore": null,
+            "status": "scheduled",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "5v5 soccer"
+        ],
+        "uncertain": [
+          "Team name spelled both 'Roary's Raiders' and 'Roarys Raiders' on screen."
+        ]
+      },
+      "flags": [
+        {
+          "level": "warn",
+          "message": "Team name spelled both 'Roary's Raiders' and 'Roarys Raiders' on screen.",
+          "source": "astra"
+        }
+      ],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 1,
+          "W": 0,
+          "D": 1,
+          "L": 0,
+          "GF": 2,
+          "GA": 2,
+          "GD": 0,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 1,
+          "W": 0,
+          "D": 0,
+          "L": 1,
+          "GF": 1,
+          "GA": 3,
+          "GD": -2,
+          "Pts": 0
+        }
+      ],
+      "review": null,
+      "seconds": 5.3,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 0,
+        "finished": true
+      },
+      "seconds_checked": 16.1,
+      "completedReceiptReadAt": "2026-09-27T06:51:30.877506+00:00"
+    },
+    "95d26e9740e6": {
+      "id": "95d26e9740e6",
+      "status": "done",
+      "created": 1790491705.107597,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 4.5,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "9009d5ba3a4cb0f4",
+          "competition": "ShellHacks Mobile Cup",
+          "sport": "soccer",
+          "check": "differs"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Mobile Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "5v5 soccer",
+          "A missing apostrophe \u2014 same team (Roary's Raiders / Roarys Raiders)"
+        ],
+        "uncertain": []
+      },
+      "flags": [
+        {
+          "level": "info",
+          "message": "Read \"Roarys Raiders\" as Roary's Raiders",
+          "source": "match"
+        },
+        {
+          "level": "warn",
+          "message": "A second read saw Golden Panthers v Roary's Raiders as 1-0; check the photo",
+          "source": "second"
+        }
+      ],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 2,
+          "W": 1,
+          "D": 0,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 3
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        }
+      ],
+      "review": {
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "changes": [
+          {
+            "kind": "result",
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "before": "not played",
+            "after": "2-1"
+          }
+        ],
+        "renamed": {}
+      },
+      "seconds": 4.5,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 1,
+        "finished": true
+      },
+      "seconds_checked": 13.1,
+      "completedReceiptReadAt": "2026-09-27T06:51:30.877588+00:00"
+    }
+  },
+  "network": [
+    {
+      "at": "2026-09-27T06:34:42.105836+00:00",
+      "url": "https://snap.easychamp.com/api/speak",
+      "status": 200,
+      "contentType": "audio/mpeg"
+    },
+    {
+      "at": "2026-09-27T06:38:15.467234+00:00",
+      "url": "https://snap.easychamp.com/api/speak",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "bytes": 0,
+      "request": {
+        "text": "ShellHacks Panther Pit Break Cup \u00b7 Demo. Standings after 7 games. First, Null Pointers, 6 points. Second, Stack Overflow FC, 4 points. Third, Infinite Loops, 4 points. Fourth, Segfault United, 4 points. Fifth, Merge Conflicts, 1 point. Sixth, Git Pushers, 0 points. Seventh, 404 Not Found, 0 points. Eighth, Rubber Duckies, 0 points. Semifinals results. Segfault United beat Null Pointers 3 to 2. Infinite Loops beat Stack Overflow FC 1 to 0. Next up: 404 Not Found against Git Pushers, Sat 11:30pm on Panther Pit."
+      },
+      "source": "actual board Read out click"
+    }
+  ],
+  "errors": [
+    "EasyChamp group and bracket pages denied by configured headless edge shedding (HTTP429, Retry-After3600). Initial media unusable; never use as product proof."
+  ],
+  "notes": [
+    "Production owner-operated crawler shield rejects default HeadlessChrome; public tenant retries used explicit identifying User-Agent EasyChampShellHacksDemo/2026 (authorized product recording). Browser remained headless; no edge config changed.",
+    "Two original browser audio response captures were zero bytes and rejected. Direct app endpoint produced valid MP3, including the exact real board-generated readout text; browser audible playback not verified.",
+    "Initial portrait capture used two fresh AI imports; desktop and built-in bracket added three more (five total). Before job cc751591baca read4 matches5.4s; first Astra check completed with1 difference. Update job c5c7059d2e54 read4 matches5.7s; exact newer scheduled-result transition to2-1. No new EasyChamp competition publications.",
+    "Both desktop imports and original built-in bracket sample performed fresh uncached Gemini3.8Flash reads; all completed GPT6Astra second checks in persisted runtime receipts.",
+    "Desktop initial read normalized team spelling without warning; update shows real Name matched card. Use portrait05-warning-phone.png if a yellow uncertainty card is required; never synthesize a warning.",
+    "All synthetic data. Bracket sample names Kirbo/NeoZ/Pika_Pal/Marth4/Shellby/Byte/Lumen/Ganonz differ from recorded venue footage.",
+    "Portrait framing repair added2fresh imports;7fresh imports total across captures. Original portraitvideo was rejected and removed from public assets. Replacement video-only capture verified at6s,13s,25s."
+  ],
+  "rejectedCaptures": [
+    {
+      "name": "elevenlabs-in-product-readout.mp3",
+      "reason": "REJECTED: first UI response body was empty despite HTTP200. Not audible proof."
+    },
+    {
+      "name": "11-group-desktop.png",
+      "reason": "REJECTED: edge HTTP429 x-ec-shed:headless; capture only displays busy, not product proof."
+    },
+    {
+      "name": "12-group-desktop-detail.png",
+      "reason": "REJECTED: edge HTTP429 x-ec-shed:headless; capture only displays busy, not product proof."
+    },
+    {
+      "name": "group-desktop-live.webm",
+      "reason": "REJECTED: edge HTTP429 x-ec-shed:headless; capture only displays busy, not product proof."
+    },
+    {
+      "name": "11-bracket-desktop.png",
+      "reason": "REJECTED: edge HTTP429 x-ec-shed:headless; capture only displays busy, not product proof."
+    },
+    {
+      "name": "12-bracket-desktop-detail.png",
+      "reason": "REJECTED: edge HTTP429 x-ec-shed:headless; capture only displays busy, not product proof."
+    },
+    {
+      "name": "bracket-desktop-live.webm",
+      "reason": "REJECTED: edge HTTP429 x-ec-shed:headless; capture only displays busy, not product proof."
+    },
+    {
+      "name": "phone-live-import-and-update.webm",
+      "reason": "Rejected after encoded-frame review:430x900 content occupies top-left of860x1800 canvas at parts of recording. Replaced by video-only capture with matching viewport and encoder dimensions."
+    },
+    {
+      "name": "phone-live-import-and-update.mp4",
+      "reason": "Rejected after encoded-frame review:430x900 content occupies top-left of860x1800 canvas at parts of recording. Replaced by video-only capture with matching viewport and encoder dimensions."
+    }
+  ]
+}

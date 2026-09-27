@@ -1,0 +1,43 @@
+{
+  "music": {
+    "title": "Deep Urban",
+    "creator": "Eugenio Mininni",
+    "source": "https://mixkit.co/free-stock-music/sports/",
+    "asset_url": "https://assets.mixkit.co/music/623/623.mp3",
+    "license": "Mixkit Stock Music Free License",
+    "license_url": "https://mixkit.co/license/#musicFree",
+    "license_terms_endpoint": "https://mixkit.co/license/modal/musicFree/",
+    "retrieved": "2026-09-27",
+    "sha256": "ac7e28f0cdd6c607df199c759f34ca66cfebd881ea61c26473fb4cecebe64fa8",
+    "use": "Integrated background score in finished video; raw music file is not distributed."
+  },
+  "voice": {
+    "provider": "ElevenLabs",
+    "model": "eleven_v3",
+    "voice_id": "EXAVITQu4vr4xnSDxMaL",
+    "takes": [
+      "bridge-a",
+      "bridge-b"
+    ],
+    "synthetic": true,
+    "cloned_voice": false
+  },
+  "footage": {
+    "source": "User-recorded ShellHacks footage, September 26\u201327, 2026",
+    "stock": false,
+    "ai_generated": false,
+    "originals": "Private verified SanDisk archive; never committed"
+  },
+  "fonts": [
+    {
+      "family": "Archivo",
+      "license": "SIL Open Font License 1.1",
+      "source": "https://github.com/google/fonts/tree/main/ofl/archivo"
+    },
+    {
+      "family": "Archivo Black",
+      "license": "SIL Open Font License 1.1",
+      "source": "https://github.com/google/fonts/tree/main/ofl/archivoblack"
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+[
+  {
+    "start": 0.08,
+    "end": 1.87,
+    "text": "This summer, World Cup came to"
+  },
+  {
+    "start": 1.88,
+    "end": 2.4,
+    "text": "Miami."
+  },
+  {
+    "start": 2.52,
+    "end": 5.09,
+    "text": "Office cups, school leagues,"
+  },
+  {
+    "start": 5.58,
+    "end": 7.8,
+    "text": "and even hackathon fellows."
+  },
+  {
+    "start": 7.88,
+    "end": 8.77,
+    "text": "and they still"
+  },
+  {
+    "start": 9.04,
+    "end": 9.769,
+    "text": "use a piece of paper to"
+  },
+  {
+    "start": 9.779,
+    "end": 11.0,
+    "text": "track all the results."
+  },
+  {
+    "start": 11.12,
+    "end": 13.29,
+    "text": "That's what inspired us to create"
+  },
+  {
+    "start": 13.3,
+    "end": 14.23,
+    "text": "a solution"
+  },
+  {
+    "start": 14.54,
+    "end": 16.29,
+    "text": "to convert it all into a"
+  },
+  {
+    "start": 16.42,
+    "end": 18.63,
+    "text": "beautiful league management software."
+  },
+  {
+    "start": 19.06,
+    "end": 19.98,
+    "text": "Let's take a look."
+  },
+  {
+    "start": 20.18,
+    "end": 21.65,
+    "text": "Pick it from a library"
+  },
+  {
+    "start": 22.76,
+    "end": 23.98,
+    "text": "or do it live."
+  },
+  {
+    "start": 24.23,
+    "end": 25.84,
+    "text": "Gemini reads the photo."
+  },
+  {
+    "start": 25.87,
+    "end": 27.805,
+    "text": "A second AI pass checks the"
+  },
+  {
+    "start": 27.815,
+    "end": 28.643,
+    "text": "extraction."
+  },
+  {
+    "start": 28.653,
+    "end": 30.838,
+    "text": "Review the teams and scores before"
+  },
+  {
+    "start": 30.848,
+    "end": 31.92,
+    "text": "publishing."
+  },
+  {
+    "start": 34.53,
+    "end": 35.32,
+    "text": "Look at this."
+  },
+  {
+    "start": 35.75,
+    "end": 37.9,
+    "text": "Panthers versus Shellhacks."
+  },
+  {
+    "start": 38.04,
+    "end": 39.11,
+    "text": "It knows that this is a"
+  },
+  {
+    "start": 39.12,
+    "end": 39.97,
+    "text": "group stage,"
+  },
+  {
+    "start": 40.56,
+    "end": 41.69,
+    "text": "shows the standings,"
+  },
+  {
+    "start": 56.0,
+    "end": 57.84,
+    "text": "and we could read it out."
+  },
+  {
+    "start": 58.0,
+    "end": 59.79,
+    "text": "Standings after two games."
+  },
+  {
+    "start": 60.0,
+    "end": 61.97,
+    "text": "First, Panthers, three points."
+  },
+  {
+    "start": 62.06,
+    "end": 64.13,
+    "text": "Second, Organizers, one point."
+  },
+  {
+    "start": 64.44,
+    "end": 66.09,
+    "text": "Third, Wizards, one point."
+  },
+  {
+    "start": 66.26,
+    "end": 68.39,
+    "text": "Fourth, Shellhacks, zero points."
+  },
+  {
+    "start": 68.55,
+    "end": 69.34,
+    "text": "Here we go."
+  },
+  {
+    "start": 69.55,
+    "end": 70.42,
+    "text": "The games,"
+  },
+  {
+    "start": 70.83,
+    "end": 71.68,
+    "text": "the bracket,"
+  },
+  {
+    "start": 76.14,
+    "end": 78.85,
+    "text": "With the handwriting or typing,"
+  },
+  {
+    "start": 79.8,
+    "end": 81.87,
+    "text": "convert it into beautiful"
+  },
+  {
+    "start": 82.76,
+    "end": 83.78,
+    "text": "statistics"
+  },
+  {
+    "start": 89.03,
+    "end": 89.86,
+    "text": "New result?"
+  },
+  {
+    "start": 89.87,
+    "end": 91.82,
+    "text": "Add another photo and review what"
+  },
+  {
+    "start": 91.83,
+    "end": 92.62,
+    "text": "changed."
+  },
+  {
+    "start": 92.63,
+    "end": 95.367,
+    "text": "Snap to League, built at ShellHacks"
+  },
+  {
+    "start": 95.377,
+    "end": 97.92,
+    "text": "on the existing EasyChamp platform."
+  }
+]

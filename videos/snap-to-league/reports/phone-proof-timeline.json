@@ -1,0 +1,47 @@
+[
+  {
+    "atSeconds": 2.76,
+    "event": "home",
+    "time": "2026-09-27T06:34:27.598718+00:00"
+  },
+  {
+    "atSeconds": 4.15,
+    "event": "upload ready",
+    "time": "2026-09-27T06:34:28.985649+00:00"
+  },
+  {
+    "atSeconds": 4.18,
+    "event": "read clicked",
+    "time": "2026-09-27T06:34:29.022067+00:00"
+  },
+  {
+    "atSeconds": 11.73,
+    "event": "review visible",
+    "time": "2026-09-27T06:34:36.574164+00:00"
+  },
+  {
+    "atSeconds": 14.28,
+    "event": "score edited 3 to 4",
+    "time": "2026-09-27T06:34:39.116048+00:00"
+  },
+  {
+    "atSeconds": 16.23,
+    "event": "table and readout",
+    "time": "2026-09-27T06:34:41.065279+00:00"
+  },
+  {
+    "atSeconds": 21.57,
+    "event": "update photo ready",
+    "time": "2026-09-27T06:34:46.413834+00:00"
+  },
+  {
+    "atSeconds": 21.6,
+    "event": "update read clicked",
+    "time": "2026-09-27T06:34:46.441696+00:00"
+  },
+  {
+    "atSeconds": 29.6,
+    "event": "update comparison visible",
+    "time": "2026-09-27T06:34:54.444508+00:00"
+  }
+]

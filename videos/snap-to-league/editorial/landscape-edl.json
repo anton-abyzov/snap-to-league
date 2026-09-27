@@ -1,0 +1,192 @@
+[
+  {
+    "start": 0,
+    "duration": 2.4,
+    "audio": "9043",
+    "source_in": 0.8,
+    "picture": "9043",
+    "style": "founder",
+    "heading": "YOUR LEAGUE.\nSTILL ON PAPER?",
+    "subheading": "A weekend idea, born at ShellHacks."
+  },
+  {
+    "start": 2.4,
+    "duration": 5.4,
+    "audio": "9043",
+    "source_in": 5.8,
+    "picture": "9034",
+    "style": "event",
+    "heading": "OFFICE CUPS.\nSCHOOL LEAGUES.",
+    "subheading": "And the games between hackathon sessions."
+  },
+  {
+    "start": 7.8,
+    "duration": 3.2,
+    "audio": "9045",
+    "source_in": 30.14,
+    "picture": "9051",
+    "style": "paper",
+    "heading": "EVERY RESULT.\nONE PIECE OF PAPER.",
+    "subheading": "The problem starts after the final whistle."
+  },
+  {
+    "start": 11,
+    "duration": 8.98,
+    "audio": "9045",
+    "source_in": 35.52,
+    "picture": "9051",
+    "style": "paper",
+    "heading": "MEET\nSNAP TO LEAGUE.",
+    "subheading": "Photo \u2192 review \u2192 share."
+  },
+  {
+    "start": 19.98,
+    "duration": 4,
+    "audio": "9049",
+    "source_in": 11.6,
+    "picture": "9051",
+    "style": "phone",
+    "heading": "01 / SNAP",
+    "subheading": "Take a photo. Or choose one."
+  },
+  {
+    "start": 23.98,
+    "duration": 10.42,
+    "audio": "bridge-a",
+    "source_in": 0,
+    "picture": "import",
+    "style": "proof",
+    "heading": "02 / READ + CHECK",
+    "subheading": "Real live capture \u00b7 demo data"
+  },
+  {
+    "start": 34.4,
+    "duration": 3.5,
+    "audio": "9049",
+    "source_in": 49.85,
+    "picture": "9049",
+    "style": "phone",
+    "heading": "THE GAMES\nBECOME RESULTS.",
+    "subheading": "Original on-phone demo"
+  },
+  {
+    "start": 37.9,
+    "duration": 3.79,
+    "audio": "9049",
+    "source_in": 57.16,
+    "picture": "9049",
+    "style": "phone",
+    "heading": "GROUPS.\nSTANDINGS.",
+    "subheading": "Original on-phone demo"
+  },
+  {
+    "start": 41.69,
+    "duration": 8.21,
+    "audio": null,
+    "source_in": 0,
+    "picture": "review",
+    "style": "proof",
+    "heading": "03 / REVIEW",
+    "subheading": "Names flagged. Scores editable. You stay in control."
+  },
+  {
+    "start": 49.9,
+    "duration": 6,
+    "audio": null,
+    "source_in": 0,
+    "picture": "group",
+    "style": "wide",
+    "heading": "READY TO SHARE.",
+    "subheading": "Separate published example \u00b7 Existing EasyChamp platform"
+  },
+  {
+    "start": 55.9,
+    "duration": 1.94,
+    "audio": "9049",
+    "source_in": 63.2,
+    "picture": "9049",
+    "style": "phone",
+    "heading": "GIVE RESULTS\nA VOICE.",
+    "subheading": "Read aloud with ElevenLabs"
+  },
+  {
+    "start": 57.84,
+    "duration": 10.55,
+    "audio": "9049",
+    "source_in": 66.8,
+    "picture": "9049",
+    "style": "phone",
+    "heading": "LISTEN TO\nTHE STANDINGS.",
+    "subheading": "Actual in-product audio \u00b7 Original event recording"
+  },
+  {
+    "start": 68.39,
+    "duration": 5.02,
+    "audio": "9056",
+    "source_in": 17.1,
+    "picture": "snap-bracket",
+    "style": "phone",
+    "heading": "THE GAMES.\nTHE BRACKET.",
+    "subheading": "Separate live capture \u00b7 Demo data"
+  },
+  {
+    "start": 73.41,
+    "duration": 2.59,
+    "audio": null,
+    "source_in": 0,
+    "picture": "bracket",
+    "style": "wide",
+    "heading": "THE WHOLE BRACKET.",
+    "subheading": "Separate published example \u00b7 Existing EasyChamp platform"
+  },
+  {
+    "start": 76,
+    "duration": 7.78,
+    "audio": "9060",
+    "source_in": 17.12,
+    "picture": "9060",
+    "style": "phone",
+    "heading": "PAPER OR SCREEN.\nSAME STARTING POINT.",
+    "subheading": "Real handwritten input, captured at ShellHacks."
+  },
+  {
+    "start": 83.78,
+    "duration": 3,
+    "audio": null,
+    "source_in": 0,
+    "picture": "9034",
+    "style": "event",
+    "heading": "MORE WAYS\nTO COMPETE.",
+    "subheading": "ShellHacks activity"
+  },
+  {
+    "start": 86.78,
+    "duration": 2,
+    "audio": null,
+    "source_in": 0,
+    "picture": "trivia",
+    "style": "wide",
+    "heading": "ANYTHING\nWITH PLACES.",
+    "subheading": "Real Snap demo \u00b7 Podiums share on Snap"
+  },
+  {
+    "start": 88.78,
+    "duration": 15.22,
+    "audio": "bridge-b",
+    "source_in": 0,
+    "picture": "update",
+    "style": "proof",
+    "heading": "NEW RESULT?\nADD ANOTHER PHOTO.",
+    "subheading": "Live comparison \u00b7 Demo data"
+  },
+  {
+    "start": 104,
+    "duration": 6,
+    "audio": null,
+    "source_in": 0,
+    "picture": "9051",
+    "style": "end",
+    "heading": "PLAY THE GAME.\nKEEP THE STORY.",
+    "subheading": "snap.easychamp.com"
+  }
+]
