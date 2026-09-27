@@ -49,7 +49,7 @@ def checks(ex: Extraction, model_rows: list[Row]) -> tuple[list[Row], list[Flag]
     names = sorted({t for m in ex.matches for t in (m.home, m.away)} | set(ex.teams))
     for i, a in enumerate(names):
         for b in names[i + 1:]:
-            if a.casefold() == b.casefold() or difflib.SequenceMatcher(None, a.casefold(), b.casefold()).ratio() >= 0.85:
+            if a.casefold() == b.casefold() or difflib.SequenceMatcher(None, a.casefold(), b.casefold()).ratio() >= 0.8:
                 flags.append(Flag(level="warn", message=f'"{a}" and "{b}" look like the same team', source="check"))
 
     pairs = Counter(frozenset((m.home, m.away)) for m in ex.matches if m.stage == "group" and m.status == "played")

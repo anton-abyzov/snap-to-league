@@ -171,3 +171,45 @@ def test_second_reader_disagreement():
     other = Extraction(matches=[Match(home="Lions", away="Sharks", homeScore=3, awayScore=4, status="played")])
     assert disagreements(a, same, "astra") == []
     assert disagreements(a, other, "astra") == ["astra read Lions v Sharks as 3-4; check the photo"]
+
+
+def test_combine_two_sheets_merges_names_results_and_scorers():
+    from app.merge import combine, review
+    G = lambda p, side, c=1: {"player": p, "side": side, "count": c}
+    one = [Match(home="Lions", away="Sharks", homeScore=3, awayScore=1, status="played", round="Week 3",
+                 goals=[G("Diaz", "home", 2), G("Kim", "home"), G("Lee", "away")]),
+           Match(home="Lions", away="Hawks", when="Sun 7pm", venue="Court 2")]
+    two = [Match(home="Lions", away="Sharks", homeScore=3, awayScore=1, status="played", round="Week 4"),
+           Match(home="Lions", away="Hawks", homeScore=0, awayScore=1, status="played", goals=[G("Ortega", "away")]),
+           Match(home="SHARKS", away="Wolves", homeScore=4, awayScore=2, status="played")]
+    c = combine([one, two])
+    assert len(c["matches"]) == 3 and c["conflicts"] == []
+    assert c["renamed"] == {"SHARKS": "Sharks"}
+    # a one-letter typo is not merged silently; the organizer gets a card instead
+    _, flags = checks(Extraction(matches=[Match(home="Sharks", away="Lions"), Match(home="Sharcs", away="Wolves")]), [])
+    assert any("look like the same team" in f.message for f in flags)
+    lh = next(m for m in c["matches"] if {m.home, m.away} == {"Lions", "Hawks"})
+    assert (lh.homeScore, lh.awayScore, lh.venue) == (0, 1, "Court 2")
+    ls = next(m for m in c["matches"] if {m.home, m.away} == {"Lions", "Sharks"})
+    assert sum(g.count for g in ls.goals) == 4
+    # a third photo disagreeing on a result is a conflict, not a silent overwrite
+    bad = [Match(home="Lions", away="Sharks", homeScore=2, awayScore=1, status="played", round="Week 3")]
+    assert combine([one, bad])["conflicts"][0]["second"] == "2-1"
+    # review against a saved league reports what changed
+    saved = [m.model_dump() for m in c["matches"]]
+    r = review(saved, [Match(home="sharks", away="Wolves", homeScore=4, awayScore=3, status="played")])
+    assert r["changes"] == [{"kind": "changed", "home": "Sharks", "away": "Wolves", "before": "4-2", "after": "4-3"}]
+    assert r["renamed"] == {"sharks": "Sharks"}
+
+
+def test_scorers_publish_as_roster_and_goal_events():
+    lg = {"id": "g", "name": "x", "sport": "futsal", "teams": [], "matches": [
+        {"home": "Lions", "away": "Sharks", "homeScore": 2, "awayScore": 0, "status": "played",
+         "goals": [{"player": "Diaz", "side": "home", "count": 2}]}]}
+    p = easychamp.build_payload(lg)
+    champ = p["League"]["Champs"][0]
+    lions = next(t for t in champ["Teams"] if t["Name"] == "Lions")
+    assert [m["Player"]["FullName"] for m in lions["TeamMembers"]] == ["Diaz"]
+    ev = champ["Stages"][0]["Groups"][0]["Fixtures"][0]["Events"]
+    assert len(ev) == 2 and all(e["EventType"] == "scorer" and e["IsHomeEvent"] for e in ev)
+    assert ev[0]["Player"]["Id"] == lions["TeamMembers"][0]["Player"]["Id"]

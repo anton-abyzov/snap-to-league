@@ -113,6 +113,15 @@ def build_payload(league: dict) -> dict:
     names = list(dict.fromkeys(league.get("teams", []) + [t for m in matches for t in (m.home, m.away)]))
     team_id = {n: f"snap:{lid}:team:{slug(n)}" for n in names}
 
+    def player(team: str, name: str) -> dict:
+        return {"Id": f"snap:{lid}:player:{slug(team)}:{slug(name)}", "FullName": name, "SportKindName": sport}
+
+    roster: dict[str, dict[str, dict]] = {n: {} for n in names}
+    for m in matches:
+        for g in m.goals:
+            team = m.home if g.side == "home" else m.away
+            roster.setdefault(team, {})[slug(g.player)] = player(team, g.player)
+
     start = datetime.now(TZ).replace(second=0, microsecond=0) - timedelta(hours=3)
 
     def fixture(m: Match, order: int) -> dict:
@@ -130,6 +139,16 @@ def build_payload(league: dict) -> dict:
         }
         if played:
             f["HomeTeamScore"], f["AwayTeamScore"] = str(m.homeScore), str(m.awayScore)
+            events, n = [], 0
+            for g in m.goals:
+                team = m.home if g.side == "home" else m.away
+                for _ in range(g.count):
+                    n += 1
+                    events.append({"Id": f"snap:{lid}:evt:{fixture_key(m)}:{n}", "IsHomeEvent": g.side == "home",
+                                   "Minute": (g.minute or "0").strip("'"), "EventType": "scorer", "Points": 1,
+                                   "Player": player(team, g.player)})
+            if events:
+                f["Events"] = events
         if m.venue:
             f["Venue"] = {"Id": f"snap:{lid}:venue:{slug(m.venue)}", "Name": m.venue}
         return f
@@ -189,7 +208,8 @@ def build_payload(league: dict) -> dict:
                 "Id": f"snap:{lid}:champ", "Name": league["name"], "LeagueName": league["name"],
                 "SportKindName": sport, "StartDate": (today - timedelta(days=1)).isoformat(), "EndDate": (today + timedelta(days=7)).isoformat(),
                 "FixturesCount": len(matches),
-                "Teams": [{"Id": team_id[n], "Name": n, "SportKindName": sport} for n in names],
+                "Teams": [{"Id": team_id[n], "Name": n, "SportKindName": sport,
+                           "TeamMembers": [{"Player": p} for p in roster.get(n, {}).values()]} for n in names],
                 "Stages": stages,
             }],
         },

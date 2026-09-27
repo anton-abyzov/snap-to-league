@@ -6,6 +6,24 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 
+class Goal(BaseModel):
+    """A scorer written on a scoresheet ("Goals: Smith 2, Lee")."""
+    player: str
+    side: Literal["home", "away"]
+    count: int = 1
+    minute: Optional[str] = None
+
+    @field_validator("player")
+    @classmethod
+    def _strip(cls, v: str) -> str:
+        return " ".join(v.split())
+
+    @field_validator("count", mode="before")
+    @classmethod
+    def _count(cls, v):
+        return max(1, int(v or 1))
+
+
 class Match(BaseModel):
     home: str
     away: str
@@ -18,6 +36,7 @@ class Match(BaseModel):
     group: Optional[str] = None
     round: Optional[str] = None
     winner: Optional[str] = None
+    goals: list[Goal] = Field(default_factory=list)
 
     @field_validator("home", "away")
     @classmethod
@@ -79,7 +98,7 @@ class Extraction(BaseModel):
 class Flag(BaseModel):
     level: Literal["info", "warn", "error"]
     message: str
-    source: Literal["astra", "check", "second"]
+    source: Literal["astra", "check", "second", "merge", "match"]
 
 
 class Snap(BaseModel):

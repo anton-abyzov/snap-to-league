@@ -5,7 +5,7 @@ import uuid
 from pathlib import Path
 
 import httpx
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, Header, HTTPException, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -15,7 +15,8 @@ from .env import load_env
 
 load_env()
 
-from . import easychamp, store  # noqa: E402
+from . import easychamp, jobs, safety, store  # noqa: E402
+from .merge import fixture_key as merge_key, review as merge_review  # noqa: E402
 from .extract import ExtractError, extract
 from .schema import Extraction, Flag, Match, Snap
 from .standings import checks, compute
@@ -23,7 +24,6 @@ from .standings import checks, compute
 ROOT = Path(__file__).resolve().parent.parent
 STATIC = ROOT / "static"
 SAMPLES = {"board": ROOT / "tests" / "fixtures" / "board.jpg", "bracket": ROOT / "tests" / "fixtures" / "bracket.jpg"}
-MAX_BYTES = 12 * 1024 * 1024
 
 app = FastAPI(title="Snap to League")
 
@@ -93,32 +93,86 @@ def health():
             "choices": [{"id": k, **v} for k, v in READERS.items()] if dual else [], "primary": PRIMARY,
             "second": SECOND.split("/")[-1] if dual else None,
             "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and (os.environ.get("EC_TOKEN") or os.environ.get("EC_TOKEN_CMD")) else "dry-run",
+            "pin": bool(os.environ.get("SNAP_PUBLISH_PIN")), "maxPhotos": safety.MAX_PHOTOS,
+            "gemini": "google" if os.environ.get("GEMINI_API_KEY") else ("openrouter" if dual else None),
             "voice": bool(os.environ.get("ELEVENLABS_API_KEY"))}
 
 
+@app.get("/api/stats")
+def stats():
+    """Totals for the stats page: photos, matches, time, corrections, readers."""
+    from .stats import totals
+    return totals()
+
+
+@app.get("/stats")
+def stats_page():
+    return FileResponse(STATIC / "stats.html")
+
+
 @app.post("/api/snap")
-async def snap(image: UploadFile = File(...), leagueId: str | None = Form(None), reader: str | None = Form(None)):
+async def snap(request: Request, image: UploadFile = File(...), leagueId: str | None = Form(None),
+               reader: str | None = Form(None)):
+    """One photo, answered in the same request (kept for scripts; the app uses /api/jobs)."""
     data = await image.read()
-    if not data:
-        raise HTTPException(400, "The photo is empty")
-    if len(data) > MAX_BYTES:
-        raise HTTPException(413, "The photo is over 12 MB; take it again at a lower resolution")
-    suffix = Path(image.filename or "photo.jpg").suffix.lower()
-    if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".heic"}:
-        suffix = ".jpg"
+    suffix = safety.check_image(data)
+    safety.spend(request, 1)
     path = store.images_dir() / f"{uuid.uuid4().hex[:12]}{suffix}"
     path.write_bytes(data)
     return await _run(path, leagueId, reader)
 
 
 @app.post("/api/sample")
-async def sample(leagueId: str | None = Form(None), kind: str = Form("board"), reader: str | None = Form(None)):
+async def sample(request: Request, leagueId: str | None = Form(None), kind: str = Form("board"),
+                 reader: str | None = Form(None)):
     src = SAMPLES.get(kind)
     if src is None:
         raise HTTPException(400, f"No sample called {kind}")
+    safety.spend(request, 1)
     path = store.images_dir() / f"sample-{uuid.uuid4().hex[:8]}.jpg"
     path.write_bytes(src.read_bytes())
     return await _run(path, leagueId, reader)
+
+
+@app.post("/api/jobs")
+async def create_job(request: Request, images: list[UploadFile] = File(default=[]), samples: str = Form(""),
+                     leagueId: str | None = Form(None), reader: str | None = Form(None)):
+    """Start reading one or more photos. Poll GET /api/jobs/{id} for progress."""
+    kinds = [k for k in samples.split(",") if k]
+    if not images and not kinds:
+        raise HTTPException(400, "Add at least one photo")
+    if len(images) + len(kinds) > safety.MAX_PHOTOS:
+        raise HTTPException(413, f"Up to {safety.MAX_PHOTOS} photos per import")
+    paths = []
+    for up in images:
+        data = await up.read()
+        suffix = safety.check_image(data)
+        paths.append((data, suffix))
+    for k in kinds:
+        if k not in SAMPLES:
+            raise HTTPException(400, f"No sample called {k}")
+    league = leagues.get(leagueId) if leagueId else None
+    if leagueId and not league:
+        raise HTTPException(404, "No such league")
+    safety.spend(request, len(paths) + len(kinds))
+    files = []
+    for data, suffix in paths:
+        p = store.images_dir() / f"{uuid.uuid4().hex[:12]}{suffix}"
+        p.write_bytes(data)
+        files.append(p)
+    for k in kinds:
+        p = store.images_dir() / f"sample-{k}-{uuid.uuid4().hex[:6]}.jpg"
+        p.write_bytes(SAMPLES[k].read_bytes())
+        files.append(p)
+    return jobs.create(files, league, reader, safety.visitor(request))
+
+
+@app.get("/api/jobs/{job_id}")
+def get_job(job_id: str):
+    job = jobs.get(job_id)
+    if not job:
+        raise HTTPException(404, "No such import")
+    return {k: v for k, v in job.items() if k != "owner"}
 
 
 @app.get("/api/images/{name}")
@@ -136,6 +190,17 @@ class LeagueIn(BaseModel):
     teams: list[str] = []
     matches: list[Match]
     snapIds: list[str] = []
+    jobId: str | None = None
+
+
+def corrections(job: dict | None, final: list[Match]) -> int:
+    """How many results the organizer changed from what the readers produced."""
+    if not job or not job.get("extraction"):
+        return 0
+    read = {merge_key(m): (m.homeScore, m.awayScore, m.winner)
+            for m in (Match.model_validate(x) for x in job["extraction"]["matches"])}
+    fixed = sum(1 for m in final if read.get(merge_key(m), "new") != (m.homeScore, m.awayScore, m.winner))
+    return fixed + max(0, len(read) - len(final))
 
 
 @app.post("/api/leagues")
@@ -146,11 +211,14 @@ def save_league(body: LeagueIn):
     prev = leagues.get(lid) or {}
     ex = Extraction(competition=body.name, sport=body.sport, teams=body.teams, matches=body.matches)
     table, flags = checks(ex, [])
+    job = jobs.get(body.jobId) if body.jobId else None
     doc = {"id": lid, "name": body.name, "sport": body.sport, "teams": body.teams,
            "matches": [m.model_dump() for m in body.matches],
            "snapIds": list(dict.fromkeys(prev.get("snapIds", []) + body.snapIds)),
+           "jobIds": list(dict.fromkeys(prev.get("jobIds", []) + ([body.jobId] if body.jobId else []))),
+           "corrections": prev.get("corrections", 0) + corrections(job, body.matches),
            "standings": [r.model_dump() for r in table], "flags": [f.model_dump() for f in flags],
-           "published": prev.get("published")}
+           "published": prev.get("published"), "updated": __import__("time").time()}
     leagues.put(doc)
     return doc
 
@@ -164,15 +232,17 @@ def get_league(league_id: str):
 
 
 @app.post("/api/leagues/{league_id}/publish")
-def publish(league_id: str):
+def publish(league_id: str, x_publish_pin: str | None = Header(None)):
     doc = leagues.get(league_id)
     if not doc:
         raise HTTPException(404, "No such league")
+    if not safety.publish_allowed(x_publish_pin):
+        return {"mode": "dry-run", "reason": "pin", "payload": easychamp.build_payload(doc)}
     try:
         result = easychamp.publish(doc)
     except httpx.HTTPError as e:
         raise HTTPException(502, f"EasyChamp did not answer: {e}")
-    doc["published"] = {"mode": result["mode"], "status": result.get("status")}
+    doc["published"] = {"mode": result["mode"], "status": result.get("status"), "links": result.get("links")}
     leagues.put(doc)
     return result
 

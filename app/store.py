@@ -22,6 +22,9 @@ class _Files:
         p = self.dir / f"{id_}.json"
         return json.loads(p.read_text()) if p.exists() else None
 
+    def all(self) -> list[dict]:
+        return [json.loads(p.read_text()) for p in self.dir.glob("*.json")]
+
     def find_by_name(self, name: str) -> dict | None:
         for p in self.dir.glob("*.json"):
             doc = json.loads(p.read_text())
@@ -43,6 +46,9 @@ class _Mongo:
         if doc:
             doc.pop("_id", None)
         return doc
+
+    def all(self) -> list[dict]:
+        return [{k: v for k, v in d.items() if k != "_id"} for d in self.col.find({})]
 
     def find_by_name(self, name: str) -> dict | None:
         doc = self.col.find_one({"name": {"$regex": f"^{re.escape(name)}$", "$options": "i"}})
