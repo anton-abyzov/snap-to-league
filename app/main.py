@@ -17,7 +17,7 @@ load_env()
 
 from . import easychamp, store  # noqa: E402
 from .extract import ExtractError, extract
-from .schema import Extraction, Match, Snap
+from .schema import Extraction, Flag, Match, Snap
 from .standings import checks, compute
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -59,10 +59,11 @@ def merge(old: list[dict], new: list[Match]) -> tuple[list[dict], list[str]]:
 
 async def _run(path: Path, league_id: str | None) -> dict:
     try:
-        ex, model_rows, backend, secs = await run_in_threadpool(extract, path)
+        ex, model_rows, backend, secs, notes = await run_in_threadpool(extract, path)
     except ExtractError as e:
         raise HTTPException(502, f"Could not read the photo: {e}")
     table, flags = checks(ex, model_rows)
+    flags += [Flag(level="warn", message=n, source="second") for n in notes]
     snap = Snap(id=uuid.uuid4().hex[:12], leagueId=league_id, image=path.name, backend=backend, seconds=secs,
                 extraction=ex, modelStandings=model_rows, standings=table, flags=flags)
     doc = snap.model_dump()
@@ -85,7 +86,10 @@ def league_page(league_id: str):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "backend": os.environ.get("SNAP_BACKEND", "astra"),
+    from .extract import PRIMARY, SECOND
+    dual = not os.environ.get("SNAP_BACKEND") and os.environ.get("OPENROUTER_API_KEY")
+    readers = f"{PRIMARY.split('/')[-1]} + {SECOND.split('/')[-1]}" if dual else os.environ.get("SNAP_BACKEND", "GPT-6 Astra")
+    return {"ok": True, "backend": os.environ.get("SNAP_BACKEND", "openrouter" if dual else "astra"), "readers": readers,
             "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and (os.environ.get("EC_TOKEN") or os.environ.get("EC_TOKEN_CMD")) else "dry-run",
             "voice": bool(os.environ.get("ELEVENLABS_API_KEY"))}
 

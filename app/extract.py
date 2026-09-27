@@ -102,15 +102,15 @@ def gemini(image: Path) -> str:
 LAST_USAGE: dict = {}
 
 
-def openrouter(image: Path) -> str:
-    """Any vision model on OpenRouter (OPENROUTER_MODEL, default openai/gpt-6-astra). Needs OPENROUTER_API_KEY."""
+def openrouter(image: Path, model: str | None = None) -> str:
+    """Any vision model on OpenRouter (model, else OPENROUTER_MODEL, else Gemini 3.8 Flash). Needs OPENROUTER_API_KEY."""
     key = os.environ.get("OPENROUTER_API_KEY")
     if not key:
         raise ExtractError("OPENROUTER_API_KEY is not set")
     with tempfile.TemporaryDirectory() as tmp:
         data = base64.b64encode(prepare(image, Path(tmp)).read_bytes()).decode()
     body = {
-        "model": os.environ.get("OPENROUTER_MODEL", "openai/gpt-6-astra"),
+        "model": model or os.environ.get("OPENROUTER_MODEL", "google/gemini-3.8-flash"),
         "messages": [{"role": "user", "content": [
             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{data}"}},
             {"type": "text", "text": PROMPT},
@@ -127,8 +127,9 @@ def openrouter(image: Path) -> str:
     if r.status_code != 200:
         raise ExtractError(f"openrouter {r.status_code}: {r.text[:300]}")
     out = r.json()
-    LAST_USAGE.clear()
-    LAST_USAGE.update(out.get("usage") or {})
+    if model is None:  # benchmark calls read the last cost
+        LAST_USAGE.clear()
+        LAST_USAGE.update(out.get("usage") or {})
     return out["choices"][0]["message"]["content"]
 
 
@@ -144,15 +145,72 @@ def fixture(image: Path) -> str:
 BACKENDS = {"astra": astra, "openrouter": openrouter, "gemini": gemini, "fixture": fixture}
 
 
-def extract(image: Path) -> tuple[Extraction, list[Row], str, float]:
+PRIMARY = os.environ.get("SNAP_PRIMARY_MODEL", "google/gemini-3.8-flash")
+SECOND = os.environ.get("SNAP_SECOND_MODEL", "openai/gpt-6-astra")
+
+
+def result_key(m) -> tuple:
+    """One result, independent of which side was written first. Group games carry no winner."""
+    sides = frozenset({(m.home.casefold(), m.homeScore), (m.away.casefold(), m.awayScore)})
+    return sides, m.status, (m.winner.casefold() if m.winner and m.stage != "group" else None)
+
+
+def disagreements(first: Extraction, second: Extraction, second_name: str) -> list[str]:
+    a = {result_key(m): m for m in first.matches}
+    b = {result_key(m): m for m in second.matches}
+    notes = []
+    for k, m in b.items():
+        if k not in a:
+            score = f"{m.homeScore}-{m.awayScore}" if m.homeScore is not None else (f"won by {m.winner}" if m.winner else "not played")
+            notes.append(f"{second_name} read {m.home} v {m.away} as {score}; check the photo")
+    if len(first.matches) != len(second.matches):
+        notes.append(f"{second_name} counted {len(second.matches)} matches, the main reader {len(first.matches)}")
+    return notes[:6]
+
+
+def _read(name: str, image: Path, model: str | None = None) -> tuple[Extraction, list[Row]]:
+    if name == "openrouter" and model:
+        return _parse(openrouter(image, model))
+    return _parse(BACKENDS[name](image))
+
+
+def extract(image: Path) -> tuple[Extraction, list[Row], str, float, list[str]]:
+    """Read the photo. Returns extraction, model table, reader name, seconds and second-reader notes.
+
+    With SNAP_BACKEND unset and an OpenRouter key, the main reader and a second reader run side by side;
+    wherever they disagree on a result the organizer gets a card to check. Without a key it falls back to
+    Astra through the Codex CLI.
+    """
+    t0 = time.monotonic()
     chosen = os.environ.get("SNAP_BACKEND")
+    if not chosen and os.environ.get("OPENROUTER_API_KEY"):
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(2) as pool:
+            main_job = pool.submit(_read, "openrouter", image, PRIMARY)
+            second_job = pool.submit(_read, "openrouter", image, SECOND) if SECOND else None
+            try:
+                ex, rows = main_job.result()
+                name = PRIMARY.split("/")[-1]
+            except (ExtractError, ValueError, KeyError, httpx.HTTPError) as e:
+                if not second_job:
+                    raise ExtractError(f"{PRIMARY}: {e}")
+                ex, rows = second_job.result()
+                return ex, rows, SECOND.split("/")[-1], round(time.monotonic() - t0, 1), []
+            notes: list[str] = []
+            if second_job:
+                try:
+                    other, _ = second_job.result(timeout=max(5.0, 45 - (time.monotonic() - t0)))
+                    notes = disagreements(ex, other, SECOND.split("/")[-1])
+                    name = f"{name} + {SECOND.split('/')[-1]}"
+                except Exception:  # the second opinion is optional; never block the organizer on it
+                    notes = []
+            return ex, rows, name, round(time.monotonic() - t0, 1), notes
     order = [chosen] if chosen else ["astra"] + (["gemini"] if os.environ.get("GEMINI_API_KEY") else [])
     errors = []
     for name in order:
-        t0 = time.monotonic()
         try:
-            ex, rows = _parse(BACKENDS[name](image))
-            return ex, rows, name, round(time.monotonic() - t0, 1)
+            ex, rows = _read(name, image)
+            return ex, rows, name, round(time.monotonic() - t0, 1), []
         except (ExtractError, subprocess.TimeoutExpired, ValueError, KeyError) as e:
             errors.append(f"{name}: {e}")
     raise ExtractError("; ".join(errors))

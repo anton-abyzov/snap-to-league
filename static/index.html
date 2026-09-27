@@ -88,7 +88,7 @@ const state = { league: null, snap: null, matches: [], teams: [] };
 const show = (...ids) => ["capture", "working", "review", "done"].forEach((v) => { $(v).hidden = !ids.includes(v); });
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
-  $("chips").innerHTML = `<span class="chip">${esc(h.backend === "astra" ? "GPT-6 Astra" : h.backend)}</span>`
+  $("chips").innerHTML = `<span class="chip">${esc(h.readers || h.backend)}</span>`
     + `<span class="chip ${h.publish === "live" ? "" : "off"}">EasyChamp ${h.publish === "live" ? "live" : "dry run"}</span>`
     + `<span class="chip ${h.voice ? "" : "off"}">${h.voice ? "ElevenLabs voice" : "Browser voice"}</span>`;
 }).catch(() => {});
@@ -146,8 +146,8 @@ function loadSnap(s) {
     $("changes").hidden = true;
   }
   $("review-img").src = `/api/images/${s.image}`;
-  $("meta").textContent = `Read by ${s.backend === "astra" ? "GPT-6 Astra" : s.backend} in ${s.seconds} s. ${ex.matches.length} matches on the photo.`;
-  $("flags").innerHTML = s.flags.map((f) => `<div class="flag ${f.level}"><span class="card"></span><div><small>${f.source === "astra" ? "Astra is unsure" : "Check"}</small>${esc(f.message)}</div></div>`).join("");
+  $("meta").textContent = `Read by ${s.backend === "astra" ? "GPT-6 Astra" : s.backend} in ${s.seconds} s. ${ex.matches.length} matches on the photo.${s.backend.includes("+") && !s.flags.some((f) => f.source === "second") ? " Both readers agree." : ""}`;
+  $("flags").innerHTML = s.flags.map((f) => `<div class="flag ${f.level}"><span class="card"></span><div><small>${f.source === "astra" ? "The reader is unsure" : f.source === "second" ? "Second reader disagrees" : "Check"}</small>${esc(f.message)}</div></div>`).join("");
   renderMatches();
   show("review");
 }

@@ -162,3 +162,12 @@ def test_same_name_reuses_league(tmp_path, monkeypatch):
     a = c.post("/api/leagues", json={"name": "Night Cup", "matches": ms}).json()
     b = c.post("/api/leagues", json={"name": "night cup", "matches": ms}).json()
     assert a["id"] == b["id"]
+
+
+def test_second_reader_disagreement():
+    from app.extract import disagreements
+    a = Extraction(matches=[Match(home="Lions", away="Sharks", homeScore=3, awayScore=1, status="played")])
+    same = Extraction(matches=[Match(home="Sharks", away="Lions", homeScore=1, awayScore=3, status="played")])
+    other = Extraction(matches=[Match(home="Lions", away="Sharks", homeScore=3, awayScore=4, status="played")])
+    assert disagreements(a, same, "astra") == []
+    assert disagreements(a, other, "astra") == ["astra read Lions v Sharks as 3-4; check the photo"]

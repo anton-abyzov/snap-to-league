@@ -25,11 +25,23 @@ A second photo of the same board merges into the same league: results update by 
 
 The model's standings are never trusted. The table is recomputed from the results (3 points for a win, 1 for a draw; ties by goal difference, then goals for), and any disagreement is shown to the organizer.
 
-## Results so far
+## Two readers
 
-| Input | Model | Matches read | Table | Time |
-|---|---|---|---|---|
-| Sample board (`tests/fixtures/board.jpg`, rotated, blurred, handwritten) | GPT-6 Astra, medium effort | 7 / 7 | correct, and it flagged that the written final contradicts the table | 29.5 s |
+Gemini 3.8 Flash reads the photo and GPT-6 Astra reads it at the same time. Where they disagree on a result, the organizer gets a card to check that match. Both models are one setting each (`SNAP_PRIMARY_MODEL`, `SNAP_SECOND_MODEL`, any OpenRouter vision model). Without an OpenRouter key the app reads with GPT-6 Astra through the Codex CLI.
+
+## Which model reads boards best
+
+`scripts/bench.py`, each sample photo read 3 times, a read counts only when every result is right:
+
+| Model | Perfect reads | Time | Cost per photo |
+|---|---|---|---|
+| Gemini 3.8 Flash | 6 / 6 | 6-9 s | $0.005 |
+| Claude Sonnet 5 | 6 / 6 | 9-11 s | $0.018 |
+| GPT-6 Astra | 4 / 6 | 9-10 s | $0.032 |
+| GPT-6 Luna | 1 / 6 | 8 s | $0.0005 |
+| Gemini 3.5 Flash Lite | 1 / 6 | 2 s | $0.002 |
+
+Two synthetic photos only; real photos from the venue are the next test.
 
 ## Run it
 
@@ -41,7 +53,7 @@ uv pip install --python .venv/bin/python -e '.[dev,mongo]'
 
 Open `http://<laptop-ip>:8077` on a phone on the same network. "Snap the board" opens the rear camera; "Try the sample board" runs the bundled photo.
 
-The default backend is GPT-6 Astra through the Codex CLI (`codex exec -i photo`), which uses the Codex sign-in on the machine. Set `SNAP_BACKEND=gemini` with `GEMINI_API_KEY` to use Gemini instead, or `SNAP_BACKEND=fixture` to run offline. See `.env.example` for MongoDB Atlas, ElevenLabs and EasyChamp settings.
+With `OPENROUTER_API_KEY` set, two readers run side by side (see above). Without it, GPT-6 Astra reads through the Codex CLI (`codex exec`), using the Codex sign-in on the machine. `SNAP_BACKEND=gemini` with `GEMINI_API_KEY` calls the Gemini API directly, and `SNAP_BACKEND=fixture` runs offline. See `.env.example` for MongoDB Atlas, ElevenLabs and EasyChamp settings.
 
 ## Tests
 

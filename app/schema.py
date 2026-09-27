@@ -79,7 +79,7 @@ class Extraction(BaseModel):
 class Flag(BaseModel):
     level: Literal["info", "warn", "error"]
     message: str
-    source: Literal["astra", "check"]
+    source: Literal["astra", "check", "second"]
 
 
 class Snap(BaseModel):
