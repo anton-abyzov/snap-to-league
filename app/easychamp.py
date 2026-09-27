@@ -90,7 +90,8 @@ def knockout_rounds(matches: list[Match]) -> list[list[Match]]:
     """
     rounds: dict[str, tuple[int, int, list[Match]]] = {}
     for i, m in enumerate(matches):
-        label = m.round or m.stage
+        # a named stage is one round even when the board numbers its games ("SEMI 1", "SEMI 2")
+        label = m.stage if m.stage in ("quarterfinal", "semifinal", "final") else (m.round or m.stage)
         rank, first, ms = rounds.get(label, (STAGE_RANK.get(m.stage, 0), i, []))
         ms.append(m)
         rounds[label] = (rank, first, ms)
@@ -188,7 +189,7 @@ def build_payload(league: dict) -> dict:
     knockout = [m for m in knockout if m not in third]
     if knockout or third:
         rounds = knockout_rounds(knockout) if knockout else [[]]
-        double = any(re.search(r"loser|grand", (m.round or "").casefold()) for m in knockout)
+        double = any(re.search(r"loser", (m.round or "").casefold()) for m in knockout)  # a losers bracket
         ko_fixtures, base, seq = [], 2 * len(rounds[0]), 0
         for ri, rms in enumerate(rounds):
             depth = len(rounds) - ri

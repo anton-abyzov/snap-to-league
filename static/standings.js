@@ -55,8 +55,10 @@ export function bracketRounds(matches) {
   const ko = matches.filter((m) => m.stage && m.stage !== "group");
   const rounds = new Map();
   ko.forEach((m, i) => {
-    const label = m.round || (m.stage === "knockout" ? "Knockout" : m.stage[0].toUpperCase() + m.stage.slice(1));
-    if (!rounds.has(label)) rounds.set(label, { label, rank: STAGE_RANK[m.stage] ?? 0, first: i, matches: [] });
+    const named = { quarterfinal: "Quarterfinals", semifinal: "Semifinals", final: "Final" };
+    const third = /3rd|third/i.test(`${m.round || ""}`);
+    const label = third ? "3rd place" : named[m.stage] || m.round || "Knockout";
+    if (!rounds.has(label)) rounds.set(label, { label, rank: third ? 4 : STAGE_RANK[m.stage] ?? 0, first: i, matches: [] });
     rounds.get(label).matches.push(m);
   });
   return [...rounds.values()].sort((a, b) => a.rank - b.rank || a.first - b.first);

@@ -169,6 +169,18 @@ def result_key(m) -> tuple:
 
 
 def disagreements(first: Extraction, second: Extraction, second_name: str) -> list[str]:
+    """Results the second reader read differently. Its spellings are first mapped onto the main
+    reader's ("Segfault Utd" is Segfault United), so only real differences in results remain."""
+    from .merge import similar
+    names = list(dict.fromkeys(t for m in first.matches for t in (m.home, m.away)))
+
+    def same_as_main(n: str) -> str:
+        best = max(names, key=lambda x: similar(n, x), default=n)
+        return best if names and similar(n, best) >= 0.75 else n
+
+    second = second.model_copy(update={"matches": [m.model_copy(update={
+        "home": same_as_main(m.home), "away": same_as_main(m.away),
+        "winner": same_as_main(m.winner) if m.winner else None}) for m in second.matches]})
     a = {result_key(m): m for m in first.matches}
     b = {result_key(m): m for m in second.matches}
     notes = []

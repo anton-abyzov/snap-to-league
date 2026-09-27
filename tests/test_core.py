@@ -335,3 +335,20 @@ def test_second_reader_checks_in_background(tmp_path, monkeypatch):
         _t.sleep(0.05)
     assert j["photos"][0]["check"] == "differs"
     assert any(f["source"] == "second" and "7-1" in f["message"] for f in j["flags"])
+
+
+def test_second_reader_spelling_is_not_a_disagreement():
+    from app.extract import disagreements
+    a = Extraction(matches=[Match(home="Infinite Loops", away="Segfault United", stage="final")])
+    b = Extraction(matches=[Match(home="Infinite Loops", away="Segfault Utd", stage="final")])
+    assert disagreements(a, b, "astra") == []
+
+
+def test_numbered_semis_and_grand_final_map_to_bracket_rounds():
+    ms = [Match(home="A", away="B", homeScore=2, awayScore=3, stage="semifinal", round="SEMI 1"),
+          Match(home="C", away="D", homeScore=1, awayScore=0, stage="semifinal", round="SEMI 2"),
+          Match(home="C", away="B", stage="final", round="GRAND FINAL"),
+          Match(home="A", away="D", stage="knockout", round="3rd place")]
+    p = easychamp.build_payload({"id": "k", "name": "x", "sport": "soccer", "teams": [], "matches": [m.model_dump() for m in ms]})
+    fx = p["League"]["Champs"][0]["Stages"][0]["Groups"][0]["Fixtures"]
+    assert [f["MatchDayName"] for f in fx] == ["semifinal", "semifinal", "final", "3rd_place_playoff"]
