@@ -18,7 +18,7 @@ from pathlib import Path
 
 from . import store
 from . import extract as extract_mod
-from .merge import combine, review
+from .merge import combine, known_scorers, review
 from .schema import Extraction, Flag, Match
 from .standings import checks
 from .ranking import rank
@@ -152,8 +152,9 @@ def _run(job: dict, paths: list[Path], league: dict | None) -> None:
 
 def _finish(job: dict, read: list, paths: list[Path], league: dict | None, t0: float) -> None:
     known_teams = [t for m in (league or {}).get("matches", []) for t in (m["home"], m["away"])]
-    known_players = [g["player"] for m in (league or {}).get("matches", []) for g in m.get("goals", [])]
-    combined = combine([ex.matches for _, ex, _ in read], known_teams, known_players)
+    known_players = known_scorers((league or {}).get("matches", []))
+    combined = combine([ex.matches for _, ex, _ in read], known_teams, known_players,
+                       [Match.model_validate(m) for m in (league or {}).get("matches", [])])
     first = read[0][1]
     extraction = Extraction(
         competition=(league or {}).get("name") or next((ex.competition for _, ex, _ in read if ex.competition), "Untitled cup"),

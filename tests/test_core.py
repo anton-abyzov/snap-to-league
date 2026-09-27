@@ -425,3 +425,34 @@ def test_unknown_sport_becomes_other():
     assert easychamp.sport_kind("cup stacking") == "Other"
     assert easychamp.sport_kind("Soccer") == "Soccer"
     assert easychamp.sport_kind("super smash bros") == "Smash"
+
+
+def test_typos_merge_but_different_teams_and_players_stay_apart():
+    from app.merge import similar, combine
+    same = [("Roarys Raiders", "Roary's Raiders"), ("Golden Panters", "Golden Panthers"), ("Segfault Utd", "Segfault United"),
+            ("Hawks FC", "Hawks"), ("Luís", "Luis"), ("Mya", "Maya"), ("Jon", "John"), ("Shell Shokers", "Shell Shockers"),
+            ("Заяц", "заяц"), ("Kenij Sato", "Kenji Sato"), ("Pryia", "Priya")]
+    for a, b in same:
+        assert similar(a, b) >= 0.86, (a, b)
+    for a, b in [("Rays", "Jays"), ("Team 1", "Team 2"), ("U12 Lions", "U14 Lions"), ("Hackers", "Sponsors")]:
+        assert similar(a, b) < 0.86, (a, b)
+
+    def g(home, away, hs, as_, goals=()):
+        return Match(home=home, away=away, homeScore=hs, awayScore=as_, status="played",
+                     goals=[{"player": p, "side": s} for p, s in goals])
+    photo1 = [g("Golden Panthers", "Shell Shockers", 2, 1, [("Maya Rivera", "home"), ("Luis", "home"), ("Kenji", "away")])]
+    photo2 = [g("Golden Panters", "Roary's Raiders", 1, 0, [("M. Rivera", "home")]),
+              g("Shell Shokers", "Roarys Raiders", 1, 1, [("Kenjі", "home"), ("Louis", "away")])]
+    out = combine([photo1, photo2])
+    assert sorted(out["teams"]) == ["Golden Panthers", "Roary's Raiders", "Shell Shockers"]
+    scorers = {(m.home, x.player) for m in out["matches"] for x in m.goals if x.side == "home"}
+    assert ("Golden Panthers", "Maya Rivera") in scorers and ("Golden Panthers", "M. Rivera") not in scorers
+    # "Louis" plays for Roary's Raiders, "Luis" for Golden Panthers: two players, not one
+    away = [x.player for m in out["matches"] for x in m.goals if x.side == "away" and m.away == "Roary's Raiders"]
+    assert away == ["Louis"]
+
+
+def test_teams_that_played_each_other_never_merge():
+    from app.merge import combine
+    ms = [Match(home="Miami Heat", away="Miami Heatt", homeScore=1, awayScore=0, status="played")]
+    assert sorted(combine([ms])["teams"]) == ["Miami Heat", "Miami Heatt"]
