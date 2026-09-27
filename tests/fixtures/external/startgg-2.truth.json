@@ -115,5 +115,5 @@
    "lostTo": "FLY | KoDoRiN Preeminent"
   }
  ],
- "notes": "start.gg event standings (player placement, wins, losses, set win %, lost to). Not match results; any extracted 'matches' are extras."
+ "notes": "start.gg event standings (player placement, wins, losses, set win %, lost to). Not match results; any extracted 'matches' are extras. Row 13 JCubez (4-2) is cut off at the bottom edge and excluded."
 }

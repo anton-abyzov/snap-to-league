@@ -20,7 +20,11 @@
     <section class="panel" id="table-panel"><h2>Standings</h2><div class="tablebox" id="table"></div></section>
     <section class="panel"><h2>Matches</h2><div class="board" id="board"></div></section>
   </div>
-  <div class="actions"><button class="btn ghost" id="read" type="button">Read out</button></div>
+  <div class="actions">
+    <button class="btn ghost" id="read" type="button">Read out</button>
+    <button class="btn" id="announcer" type="button">Turn on the announcer</button>
+    <span class="muted small" id="announcer-note">Leave this board on a TV: every new result is announced out loud.</span>
+  </div>
   <p class="err" id="error" hidden role="alert"></p>
 </main>
 <script type="module">
@@ -28,13 +32,34 @@ import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goa
 const $ = (id) => document.getElementById(id);
 const id = location.pathname.split("/").pop();
 let league;
+let announcer = false;
+let lastSeen = null;
+
+const resultOf = (m) => (m.status === "played" ? `${m.homeScore ?? ""}-${m.awayScore ?? ""}-${m.winner ?? ""}` : "");
+function newsSince(prev, next) {
+  if (!prev) return [];
+  const before = new Map(prev.matches.map((m) => [`${m.home}|${m.away}|${m.stage}|${m.round ?? ""}`, resultOf(m)]));
+  return next.matches.filter((m) => m.status === "played" && before.get(`${m.home}|${m.away}|${m.stage}|${m.round ?? ""}`) !== resultOf(m))
+    .map((m) => {
+      if (m.homeScore === null || m.homeScore === undefined) return `${m.winner} goes through.`;
+      if (m.homeScore === m.awayScore) return `${m.home} and ${m.away} draw ${m.homeScore} all.`;
+      const [w, l, a, b] = m.homeScore > m.awayScore ? [m.home, m.away, m.homeScore, m.awayScore] : [m.away, m.home, m.awayScore, m.homeScore];
+      return `${w} beat ${l}, ${a} to ${b}.`;
+    });
+}
 
 async function load() {
   try {
     const r = await fetch(`/api/leagues/${encodeURIComponent(id)}`);
     if (!r.ok) throw new Error(r.status === 404 ? "This league does not exist" : `HTTP ${r.status}`);
-    league = await r.json();
+    const next = await r.json();
+    const news = newsSince(lastSeen, next);
+    league = next; lastSeen = next;
     render();
+    if (announcer && news.length) {
+      const rows = computeStandings(league.matches, league.teams);
+      speak(`Result update. ${news.join(" ")} ${rows.length ? `${rows[0].team} lead with ${rows[0].Pts} points.` : ""}`);
+    }
     $("error").hidden = true;
   } catch (e) { $("error").textContent = e.message; $("error").hidden = false; }
 }
@@ -58,6 +83,11 @@ function render() {
     <span class="a">${esc(m.away)}</span>${goalsText(m) ? `<span class="g">${esc(goalsText(m))}</span>` : ""}</div>`).join("")).join("");
 }
 
+$("announcer").addEventListener("click", async () => {
+  announcer = !announcer;
+  $("announcer").textContent = announcer ? "Announcer on" : "Turn on the announcer";
+  if (announcer) await speak(`Announcer on for ${league ? league.name : "this league"}. New results will be read out here.`);
+});
 $("read").addEventListener("click", () => league && speak(readOut(league.name, computeStandings(league.matches, league.teams), league.matches)));
 load();
 setInterval(load, 15000);
