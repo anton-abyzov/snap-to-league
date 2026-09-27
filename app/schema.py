@@ -164,7 +164,7 @@ class Extraction(BaseModel):
 class Flag(BaseModel):
     level: Literal["info", "warn", "error"]
     message: str
-    source: Literal["astra", "check", "second", "merge", "match"]
+    source: Literal["astra", "check", "second", "merge", "match", "same"]
 
 
 class Snap(BaseModel):

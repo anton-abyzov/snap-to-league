@@ -84,7 +84,8 @@
     <div class="progress" id="progress" role="progressbar" aria-label="Import progress" aria-valuemin="0" aria-valuemax="100" hidden><i></i></div>
     <div class="actions">
       <button class="btn" id="read" type="button">Read photos</button>
-      <button class="linkbtn" id="clear" type="button">Start over</button>
+      <label class="btn ghost" id="more" for="photos" hidden>+ Add or retake a photo</label>
+      <button class="linkbtn" id="clear" type="button">New import</button>
     </div>
 
   </section>
@@ -214,7 +215,16 @@ async function shrink(file) {
     return blob ? new File([blob], (file.name || "photo").replace(/\.[^.]+$/, "") + ".jpg", { type: "image/jpeg" }) : file;
   } catch (e) { return file; }
 }
+// Photos added after a read update what is on screen: the new read is compared with the draft (or the
+// saved league) and the review shows only what changed. The same photo again is recognised and not re-read.
+function draft() {
+  return { name: $("name").value, sport: $("sport").value, matches: state.matches.filter((m) => m.home && m.away) };
+}
 async function addFiles(list) {
+  if (state.job && state.job.status !== "reading") {
+    state.base = state.league || state.leaderboard ? null : draft();
+    state.files = []; state.job = null; state.loaded = null; state.polling = null;
+  }
   state.samples = [];
   const room = (health.maxPhotos || 10) - state.files.length - state.samples.length;
   for (const f of [...list].slice(0, Math.max(0, room))) {
@@ -233,7 +243,8 @@ document.querySelectorAll("[data-sample]").forEach((b) => b.addEventListener("cl
 $("clear").addEventListener("click", reset);
 
 function reset() {
-  state.files = []; state.samples = []; state.job = null;
+  state.files = []; state.samples = []; state.job = null; state.base = null; state.league = null; state.loaded = null; state.polling = null;
+  $("league-note").hidden = true; $("error").hidden = true;
   renderTray(); show("capture");
 }
 
@@ -247,19 +258,25 @@ function renderActionbar(job) {
   const show = n > 0 && !job && !state.samples.length;
   $("actionbar").hidden = !show;
   document.body.classList.toggle("has-actionbar", show);
-  $("read-now").textContent = n === 1 ? "Read 1 photo" : `Read ${n} photos`;
+  const upd = updating();
+  $("read-now").textContent = upd ? `Update with ${n} photo${n > 1 ? "s" : ""}` : n === 1 ? "Read 1 photo" : `Read ${n} photos`;
+  $("actionbar-hint").textContent = upd ? `Only what changed is applied to ${upd}. The same photo again is fine.`
+    : "Add every page of the board, then read them together.";
 }
+function updating() { return state.league ? state.league.name : state.base ? (state.base.name || "your draft") : ""; }
 function renderTray(job) {
   renderActionbar(job);
   const photos = state.files.map((f) => f.url).concat(state.samples.map((s) => `/static/sample-${s}.jpg`));
   $("tray").hidden = !photos.length;
   $("read").textContent = photos.length === 1 ? "Read 1 photo" : `Read ${photos.length} photos`;
   $("read").hidden = !!job || !!state.samples.length;
-  $("tray-title").textContent = job ? (job.status === "done" ? "Photos read" : "Reading photos") : "Photos";
+  $("read").textContent = updating() ? `Update with ${photos.length} photo${photos.length > 1 ? "s" : ""}` : $("read").textContent;
+  $("more").hidden = !job || job.status === "reading";
+  $("tray-title").textContent = job ? (job.status === "done" ? "Photos read" : "Reading photos") : updating() ? `New photos for ${updating()}` : "Photos";
   const cells = photos.map((u, i) => {
     const p = job && job.photos[i];
     const label = !p ? (job ? "Uploading" : "Ready") : p.status === "queued" ? "Waiting" : p.status === "reading" ? "Reading..." :
-      p.status === "done" ? `${p.matches} matches · ${p.seconds} s` : "Could not read";
+      p.status === "done" ? (p.same ? "Same photo, already read" : `${p.matches} matches · ${p.seconds} s`) : "Could not read";
     return shotHtml(i, u, p ? p.status : "", label, !job && i < state.files.length);
   });
   if (!job && photos.length < (health.maxPhotos || 10)) cells.push(`<label class="shot add" for="photos"><span class="plus">+</span>Add a page</label>`);
@@ -315,6 +332,7 @@ function startJob(attempt = 0) {
   state.files.forEach((f) => form.append("images", f.file, f.file.name || "photo.jpg"));
   if (state.samples.length) form.append("samples", state.samples.join(","));
   if (state.league) form.append("leagueId", state.league.id);
+  else if (state.base) form.append("base", JSON.stringify(state.base));
   if ($("reader-box").classList.contains("ready")) form.append("reader", $("reader").value);
   $("error").hidden = true; $("read").disabled = true;
   $("review").hidden = true; $("done").hidden = true;
@@ -341,16 +359,18 @@ function startJob(attempt = 0) {
     if ([502, 503, 504, 520, 522, 524].includes(xhr.status) && retry()) return;
     if (xhr.status >= 300) return fail(body.detail || (xhr.status >= 500 ? "The app did not answer. Check the connection and tap Read again." : `Upload failed (${xhr.status})`));
     run.upload = 1; run.phase = "read"; run.readStart = performance.now();
-    state.job = body; poll(body.id);
+    state.job = body; state.polling = body.id; poll(body.id);
   };
   xhr.onerror = () => { if (!retry()) fail("The upload did not reach the app. Check the Wi-Fi and tap Read again."); };
   xhr.send(form);
 }
 
 async function poll(id) {
+  if (id !== state.polling) return;                 // a newer import or a reset replaced this one
   try {
     const r = await fetch(`/api/jobs/${id}`);
     const job = await r.json();
+    if (id !== state.polling) return;
     if (!r.ok) return fail(job.detail || "Lost the import");
     state.job = job;
     run.done = job.photos.filter((p) => p.status === "done" || p.status === "error").length;
@@ -360,7 +380,8 @@ async function poll(id) {
     if (job.status === "error") return fail("None of the photos could be read. Try a closer, straighter photo in good light.");
     if (state.loaded !== job.id) {
       endRun("done");
-      $("tray-title").textContent = `Read ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s`;
+      $("tray-title").textContent = job.photos.every((p) => p.same) ? "Already read this photo"
+        : `Read ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s`;
       state.loaded = job.id; loadJob(job);
     } else renderFlags(job);
     if (job.checking && !job.checking.finished) setTimeout(() => poll(id), 900);
@@ -378,9 +399,11 @@ function loadJob(job) {
   const ex = job.extraction;
   if (job.review) {
     state.matches = job.review.matches;
+    state.teams = [...new Set(state.matches.flatMap((m) => [m.home, m.away]).concat(state.teams || []))];
+    state.base = null;
     $("changes").innerHTML = job.review.changes.length ? job.review.changes.map((c) => `<div class="change"><span class="tag ${c.kind}">${c.kind}</span>
-      <span>${esc(c.home)} v ${esc(c.away)}</span>${c.before ? `<s>${esc(c.before)}</s>` : ""}<b>${esc(c.after)}</b></div>`).join("")
-      : `<div class="change muted">Nothing new on these photos.</div>`;
+      <span class="who">${esc(c.home)} v ${esc(c.away)}</span><span class="res">${c.before ? `<s>${esc(c.before)}</s> ` : ""}<b>${esc(c.after)}</b></span></div>`).join("")
+      : `<div class="change muted">${job.photos.every((p) => p.same) ? "Same photo as before: nothing changed." : "Nothing new on these photos: everything already matches."}</div>`;
     $("changes-box").hidden = false;
   } else {
     state.matches = ex.matches; state.teams = ex.teams; state.table = ex.table || [];
@@ -394,14 +417,15 @@ function loadJob(job) {
   const readers = [...new Set(job.photos.map((p) => p.reader).filter(Boolean))].join(", ");
   const nm = ex.matches.length, np = job.photos.length, ne = (ex.leaderboard?.entries || []).length;
   const what = nm ? `${nm} match${nm === 1 ? "" : "es"}` : `${ne} entr${ne === 1 ? "y" : "ies"}`;
-  $("meta").textContent = `${what} from ${np} photo${np === 1 ? "" : "s"} in ${job.seconds} s`;
+  $("meta").textContent = job.review ? `${state.matches.length} matches · ${job.review.changes.length} change${job.review.changes.length === 1 ? "" : "s"} from ${np} new photo${np === 1 ? "" : "s"}`
+    : `${what} from ${np} photo${np === 1 ? "" : "s"} in ${job.seconds} s`;
   renderFlags(job);
   renderMatches(); show("review");
   keepInView($("review"));
 }
 
 function renderFlags(job) {
-  const label = { astra: "The reader is unsure", second: "Double-check", merge: "Photos disagree", match: "Name matched", check: "Check" };
+  const label = { astra: "The reader is unsure", second: "Double-check", merge: "Photos disagree", match: "Name matched", same: "Same photo", check: "Check" };
   $("flags").innerHTML = job.flags.map((f, i) => `<div class="flag ${f.level}" style="--i:${i}"><span class="card"></span><div><small>${label[f.source] || "Check"}</small>${esc(f.message)}</div></div>`).join("");
   const c = job.checking;
   $("checking").hidden = !c;
@@ -548,9 +572,19 @@ function remember(entry) {
 function renderHistory() {
   const list = store.get("imports", []);
   $("history-box").hidden = !list.length;
-  $("history").innerHTML = list.map((x) => `<a href="${esc(x.url)}" target="_blank" rel="noopener"><span>${esc(x.name)}</span>
-    <span class="meta">${x.matches} matches · ${x.photos} photos · ${new Date(x.at).toLocaleDateString()}</span></a>`).join("");
+  $("history").innerHTML = list.map((x) => `<div class="hist"><a href="${esc(x.url)}" target="_blank" rel="noopener"><span>${esc(x.name)}</span>
+    <span class="meta">${x.matches} matches · ${x.photos} photos · ${new Date(x.at).toLocaleDateString()}</span></a>
+    <button class="btn ghost small" type="button" data-update="${esc(x.id)}" data-name="${esc(x.name)}">Snap an update</button></div>`).join("");
 }
+$("history").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-update]");
+  if (!b) return;
+  reset();
+  state.league = { id: b.dataset.update, name: b.dataset.name };
+  $("league-note").textContent = `New photos will update ${b.dataset.name}. The same photo again is fine: only changes are applied.`;
+  $("league-note").hidden = false;
+  keepInView($("capture"));
+});
 renderHistory();
 
 function show(...ids) {

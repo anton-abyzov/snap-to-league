@@ -262,6 +262,21 @@ def test_job_update_reviews_against_saved_league(tmp_path, monkeypatch):
     assert c.get("/api/stats").json()["photosRead"] == 2
 
 
+def test_same_photo_again_reuses_the_read_and_updates_the_draft(tmp_path, monkeypatch):
+    c, _ = _client(tmp_path, monkeypatch)
+    photo = [("images", ("a.jpg", (FIX / "board.jpg").read_bytes(), "image/jpeg"))]
+    first = _wait(c, c.post("/api/jobs", files=photo).json()["id"])
+    ms = first["extraction"]["matches"]
+    ms[0].update(homeScore=None, awayScore=None, status="scheduled")  # the draft before this result was written
+    draft = json.dumps({"name": "Sat 7v7", "sport": "soccer", "matches": ms})
+    again = _wait(c, c.post("/api/jobs", files=photo, data={"base": draft}).json()["id"])
+    assert again["photos"][0]["same"] is True
+    assert "same photo as before" in again["flags"][0]["message"]
+    assert [x["kind"] for x in again["review"]["changes"]] == ["result"]
+    assert again["extraction"]["competition"] == "Sat 7v7"
+    assert len(again["review"]["matches"]) == len(ms)
+
+
 def test_refuses_non_images_and_needs_pin_to_publish(tmp_path, monkeypatch):
     c, _ = _client(tmp_path, monkeypatch)
     bad = c.post("/api/jobs", files=[("images", ("x.jpg", b"not an image", "image/jpeg"))])

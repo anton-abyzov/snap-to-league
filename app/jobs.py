@@ -8,6 +8,7 @@ background and adds a card wherever it reads a result differently.
 """
 from __future__ import annotations
 
+import hashlib
 import os
 import threading
 import time
@@ -25,10 +26,13 @@ from .ranking import rank
 POOL = ThreadPoolExecutor(max_workers=3)      # jobs
 PHOTOS = ThreadPoolExecutor(max_workers=4)    # photos across all jobs
 JOBS: dict[str, dict] = {}
+READS = store.collection("reads")            # photo sha256 -> its read, so a re-upload costs nothing
 LOCK = threading.Lock()
 
 
 def create(paths: list[Path], league: dict | None, reader: str | None, owner: str) -> dict:
+    """league is a saved league, or the unsaved draft on screen ({"id": None, name, sport, matches}):
+    either way the new photos are compared with it and the review shows only what they change."""
     job = {
         "id": uuid.uuid4().hex[:12], "status": "reading", "created": time.time(), "owner": owner,
         "leagueId": league["id"] if league else None, "reader": reader,
@@ -68,6 +72,15 @@ def _run(job: dict, paths: list[Path], league: dict | None) -> None:
         photo = job["photos"][i]
         photo["status"] = "reading"
         t = time.monotonic()
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        photo["hash"] = digest[:16]
+        seen = None if path.name.startswith("sample-") else READS.get(digest)
+        if seen:  # the same photo again: reuse its read, no model call, nothing to double-check
+            ex = Extraction.model_validate(seen["ex"])
+            photo.update(status="done", seconds=round(time.monotonic() - t, 1), matches=len(ex.matches),
+                         reader=seen["reader"], same=True, competition=ex.competition, sport=ex.sport)
+            results[i] = (i, ex, [])
+            return
         try:
             if main:
                 ex, _rows = extract_mod._read("openrouter", path, main)
@@ -77,6 +90,8 @@ def _run(job: dict, paths: list[Path], league: dict | None) -> None:
             photo.update(status="done", seconds=round(time.monotonic() - t, 1), matches=len(ex.matches),
                          reader=name, competition=ex.competition, sport=ex.sport)
             results[i] = (i, ex, notes)
+            if not path.name.startswith("sample-"):
+                READS.put({"id": digest, "ex": ex.model_dump(), "reader": name, "at": time.time()})
         except Exception as e:  # noqa: BLE001  one unreadable photo must not sink the others
             photo.update(status="error", error=str(e)[:200])
 
@@ -86,7 +101,8 @@ def _run(job: dict, paths: list[Path], league: dict | None) -> None:
         except Exception:  # noqa: BLE001  the check is optional
             return None
 
-    second_jobs = {i: PHOTOS.submit(read_second, i, p) for i, p in enumerate(paths)} if second else {}
+    second_jobs = {i: PHOTOS.submit(read_second, i, p) for i, p in enumerate(paths)
+                   if p.name.startswith("sample-") or READS.get(hashlib.sha256(p.read_bytes()).hexdigest()) is None} if second else {}
     for future in [PHOTOS.submit(read_main, i, p) for i, p in enumerate(paths)]:
         future.result()
 
@@ -171,6 +187,11 @@ def _finish(job: dict, read: list, paths: list[Path], league: dict | None, t0: f
         for before, after in job["review"]["renamed"].items():
             job["flags"].append(Flag(level="info", source="match",
                                      message=f'Matched "{before}" to {after} in {league["name"]}').model_dump())
+    same = [i + 1 for i, p in enumerate(job["photos"]) if p.get("same")]
+    if same and league:
+        which = "This is" if len(paths) == 1 else f"Photo {', '.join(map(str, same))} is"
+        job["flags"].insert(0, Flag(level="info", source="same",
+                                    message=f"{which} the same photo as before, so it was not read again").model_dump())
 
 
 def _save(job: dict) -> None:

@@ -93,7 +93,10 @@ input, select { font: 500 16px var(--font-body); color: var(--color-ink); backgr
 .flag small { display: block; font: 600 10px/1.4 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); }
 
 .changes { display: flex; flex-direction: column; gap: 6px; }
-.change { display: flex; align-items: center; gap: 8px; font-size: var(--text-base); flex-wrap: wrap; }
+.change { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; font-size: var(--text-base); }
+.change .res { display: flex; flex-direction: column; align-items: flex-end; text-align: right; font-variant-numeric: tabular-nums; }
+.change .res s { font-size: var(--text-sm, 13px); }
+.change.muted { display: block; }
 .change .tag { font: 700 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .08em; padding: 5px 6px; border-radius: var(--radius-chip); color: #fff; background: var(--color-win); }
 .change .tag.changed { background: var(--color-warning); }
 .change .tag.scorers { background: var(--color-accent-cool); }
@@ -136,8 +139,10 @@ details pre { max-height: 320px; overflow: auto; font: 12px/1.45 var(--font-mono
 .err { color: var(--color-loss); font-weight: 600; }
 
 .history { display: flex; flex-direction: column; }
-.history a { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--color-line); text-decoration: none; color: var(--color-ink); }
-.history a:first-child { border-top: 0; }
+.history .hist { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--color-line); }
+.history .hist:first-child { border-top: 0; }
+.history a { flex: 1; min-width: 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; text-decoration: none; color: var(--color-ink); }
+.history .btn.small { flex: none; min-height: 40px; padding: 8px 14px; font-size: 14px; }
 .history .meta { font: 500 12px var(--font-mono); color: var(--color-muted); white-space: nowrap; }
 
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }

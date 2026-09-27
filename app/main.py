@@ -138,8 +138,11 @@ async def sample(request: Request, leagueId: str | None = Form(None), kind: str 
 
 @app.post("/api/jobs")
 async def create_job(request: Request, images: list[UploadFile] = File(default=[]), samples: str = Form(""),
-                     leagueId: str | None = Form(None), reader: str | None = Form(None)):
-    """Start reading one or more photos. Poll GET /api/jobs/{id} for progress."""
+                     leagueId: str | None = Form(None), reader: str | None = Form(None), base: str = Form("")):
+    """Start reading one or more photos. Poll GET /api/jobs/{id} for progress.
+
+    base is the unsaved draft on screen (name, sport, matches) when the organizer adds or retakes a photo
+    before publishing; the new photos are compared with it, exactly like with a saved league."""
     kinds = [k for k in samples.split(",") if k]
     if not images and not kinds:
         raise HTTPException(400, "Add at least one photo")
@@ -156,6 +159,16 @@ async def create_job(request: Request, images: list[UploadFile] = File(default=[
     league = leagues.get(leagueId) if leagueId else None
     if leagueId and not league:
         raise HTTPException(404, "No such league")
+    if base and not league:
+        if len(base) > 200_000:
+            raise HTTPException(413, "The draft is too big")
+        try:
+            draft = __import__("json").loads(base)
+            league = {"id": None, "name": str(draft.get("name") or "Untitled cup")[:120],
+                      "sport": str(draft.get("sport") or "soccer")[:40],
+                      "matches": [Match.model_validate(m).model_dump() for m in draft.get("matches", [])][:400]}
+        except Exception:  # noqa: BLE001
+            raise HTTPException(400, "Could not read the draft")
     safety.spend(request, len(paths) + len(kinds))
     files = []
     for data, suffix in paths:
