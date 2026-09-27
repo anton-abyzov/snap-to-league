@@ -23,6 +23,20 @@ export function computeStandings(matches, teams = []) {
   return out.sort((x, y) => y.Pts - x.Pts || y.GD - x.GD || y.GF - x.GF || x.team.localeCompare(y.team));
 }
 
+// One table per group when the board has groups ("Group A", "Group B"); otherwise one table.
+export function groupTables(matches, teams = []) {
+  const labels = [...new Set(matches.filter((m) => m.stage === "group").map((m) => m.group || ""))];
+  if (labels.length <= 1) {
+    const rows = computeStandings(matches, teams);
+    return rows.length ? [{ label: labels[0] ? `Group ${labels[0]}` : "", rows }] : [];
+  }
+  return labels.sort().map((g) => ({ label: g ? `Group ${g}` : "Other games", rows: computeStandings(matches.filter((m) => m.stage !== "group" || (m.group || "") === g)) }));
+}
+
+export function groupTablesHtml(tables) {
+  return tables.map((t) => `${t.label ? `<div class="stagehead">${esc(t.label)}</div>` : ""}${standingsTable(t.rows)}`).join("");
+}
+
 export function num(v) {
   if (v === null || v === undefined || v === "") return null;
   const n = Number(v);

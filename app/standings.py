@@ -78,7 +78,8 @@ def checks(ex: Extraction, model_rows: list[Row]) -> tuple[list[Row], list[Flag]
             elif (ours.Pts, ours.GD, ours.P) != (r.Pts, r.GD, r.P):
                 flags.append(Flag(level="warn", message=f"Astra's table gives {r.team} {r.Pts} pts, the results give {ours.Pts}", source="check"))
 
-    finals = [m for m in ex.matches if m.stage == "final"]
+    groups_seen = {m.group for m in ex.matches if m.stage == "group"}
+    finals = [m for m in ex.matches if m.stage == "final"] if len(groups_seen) <= 1 else []
     played_group = [m for m in ex.matches if m.stage == "group" and m.status == "played"]
     astra_saw_final = any("final" in u.casefold() for u in ex.uncertain)
     if finals and played_group and len(table) >= 2 and not astra_saw_final:

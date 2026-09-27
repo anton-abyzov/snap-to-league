@@ -152,7 +152,7 @@
 </main>
 
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText, topScorers, scorersTable } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml } from "/static/standings.js";
 
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -353,7 +353,7 @@ function renderTable() {
   $("table-title").textContent = rows.length && br ? "Table and bracket" : br ? "Bracket" : read ? "Table as read from the photo" : "Table";
   const sc = topScorers(state.matches);
   $("scorers-box").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);
-  $("table").innerHTML = (rows.length ? standingsTable(rows) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
+  $("table").innerHTML = (rows.length ? groupTablesHtml(groupTables(state.matches, state.teams)) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
 }
 $("matches").addEventListener("input", (e) => {
   const box = e.target.closest(".match"); const f = e.target.dataset.f;

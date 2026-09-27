@@ -32,7 +32,7 @@
   <p class="err" id="error" hidden role="alert"></p>
 </main>
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText, topScorers, scorersTable } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml } from "/static/standings.js";
 const $ = (id) => document.getElementById(id);
 const id = location.pathname.split("/").pop();
 let league;
@@ -78,7 +78,7 @@ function render() {
   $("updated").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
   const rows = computeStandings(league.matches, league.teams);
   const read = !rows.length && (league.table || []).length ? league.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) })) : null;
-  $("table").innerHTML = standingsTable(read || rows);
+  $("table").innerHTML = read ? standingsTable(read) : groupTablesHtml(groupTables(league.matches, league.teams));
   $("table-panel").hidden = !rows.length && !read;
   const sc = topScorers(league.matches);
   $("scorers-panel").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);
