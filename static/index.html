@@ -17,6 +17,7 @@
   <header class="bar">
     <a class="brand" href="/" aria-label="Snap to League home"><span class="ec">EasyChamp</span><span class="name">Snap <i>to</i> League</span></a>
     <div class="chips" id="chips"></div>
+    <div class="account" id="account"></div>
   </header>
   <div class="ticker" aria-hidden="true"><div class="ticker-track">
     <span><b>FT</b> Miami Heatwave 3-1 Doral United</span><span><b>QF</b> Kirbo 2-0 NeoZ</span><span><b>FT</b> Wynwood Wolves 4-0 Brickell FC</span>
@@ -118,10 +119,7 @@
         <h2 id="table-title">Table</h2>
         <div class="tablebox" id="table"></div>
         <div id="scorers-box" hidden><h2>Scorers</h2><div class="tablebox" id="scorers"></div></div>
-        <label class="field" id="pin-box" hidden>Organizer PIN for EasyChamp
-          <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Optional">
-          <span class="muted small hint">Without it you still get a board to share with the teams.</span>
-        </label>
+        <p class="muted small" id="signin-note">Publishing saves the league in your EasyChamp account, so it stays yours: you can edit it, share it and keep adding results.</p>
         <div class="actions">
           <button class="btn" id="publish" type="button">Publish league</button>
           <button class="btn ghost" id="speak" type="button">Read out</button>
@@ -141,6 +139,7 @@
     <div class="actions">
       <a class="btn" id="done-open" href="#" target="_blank" rel="noopener">Open the league</a>
       <a class="btn ghost" id="done-board" href="#" target="_blank" rel="noopener">Big-screen board</a>
+      <a class="btn ghost" id="done-console" href="https://console.easychamp.com" target="_blank" rel="noopener" hidden>Manage in EasyChamp</a>
       <button class="btn ghost" id="again" type="button">Snap an update</button>
     </div>
     <details><summary>EasyChamp import payload</summary><pre id="payload"></pre></details>
@@ -168,6 +167,7 @@
 </main>
 
 <script type="module">
+import { configure, user, signIn, signOut, finishSignIn, accessToken } from "/static/auth.js";
 import { computeStandings, standingsTable, readOut, esc, speak, speaking, stopSpeaking, num, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml, leaderboardHtml, rankLeaderboard } from "/static/standings.js";
 
 const $ = (id) => document.getElementById(id);
@@ -194,8 +194,9 @@ fetch("/api/health").then((r) => r.json()).then((h) => {
     $("reader-box").hidden = false;
     $("reader-box").classList.add("ready");
   }
-  $("pin-box").hidden = !h.pin;
-  $("pin").value = store.get("pin", "");
+  configure(h.auth);
+  renderAccount();
+  resumeAfterSignIn();
 }).catch(() => {});
 // A tab left open on a phone keeps old code. When the app is updated, reload it, but only while idle.
 setInterval(async () => {
@@ -206,7 +207,41 @@ setInterval(async () => {
   } catch (e) { /* offline for a moment */ }
 }, 30000);
 $("reader").addEventListener("change", () => store.set("reader", $("reader").value));
-$("pin").addEventListener("change", () => store.set("pin", $("pin").value));
+
+// ---------- EasyChamp account ----------
+function renderAccount() {
+  const u = user();
+  $("account").innerHTML = u ? `<span class="who" title="${esc(u.email || "")}">${esc(u.name)}</span><button class="linkbtn" id="signout" type="button">Sign out</button>`
+    : `<button class="btn ghost small" id="signin" type="button">Sign in</button>`;
+  const lb = state.leaderboard && !state.matches.length;
+  $("publish").textContent = u ? (lb ? "Share the leaderboard" : "Publish to EasyChamp") : (lb ? "Sign in and share" : "Sign in and publish");
+}
+$("account").addEventListener("click", (e) => {
+  if (e.target.id === "signin") { savePending(false); signIn(); }
+  if (e.target.id === "signout") { signOut(); renderAccount(); }
+});
+// The sign-in trip leaves the page, so the draft on screen is kept for this tab and restored after.
+function savePending(publish) {
+  if ($("review").hidden) return sessionStorage.removeItem("snap-pending");
+  sessionStorage.setItem("snap-pending", JSON.stringify({ publish, name: $("name").value, sport: $("sport").value, teams: state.teams,
+    matches: state.matches, table: state.table, leaderboard: state.leaderboard, jobId: state.job?.id || null,
+    league: state.league ? { id: state.league.id, name: state.league.name } : null }));
+}
+async function resumeAfterSignIn() {
+  try { if (await finishSignIn()) renderAccount(); }
+  catch (e) { $("error").textContent = "EasyChamp sign-in did not finish. Try again."; $("error").hidden = false; }
+  let p = null;
+  try { p = JSON.parse(sessionStorage.getItem("snap-pending") || "null"); } catch (e) { /* none */ }
+  sessionStorage.removeItem("snap-pending");
+  if (!p) return;
+  Object.assign(state, { teams: p.teams || [], matches: p.matches || [], table: p.table || [], leaderboard: p.leaderboard || null,
+    league: p.league, job: p.jobId ? { id: p.jobId, photos: [], status: "done" } : null });
+  $("name").value = p.name || "";
+  if (![...$("sport").options].some((o) => o.value === p.sport)) $("sport").add(new Option(p.sport, p.sport), 0);
+  $("sport").value = p.sport || "other";
+  renderMatches(); renderAccount(); show("review"); keepInView($("review"));
+  if (p.publish && user()) publishNow();
+}
 
 // ---------- photo tray ----------
 // Phone photos are 3-12 MB; the readers only need 1600 px. Shrinking on the phone makes uploads
@@ -497,10 +532,10 @@ function renderTable() {
     $("table-title").textContent = "Leaderboard";
     $("table").innerHTML = leaderboardHtml(state.leaderboard);
     $("scorers-box").hidden = true;
-    $("publish").textContent = "Share the leaderboard";
+    $("publish").textContent = user() ? "Share the leaderboard" : "Sign in and share";
     return;
   }
-  $("publish").textContent = "Publish league";
+  $("publish").textContent = user() ? "Publish to EasyChamp" : "Sign in and publish";
   const sc = topScorers(state.matches);
   $("scorers-box").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);
   $("table").innerHTML = (rows.length ? groupTablesHtml(groupTables(state.matches, state.teams, $("sport").value)) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
@@ -546,31 +581,37 @@ $("speak").addEventListener("click", async () => {
 });
 
 // ---------- publish ----------
-$("publish").addEventListener("click", async () => {
+$("publish").addEventListener("click", () => publishNow());
+async function publishNow() {
+  let token = await accessToken();
+  if (!token) { savePending(true); return signIn(); }
+  const auth = { authorization: `Bearer ${token}` };
   $("publish").disabled = true;
   try {
     const matches = state.matches.filter((m) => m.home && m.away);
     if (state.leaderboard) state.leaderboard.entries = state.leaderboard.entries.filter((x) => x.name);
-    let r = await fetch("/api/leagues", { method: "POST", headers: { "content-type": "application/json" },
+    let r = await fetch("/api/leagues", { method: "POST", headers: { "content-type": "application/json", ...auth },
       body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, jobId: state.job?.id, table: state.table || [], leaderboard: state.leaderboard }) });
     if (!r.ok) throw new Error((await r.json()).detail || "Could not save the league");
     state.league = await r.json();
-    r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST", headers: { "x-publish-pin": $("pin").value || "" } });
+    r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST", headers: auth });
+    if (r.status === 401) { signOut(); savePending(true); return signIn(); }
     const pub = await r.json();
     if (!r.ok) throw new Error(pub.detail || "Could not publish");
     const board = `${location.origin}/l/${state.league.id}`;
     const ec = pub.links && (pub.links.competition || pub.links.leagueSite);
     const live = pub.mode === "live" && pub.status === 200;
-    $("done-kicker").textContent = live ? "Published to EasyChamp" : "Saved";
+    $("done-kicker").textContent = live ? "Saved in your EasyChamp account" : "Saved";
     $("done-title").textContent = live ? "League is live on EasyChamp" : pub.mode === "board" ? "Leaderboard is live" : "Your league board is ready";
     $("done-text").textContent = pub.mode === "board" ? "Share this leaderboard: places and points update with every new photo. (EasyChamp leagues cover games today; races and quizzes are next.)"
-      : live ? "Teams can follow results and standings on the EasyChamp league site. Every new photo updates it."
+      : live ? "It's a real competition in your EasyChamp account: teams follow results and standings on the league site, and you can edit it in EasyChamp. Every new photo updates it."
       : pub.reason === "pin" ? "Share this board with the teams. Publishing to EasyChamp needs the organizer PIN."
       : pub.mode === "live" ? `EasyChamp answered ${pub.status}; the board below still works.` : "Share this board with the teams.";
     $("done-url").textContent = ec || board; $("done-url").href = ec || board;
     $("done-open").href = ec || board;
     $("done-open").textContent = ec ? "Open on EasyChamp" : "Open the board";
     $("done-board").href = board; $("done-board").hidden = !ec;
+    $("done-console").hidden = !live;
     $("payload").textContent = JSON.stringify(pub.payload, null, 1);
     $("league-note").textContent = `New photos will update ${state.league.name}.`; $("league-note").hidden = false;
     remember({ id: state.league.id, name: state.league.name, url: ec || board, matches: matches.length, photos: state.job?.photos.length || 0, at: Date.now() });
@@ -578,7 +619,7 @@ $("publish").addEventListener("click", async () => {
     show("done");
   } catch (e) { $("error").textContent = e.message; $("error").hidden = false; }
   finally { $("publish").disabled = false; }
-});
+}
 $("again").addEventListener("click", () => { state.files = []; state.samples = []; renderTray(); show("capture"); keepInView($("capture")); });
 
 function remember(entry) {
@@ -589,7 +630,7 @@ function renderHistory() {
   const list = store.get("imports", []);
   $("history-box").hidden = !list.length;
   $("history").innerHTML = list.map((x) => `<div class="hist"><a href="${esc(x.url)}" target="_blank" rel="noopener"><span>${esc(x.name)}</span>
-    <span class="meta">${x.matches} matches · ${x.photos} photos · ${new Date(x.at).toLocaleDateString()}</span></a>
+    <span class="meta">${x.matches} match${x.matches === 1 ? "" : "es"} · ${x.photos} photo${x.photos === 1 ? "" : "s"} · ${new Date(x.at).toLocaleDateString()}</span></a>
     <button class="btn ghost small" type="button" data-update="${esc(x.id)}" data-name="${esc(x.name)}">Snap an update</button></div>`).join("");
 }
 $("history").addEventListener("click", (e) => {

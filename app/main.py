@@ -15,7 +15,7 @@ from .env import load_env
 
 load_env()
 
-from . import easychamp, jobs, safety, store  # noqa: E402
+from . import auth, easychamp, jobs, safety, store  # noqa: E402
 from .merge import fixture_key as merge_key, review as merge_review  # noqa: E402
 from .extract import ExtractError, extract
 from .schema import Extraction, Flag, Match, Snap, sport_name
@@ -81,6 +81,11 @@ def index():
     return FileResponse(STATIC / "index.html")
 
 
+@app.get("/callback")
+def callback():
+    return FileResponse(STATIC / "index.html")  # the page finishes the EasyChamp sign-in itself
+
+
 @app.get("/l/{league_id}")
 def league_page(league_id: str):
     return FileResponse(STATIC / "league.html")
@@ -102,7 +107,7 @@ def health():
             "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and (os.environ.get("EC_TOKEN") or os.environ.get("EC_TOKEN_CMD")) else "dry-run",
             "pin": bool(os.environ.get("SNAP_PUBLISH_PIN")), "maxPhotos": safety.MAX_PHOTOS,
             "gemini": "google" if os.environ.get("GEMINI_API_KEY") else ("openrouter" if dual else None),
-            "voice": bool(os.environ.get("ELEVENLABS_API_KEY")), "version": VERSION}
+            "voice": bool(os.environ.get("ELEVENLABS_API_KEY")), "version": VERSION, "auth": auth.config()}
 
 
 @app.get("/api/stats")
@@ -227,13 +232,19 @@ def corrections(job: dict | None, final: list[Match]) -> int:
 
 
 @app.post("/api/leagues")
-def save_league(body: LeagueIn, request: Request):
+def save_league(body: LeagueIn, request: Request, authorization: str | None = Header(None),
+                x_publish_pin: str | None = Header(None)):
     safety.limit(request, "save", int(os.environ.get("SNAP_SAVES_PER_HOUR", "120")))
     # same competition name means the same league, so a fresh session never publishes a twin
     body.sport = sport_name(body.sport)
     same = None if body.id else leagues.find_by_name(body.name)
     lid = body.id or (same or {}).get("id") or uuid.uuid4().hex[:10]
     prev = leagues.get(lid) or {}
+    if prev.get("owner"):  # a league saved to an EasyChamp account changes only with that account
+        who = auth.user(auth.bearer(authorization))
+        pin_ok = bool(not who and x_publish_pin and safety.publish_allowed(x_publish_pin))
+        if not ((who and who["id"] == prev["owner"]) or pin_ok):
+            raise HTTPException(403, "This league belongs to another EasyChamp account")
     ex = Extraction(competition=body.name, sport=body.sport, teams=body.teams, matches=body.matches)
     table, flags = checks(ex, [])
     job = jobs.get(body.jobId) if body.jobId else None
@@ -249,7 +260,8 @@ def save_league(body: LeagueIn, request: Request):
            "jobIds": list(dict.fromkeys(prev.get("jobIds", []) + ([body.jobId] if body.jobId else []))),
            "corrections": prev.get("corrections", 0) + corrections(job, body.matches),
            "standings": [r.model_dump() for r in table], "flags": [f.model_dump() for f in flags],
-           "published": prev.get("published"), "updated": __import__("time").time()}
+           "published": prev.get("published"), "updated": __import__("time").time(),
+           "owner": prev.get("owner"), "ownerName": prev.get("ownerName")}
     leagues.put(doc)
     return doc
 
@@ -263,17 +275,34 @@ def get_league(league_id: str):
 
 
 @app.post("/api/leagues/{league_id}/publish")
-def publish(league_id: str, request: Request, x_publish_pin: str | None = Header(None)):
+def publish(league_id: str, request: Request, x_publish_pin: str | None = Header(None),
+            authorization: str | None = Header(None)):
+    """Publish to EasyChamp as the signed-in organizer, into their own account. Scripts may still use
+    the organizer PIN with the service account; everyone else is asked to sign in."""
     safety.limit(request, "publish", 30)
     doc = leagues.get(league_id)
     if not doc:
         raise HTTPException(404, "No such league")
+    token = auth.bearer(authorization)
+    who = auth.user(token) if token else None
+    if token and not who:
+        raise HTTPException(401, "Your EasyChamp sign-in has expired. Sign in again to publish.")
+    pin_ok = bool(not who and x_publish_pin and safety.publish_allowed(x_publish_pin))
+    if doc.get("owner") and not ((who and who["id"] == doc["owner"]) or pin_ok):
+        raise HTTPException(403, "This league belongs to another EasyChamp account")
+    if who and not doc.get("owner"):
+        doc["owner"], doc["ownerName"] = who["id"], who["name"]
+        leagues.put(doc)
     if not doc.get("matches") and doc.get("leaderboard"):
-        return {"mode": "board", "reason": "leaderboard"}  # EasyChamp has no placement stage yet
-    if not safety.publish_allowed(x_publish_pin):
+        if not who and not pin_ok:
+            raise HTTPException(401, "Sign in to EasyChamp to save this leaderboard")
+        return {"mode": "board", "reason": "leaderboard", "owner": doc.get("ownerName")}  # EasyChamp has no placement stage yet
+    if not who and not pin_ok and os.environ.get("SNAP_REQUIRE_SIGNIN", "1") == "1":
+        raise HTTPException(401, "Sign in to EasyChamp to publish, so the league is saved in your account")
+    if not who and not safety.publish_allowed(x_publish_pin):
         return {"mode": "dry-run", "reason": "pin", "payload": easychamp.build_payload(doc)}
     try:
-        result = easychamp.publish(doc)
+        result = easychamp.publish(doc, user_token=token if who else None, owner_id=who["id"] if who else None)
     except httpx.HTTPError as e:
         raise HTTPException(502, f"EasyChamp did not answer: {e}")
     doc["published"] = {"mode": result["mode"], "status": result.get("status"), "links": result.get("links")}

@@ -247,20 +247,24 @@ def token() -> str | None:
     return proc.stdout.strip() or None if proc.returncode == 0 else None
 
 
-def publish(league: dict) -> dict:
+def publish(league: dict, user_token: str | None = None, owner_id: str | None = None) -> dict:
+    """Import the league into EasyChamp. With user_token (the signed-in organizer) the league is created
+    in their own account and they own it; without, the service token and EC_OWNER_ID are used (scripts)."""
     payload = build_payload(league)
-    token_ = token() if os.environ.get("EC_PUBLISH") == "1" else None
+    if os.environ.get("EC_PUBLISH") != "1":
+        return {"mode": "dry-run", "payload": payload}
+    token_ = user_token or token()
     if not token_:
         return {"mode": "dry-run", "payload": payload}
-    owner = os.environ.get("EC_OWNER_ID")
-    headers = {"Authorization": f"Bearer {token_}", "User-Agent": "snap-to-league/0.1"}
+    owner = owner_id if user_token else os.environ.get("EC_OWNER_ID")
+    headers = {"Authorization": f"Bearer {token_}", "User-Agent": "snap-to-league/0.2"}
     r = httpx.post(f"{API}/import/league", params={"ownerId": owner} if owner else None, json=payload,
                    headers=headers, timeout=300)
     result = r.json() if r.headers.get("content-type", "").startswith("application/json") else r.text[:500]
     out = {"mode": "live", "status": r.status_code, "result": result, "payload": payload}
     if r.status_code == 200:
         for attempt in range(4):  # the new league can take a moment to appear in search
-            out["links"] = find_links(league, headers)
+            out["links"] = find_links(league, headers, mine=bool(user_token))
             if out["links"].get("competition"):
                 break
             time.sleep(1.5)
@@ -283,10 +287,18 @@ def set_time_zone(lg: dict, headers: dict) -> None:
         pass  # times still show, in UTC
 
 
-def find_links(league: dict, headers: dict) -> dict:
-    """Where the imported league lives: the league website and the competition page."""
+def find_links(league: dict, headers: dict, mine: bool = False) -> dict:
+    """Where the imported league lives: the league website and the competition page.
+
+    For a signed-in organizer the league is found among their own leagues by its import id (names like
+    "Untitled cup" repeat across accounts); the service account looks it up by name."""
     try:
-        lg = httpx.get(f"{API}/champ-leagues/search", params={"name": league["name"]}, headers=headers, timeout=30).json()
+        if mine:
+            page = httpx.get(f"{API}/champ-leagues", params={"keyword": league["name"], "pageSize": 50}, headers=headers, timeout=30).json()
+            items = page.get("items", page if isinstance(page, list) else [])
+            lg = next((x for x in items if str(x.get("externalId", "")).endswith(f"snap:{league['id']}:league")), None) or {}
+        else:
+            lg = httpx.get(f"{API}/champ-leagues/search", params={"name": league["name"]}, headers=headers, timeout=30).json()
         if not lg or not lg.get("id"):
             return {}
         champs = httpx.get(f"{API}/champ-leagues/{lg['id']}/champs", headers=headers, timeout=30).json().get("items", [])

@@ -100,7 +100,8 @@ def test_api_sample_then_update(tmp_path, monkeypatch):
     ms = snap["extraction"]["matches"]
     lg = c.post("/api/leagues", json={"name": "Sat 7v7 Cup", "matches": ms, "snapIds": [snap["id"]]}).json()
     assert lg["standings"][0]["team"] == "Hawks"
-    pub = c.post(f"/api/leagues/{lg['id']}/publish").json()
+    assert c.post(f"/api/leagues/{lg['id']}/publish").status_code == 401  # guests must sign in
+    pub = c.post(f"/api/leagues/{lg['id']}/publish", headers={"x-publish-pin": "any"}).json()
     assert pub["mode"] == "dry-run"
     # a second photo with the final played merges into the same league
     final = next(m for m in ms if m["stage"] == "final")
@@ -286,8 +287,26 @@ def test_refuses_non_images_and_needs_pin_to_publish(tmp_path, monkeypatch):
     monkeypatch.setenv("EC_TOKEN", "should-not-be-used")
     lg = c.post("/api/leagues", json={"name": "Pin Cup", "matches": [
         {"home": "A", "away": "B", "homeScore": 1, "awayScore": 0, "status": "played"}]}).json()
-    r = c.post(f"/api/leagues/{lg['id']}/publish", headers={"x-publish-pin": "0000"}).json()
-    assert r["mode"] == "dry-run" and r["reason"] == "pin"
+    r = c.post(f"/api/leagues/{lg['id']}/publish", headers={"x-publish-pin": "0000"})
+    assert r.status_code == 401  # a wrong PIN is no better than no sign-in
+
+
+def test_signed_in_organizer_owns_the_league(tmp_path, monkeypatch):
+    c, main = _client(tmp_path, monkeypatch)
+    people = {"tok-ana": {"id": "u-ana", "name": "Ana"}, "tok-bo": {"id": "u-bo", "name": "Bo"}}
+    monkeypatch.setattr(main.auth, "user", lambda t: people.get(t))
+    seen = {}
+    monkeypatch.setattr(main.easychamp, "publish", lambda doc, user_token=None, owner_id=None:
+                        seen.update(token=user_token, owner=owner_id) or {"mode": "live", "status": 200, "links": {}})
+    lg = c.post("/api/leagues", json={"name": "Ana Cup", "matches": [
+        {"home": "A", "away": "B", "homeScore": 1, "awayScore": 0, "status": "played"}]}).json()
+    ok = c.post(f"/api/leagues/{lg['id']}/publish", headers={"authorization": "Bearer tok-ana"})
+    assert ok.status_code == 200 and seen == {"token": "tok-ana", "owner": "u-ana"}
+    assert c.post(f"/api/leagues/{lg['id']}/publish", headers={"authorization": "Bearer tok-bo"}).status_code == 403
+    assert c.post(f"/api/leagues/{lg['id']}/publish", headers={"authorization": "Bearer forged"}).status_code == 401
+    edit = {"id": lg["id"], "name": "Ana Cup", "matches": []}
+    assert c.post("/api/leagues", json=edit, headers={"authorization": "Bearer tok-bo"}).status_code == 403
+    assert c.post("/api/leagues", json=edit, headers={"authorization": "Bearer tok-ana"}).json()["owner"] == "u-ana"
 
 
 def test_rate_limit(tmp_path, monkeypatch):
