@@ -39,7 +39,7 @@ def sport_kind(sport: str | None) -> str:
     for alias, k in ALIASES.items():
         if alias in key:
             return k
-    return "Soccer" if not key else "Other"
+    return "Other"  # unknown or unreadable: EasyChamp's generic kind, never a guess
 API = os.environ.get("EC_API_URL", "https://easychamp.com/ec-standings-api")
 
 

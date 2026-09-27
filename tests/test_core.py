@@ -394,3 +394,15 @@ def test_leaderboard_sums_rounds_and_reads_as_a_photo():
                    '{"name": "Towers", "values": ["30", "25"]}]}}}')
     ranked, _ = rank(ex.leaderboard)
     assert [(r["name"], r["score"], r["place"]) for r in ranked] == [("Towers", 55, 1), ("Stackers", 49, 2)]
+
+
+def test_unknown_sport_becomes_other():
+    from app.schema import Extraction
+    assert Extraction().sport == "other"
+    assert Extraction(sport=None).sport == "other"
+    assert Extraction(sport=" Unknown ").sport == "other"
+    assert Extraction(sport="Cup stacking").sport == "cup stacking"
+    assert easychamp.sport_kind("") == "Other"
+    assert easychamp.sport_kind("cup stacking") == "Other"
+    assert easychamp.sport_kind("Soccer") == "Soccer"
+    assert easychamp.sport_kind("super smash bros") == "Smash"

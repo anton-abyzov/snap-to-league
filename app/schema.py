@@ -7,6 +7,16 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 
+
+UNKNOWN_SPORT = {"", "unknown", "unclear", "none", "null", "n/a", "na", "?", "-", "sport", "sports", "game", "games",
+                 "tournament", "competition", "league", "cup", "mixed", "various"}
+
+
+def sport_name(v) -> str:
+    """The board's sport or game, lower case; "other" whenever the reader could not tell."""
+    s = " ".join(str(v or "").split()).casefold().strip(" .")
+    return "other" if s in UNKNOWN_SPORT else s[:40]
+
 class Goal(BaseModel):
     """A scorer written on a scoresheet ("Goals: Smith 2, Lee")."""
     player: str
@@ -140,15 +150,17 @@ class Leaderboard(BaseModel):
 
 class Extraction(BaseModel):
     competition: str = "Untitled cup"
-    sport: str = "soccer"
+    sport: str = "other"
     table: list["Row"] = Field(default_factory=list)  # a standings table read as-is (screenshot of a league site)
     leaderboard: Optional[Leaderboard] = None
 
     @field_validator("competition", "sport", mode="before")
     @classmethod
     def _text(cls, v, info):
+        if info.field_name == "sport":
+            return sport_name(v)
         if v is None or not str(v).strip():
-            return "Untitled cup" if info.field_name == "competition" else "other"
+            return "Untitled cup"
         return str(v).strip()
 
     @field_validator("teams", "rules_notes", "uncertain", mode="before")

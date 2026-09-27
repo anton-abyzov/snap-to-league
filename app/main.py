@@ -18,7 +18,7 @@ load_env()
 from . import easychamp, jobs, safety, store  # noqa: E402
 from .merge import fixture_key as merge_key, review as merge_review  # noqa: E402
 from .extract import ExtractError, extract
-from .schema import Extraction, Flag, Match, Snap
+from .schema import Extraction, Flag, Match, Snap, sport_name
 from .standings import checks, compute
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -165,7 +165,7 @@ async def create_job(request: Request, images: list[UploadFile] = File(default=[
         try:
             draft = __import__("json").loads(base)
             league = {"id": None, "name": str(draft.get("name") or "Untitled cup")[:120],
-                      "sport": str(draft.get("sport") or "soccer")[:40],
+                      "sport": sport_name(draft.get("sport")),
                       "matches": [Match.model_validate(m).model_dump() for m in draft.get("matches", [])][:400]}
         except Exception:  # noqa: BLE001
             raise HTTPException(400, "Could not read the draft")
@@ -202,7 +202,7 @@ def image(name: str):
 class LeagueIn(BaseModel):
     id: str | None = None
     name: str
-    sport: str = "soccer"
+    sport: str = "other"
     teams: list[str] = []
     matches: list[Match]
     snapIds: list[str] = []
@@ -225,6 +225,7 @@ def corrections(job: dict | None, final: list[Match]) -> int:
 def save_league(body: LeagueIn, request: Request):
     safety.limit(request, "save", int(os.environ.get("SNAP_SAVES_PER_HOUR", "120")))
     # same competition name means the same league, so a fresh session never publishes a twin
+    body.sport = sport_name(body.sport)
     same = None if body.id else leagues.find_by_name(body.name)
     lid = body.id or (same or {}).get("id") or uuid.uuid4().hex[:10]
     prev = leagues.get(lid) or {}

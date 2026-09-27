@@ -12,7 +12,7 @@ Rules:
 - The photo may be a screenshot of another app (Challonge, start.gg, a league website, a spreadsheet, a group chat); read it the same way.
 - group is the group label if the board has one (for example "A"), otherwise null.
 - when and venue are copied as written ("Sun 10am", "Field 2"), otherwise null.
-- sport is your best guess from the board: soccer, futsal, basketball, volleyball, padel, pickleball, tennis, hockey, or for esports the game itself (smash, fifa, efootball, tekken, valorant, rocket league, league of legends, fortnite and so on; "esports" if the game is unclear), otherwise other.
+- sport is your best guess from the board: soccer, futsal, basketball, volleyball, padel, pickleball, tennis, hockey, or for esports the game itself (smash, fifa, efootball, tekken, valorant, rocket league, league of legends, fortnite and so on; "esports" if the game is unclear), otherwise other. If nothing on the board says or clearly shows the sport, use "other"; do not guess soccer just because there are scores.
 - Put anything you could not read confidently, and anything that contradicts itself, in "uncertain" as a short sentence a tournament organizer would understand.
 - Do not run any commands.
 

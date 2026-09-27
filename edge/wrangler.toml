@@ -5,4 +5,4 @@ workers_dev = false
 routes = [{ pattern = "snap.easychamp.com", custom_domain = true }]
 
 [vars]
-ORIGIN = "https://lap-settlement-louisiana-pda.trycloudflare.com"
+ORIGIN = "https://valley-reputation-printer-stating.trycloudflare.com"
