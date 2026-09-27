@@ -1,0 +1,215 @@
+{
+ "source_url": "https://www.start.gg/tournament/the-grand-melee/event/qualification-phase/brackets/1247352/1916774",
+ "matches": [
+  {
+   "id": "A",
+   "home": "RediRodion",
+   "away": "ThunderboltX",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "RediRodion"
+  },
+  {
+   "id": "B",
+   "home": "twitch.tv/st4rk_",
+   "away": "Poland Ninja",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "twitch.tv/st4rk_"
+  },
+  {
+   "id": "C",
+   "home": "Ubetnir",
+   "away": "katzzlikemeowmix",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "Ubetnir"
+  },
+  {
+   "id": "D",
+   "home": "Macluffy",
+   "away": "BuTo",
+   "homeScore": null,
+   "awayScore": null,
+   "winner": null
+  },
+  {
+   "id": "E",
+   "home": "R4v3N_",
+   "away": "ActionMarc",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "R4v3N_"
+  },
+  {
+   "id": "F",
+   "home": "The Bloodless",
+   "away": "haenibol",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "The Bloodless",
+   "homeFull": "CL The Bloodless"
+  },
+  {
+   "id": "G",
+   "home": "Kugelblitz",
+   "away": "Ertwin O' Fliguter",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "Kugelblitz"
+  },
+  {
+   "id": "H",
+   "home": "D3rp",
+   "away": "Mr.Soltmann",
+   "homeScore": 0,
+   "awayScore": null,
+   "winner": "D3rp",
+   "homeFull": "CL D3rp",
+   "awayFull": "[AENO] Mr.Soltmann"
+  },
+  {
+   "id": "I",
+   "home": "Vinchester",
+   "away": "RediRodion",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "Vinchester",
+   "homeFull": "SalzZ Vinchester"
+  },
+  {
+   "id": "J",
+   "home": "Thành Cổ Quảng Trị",
+   "away": "twitch.tv/st4rk_",
+   "homeScore": 1,
+   "awayScore": 2,
+   "winner": "twitch.tv/st4rk_"
+  },
+  {
+   "id": "K",
+   "home": "F1ReAoE",
+   "away": "Ubetnir",
+   "homeScore": 2,
+   "awayScore": 1,
+   "winner": "F1ReAoE",
+   "homeFull": "KGB F1ReAoE"
+  },
+  {
+   "id": "L",
+   "home": "lyx",
+   "away": "Macluffy",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "lyx",
+   "homeFull": "wwp lyx"
+  },
+  {
+   "id": "M",
+   "home": "Nicov",
+   "away": "R4v3N_",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "Nicov",
+   "homeFull": "[aM] Nicov"
+  },
+  {
+   "id": "N",
+   "home": "Overtaken",
+   "away": "The Bloodless",
+   "homeScore": 2,
+   "awayScore": 1,
+   "winner": "Overtaken",
+   "awayFull": "CL The Bloodless"
+  },
+  {
+   "id": "O",
+   "home": "miguel",
+   "away": "Kugelblitz",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "miguel",
+   "homeFull": "Heresy miguel"
+  },
+  {
+   "id": "P",
+   "home": "sobek",
+   "away": "D3rp",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "sobek",
+   "homeFull": "HR sobek",
+   "awayFull": "CL D3rp"
+  },
+  {
+   "id": "Q",
+   "home": "Vinchester",
+   "away": "twitch.tv/st4rk_",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "Vinchester",
+   "homeFull": "SalzZ Vinchester"
+  },
+  {
+   "id": "R",
+   "home": "F1ReAoE",
+   "away": "lyx",
+   "homeScore": null,
+   "awayScore": null,
+   "winner": "F1ReAoE",
+   "homeFull": "KGB F1ReAoE",
+   "awayFull": "wwp lyx"
+  },
+  {
+   "id": "S",
+   "home": "Nicov",
+   "away": "Overtaken",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "Nicov",
+   "homeFull": "[aM] Nicov"
+  },
+  {
+   "id": "T",
+   "home": "miguel",
+   "away": "sobek",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "miguel",
+   "homeFull": "Heresy miguel",
+   "awayFull": "HR sobek"
+  },
+  {
+   "id": "U",
+   "home": "Vinchester",
+   "away": "F1ReAoE",
+   "homeScore": 3,
+   "awayScore": 1,
+   "winner": "Vinchester",
+   "homeFull": "SalzZ Vinchester",
+   "awayFull": "KGB F1ReAoE"
+  },
+  {
+   "id": "V",
+   "home": "Nicov",
+   "away": "miguel",
+   "homeScore": 3,
+   "awayScore": 0,
+   "winner": "Nicov",
+   "homeFull": "[aM] Nicov",
+   "awayFull": "Heresy miguel"
+  }
+ ],
+ "partial": [
+  {
+   "id": "W",
+   "home": "Vinchester",
+   "away": "Nicov",
+   "homeScore": 3,
+   "awayScore": 1,
+   "winner": "Vinchester",
+   "homeFull": "SalzZ Vinchester",
+   "awayFull": "[aM] Nicov"
+  }
+ ],
+ "notes": "start.gg pool A6 single-elim bracket. Names are gamer tags (entrant-tag); homeFull/awayFull include sponsor prefix. Seed numbers shown before names in image. 'DQ' entries have score null/'DQ'. Match R has a winner check mark but no score."
+}

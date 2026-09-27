@@ -1,0 +1,119 @@
+{
+ "source_url": "https://www.start.gg/tournament/wisdom-melee/event/melee-singles/standings",
+ "matches": [],
+ "standings": [
+  [
+   "1",
+   "Cody Schwab 2 1",
+   "9",
+   "1",
+   "90%",
+   "Zamu"
+  ],
+  [
+   "2",
+   "Z Zamu 25 60",
+   "6",
+   "2",
+   "75%",
+   "Cody Schwab Cody Schwab"
+  ],
+  [
+   "3",
+   "G LG Ginger",
+   "5",
+   "2",
+   "71.43%",
+   "Zamu Cody Schwab"
+  ],
+  [
+   "4",
+   "Spark 17 15",
+   "6",
+   "2",
+   "75%",
+   "Zamu Cody Schwab"
+  ],
+  [
+   "5",
+   "FLY KoDoRiN 19 40",
+   "4",
+   "2",
+   "66.67%",
+   "LG | Ginger Spark"
+  ],
+  [
+   "5",
+   "S shabo",
+   "6",
+   "2",
+   "75%",
+   "SlyFox | Slowking Cody Schwab"
+  ],
+  [
+   "7",
+   "Lowercase hero 64 39",
+   "6",
+   "2",
+   "75%",
+   "Zamu shabo"
+  ],
+  [
+   "7",
+   "Preeminent 18 23",
+   "6",
+   "2",
+   "75%",
+   "KJH Spark"
+  ],
+  [
+   "9",
+   "B Ben 30 27",
+   "3",
+   "2",
+   "60%",
+   "LG | Ginger Lowercase hero"
+  ],
+  [
+   "9",
+   "Squid 119 2",
+   "4",
+   "2",
+   "66.67%",
+   "Ben Spark"
+  ],
+  [
+   "9",
+   "KJH 51 106",
+   "3",
+   "2",
+   "60%",
+   "FLY | KoDoRiN shabo"
+  ],
+  [
+   "9",
+   "SlyFox Slowking 50 64",
+   "4",
+   "2",
+   "66.67%",
+   "Cody Schwab Preeminent"
+  ],
+  [
+   "13",
+   "Brazmonkey 3",
+   "4",
+   "2",
+   "66.67%",
+   "Cody Schwab shabo"
+  ],
+  [
+   "13",
+   "Joey Donuts 61 370",
+   "4",
+   "2",
+   "66.67%",
+   "FLY | KoDoRiN Preeminent"
+  ]
+ ],
+ "notes": "start.gg event standings (player placement, wins, losses, set win %, lost to). Not match results; any extracted 'matches' are extras."
+}

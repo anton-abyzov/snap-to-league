@@ -1,0 +1,55 @@
+{
+ "source_url": "https://www.score7.io/tournaments/uwucyru8rf/stages/4139616",
+ "matches": [
+  {
+   "id": "4 @ 0",
+   "home": "S.D Ribadeo",
+   "away": "Pto de Vega C.F",
+   "homeScore": 4,
+   "awayScore": 0,
+   "winner": "S.D Ribadeo"
+  },
+  {
+   "id": "2 @ 0",
+   "home": "A.D. Rio Ouro \"A\"",
+   "away": "S.D Ribadeo",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "A.D. Rio Ouro \"A\""
+  },
+  {
+   "id": "0 @ 4",
+   "home": "Pto de Vega C.F",
+   "away": "A.D. Rio Ouro \"A\"",
+   "homeScore": 0,
+   "awayScore": 4,
+   "winner": "A.D. Rio Ouro \"A\""
+  },
+  {
+   "id": "1 @ 1",
+   "home": "C.D. Valdés Atl \"B\"",
+   "away": "A.D. Rio Ouro \"B\"",
+   "homeScore": 1,
+   "awayScore": 1,
+   "winner": null
+  },
+  {
+   "id": "0 @ 1",
+   "home": "A.D. Rio Ouro \"B\"",
+   "away": "Andés C.F",
+   "homeScore": 0,
+   "awayScore": 1,
+   "winner": "Andés C.F"
+  },
+  {
+   "id": "4 @ 0",
+   "home": "Andés C.F",
+   "away": "C.D. Valdés Atl \"B\"",
+   "homeScore": 4,
+   "awayScore": 0,
+   "winner": "Andés C.F"
+  }
+ ],
+ "partial": [],
+ "notes": "Score7 youth football tournament group stage (Group A, Group B). Rendered at 1280 width with a tall viewport (page uses an inner scroller) and cropped to the match list. Winner = higher score; draw -> winner null."
+}

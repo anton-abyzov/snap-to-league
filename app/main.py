@@ -23,7 +23,7 @@ from .standings import checks, compute
 
 ROOT = Path(__file__).resolve().parent.parent
 STATIC = ROOT / "static"
-SAMPLES = {"board": ROOT / "tests" / "fixtures" / "board.jpg", "bracket": ROOT / "tests" / "fixtures" / "bracket.jpg"}
+SAMPLES = {k: ROOT / "tests" / "fixtures" / f"{k}.jpg" for k in ("board", "bracket", "sheet1", "sheet2")}
 
 app = FastAPI(title="Snap to League")
 

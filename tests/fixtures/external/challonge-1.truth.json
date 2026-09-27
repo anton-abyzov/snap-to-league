@@ -1,0 +1,71 @@
+{
+ "source_url": "https://challonge.com/challongetutorial",
+ "matches": [
+  {
+   "id": "7",
+   "home": "Team Name4",
+   "away": "Team Name3",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "Team Name4"
+  },
+  {
+   "id": "6",
+   "home": "Team Name8",
+   "away": "Team Name3",
+   "homeScore": 0,
+   "awayScore": 1,
+   "winner": "Team Name3"
+  },
+  {
+   "id": "5",
+   "home": "Team Name4",
+   "away": "Team Name1",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "Team Name4"
+  },
+  {
+   "id": "4",
+   "home": "Team Name7",
+   "away": "Team Name3",
+   "homeScore": 0,
+   "awayScore": 1,
+   "winner": "Team Name3"
+  },
+  {
+   "id": "3",
+   "home": "Team Name8",
+   "away": "Team Name5",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "Team Name8"
+  },
+  {
+   "id": "2",
+   "home": "Team Name6",
+   "away": "Team Name1",
+   "homeScore": 0,
+   "awayScore": 1,
+   "winner": "Team Name1"
+  },
+  {
+   "id": "1",
+   "home": "Team Name4",
+   "away": "Team Name2",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "Team Name4"
+  },
+  {
+   "id": "8",
+   "home": "Team Name1",
+   "away": "Team Name8",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "Team Name1"
+  }
+ ],
+ "partial": [],
+ "notes": "Challonge 8-player single elimination incl. 3rd place match (final id 7: Team Name4 1-0 Team Name3; 3rd place id 8). home=top slot, away=bottom slot; scores are set/game counts."
+}

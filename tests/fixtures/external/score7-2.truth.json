@@ -1,0 +1,32 @@
+{
+ "source_url": "https://www.score7.io/tournaments/uwucyru8rf/stages/4139629",
+ "viewport": "390x844 mobile (dpr 2)",
+ "matches": [
+  {
+   "id": "2 @ 0",
+   "home": "A.D. Rio Ouro \"A\"",
+   "away": "S.D Ribadeo",
+   "homeScore": 2,
+   "awayScore": 0,
+   "winner": "A.D. Rio Ouro \"A\""
+  },
+  {
+   "id": "1 @ 0",
+   "home": "C.D. Valdés Atl \"A\"",
+   "away": "Andés C.F",
+   "homeScore": 1,
+   "awayScore": 0,
+   "winner": "C.D. Valdés Atl \"A\""
+  },
+  {
+   "id": "4 @ 0",
+   "home": "A.D. Rio Ouro \"A\"",
+   "away": "C.D. Valdés Atl \"A\"",
+   "homeScore": 4,
+   "awayScore": 0,
+   "winner": "A.D. Rio Ouro \"A\""
+  }
+ ],
+ "partial": [],
+ "notes": "Score7 knockout stage (semifinals + final) at phone width; only fully visible matches listed in matches."
+}

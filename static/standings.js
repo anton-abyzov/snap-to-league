@@ -93,3 +93,10 @@ export async function speak(text) {
   if ("speechSynthesis" in window) { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(text)); return "browser"; }
   return "none";
 }
+
+export function goalsText(m) {
+  if (!m.goals || !m.goals.length) return "";
+  const side = (s) => m.goals.filter((g) => g.side === s).map((g) => `${g.player}${g.count > 1 ? ` ${g.count}` : ""}${g.minute ? ` ${g.minute}'` : ""}`).join(", ");
+  const h = side("home"), a = side("away");
+  return `Goals: ${h || "none"}${a ? ` / ${a}` : ""}`;
+}

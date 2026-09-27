@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Import stats · Snap to League</title>
+<link rel="stylesheet" href="/static/tokens.css">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<main class="wrap">
+  <header class="bar">
+    <a class="brand" href="/"><span class="ec">EasyChamp</span><span class="name">Snap <i>to</i> League</span></a>
+    <div class="chips"><span class="chip on" id="updated">Loading</span></div>
+  </header>
+  <div class="kicker">Every import on this app</div>
+  <h1>Import stats</h1>
+  <section class="tiles" id="tiles"></section>
+  <div class="grid2">
+    <section class="panel"><h2>Photo readers</h2><div class="tablebox" id="readers"></div></section>
+    <section class="panel"><h2>Sports and games</h2><div class="tablebox" id="sports"></div></section>
+  </div>
+  <p class="muted small">"Kept as read" counts saved results the organizer did not have to correct.</p>
+</main>
+<script type="module">
+import { esc } from "/static/standings.js";
+const $ = (id) => document.getElementById(id);
+const r = await fetch("/api/stats"); const s = await r.json();
+const pct = (x) => (x === null || x === undefined ? "n/a" : `${Math.round(x * 100)}%`);
+$("tiles").innerHTML = [
+  [s.photosRead, "photos read"], [s.matchesRead, "matches read"], [s.imports, "imports"], [s.leagues, "leagues"],
+  [s.published, "published to EasyChamp"], [pct(s.untouchedShare), "kept as read"], [s.medianSeconds ? `${s.medianSeconds} s` : "n/a", "median read time"], [s.photosFailed, "photos not readable"],
+].map(([v, l]) => `<div class="tile"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("");
+const table = (o) => `<table class="st"><tbody>${Object.entries(o).map(([k, v]) => `<tr><td class="team">${esc(k)}</td><td class="pts">${v}</td></tr>`).join("") || "<tr><td>none yet</td></tr>"}</tbody></table>`;
+$("readers").innerHTML = table(s.readers); $("sports").innerHTML = table(s.sports);
+$("updated").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+</script>
+</body>
+</html>

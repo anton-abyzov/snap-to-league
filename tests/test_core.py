@@ -213,3 +213,70 @@ def test_scorers_publish_as_roster_and_goal_events():
     ev = champ["Stages"][0]["Groups"][0]["Fixtures"][0]["Events"]
     assert len(ev) == 2 and all(e["EventType"] == "scorer" and e["IsHomeEvent"] for e in ev)
     assert ev[0]["Player"]["Id"] == lions["TeamMembers"][0]["Player"]["Id"]
+
+
+def _client(tmp_path, monkeypatch):
+    monkeypatch.setenv("SNAP_BACKEND", "fixture")
+    monkeypatch.setenv("SNAP_DATA", str(tmp_path))
+    import importlib
+    from app import jobs, main, safety, store
+    importlib.reload(store)
+    importlib.reload(jobs)
+    importlib.reload(main)
+    safety.reset()
+    return TestClient(main.app), main
+
+
+def _wait(c, job_id):
+    import time
+    for _ in range(100):
+        job = c.get(f"/api/jobs/{job_id}").json()
+        if job["status"] != "reading":
+            return job
+        time.sleep(0.05)
+    raise AssertionError("job did not finish")
+
+
+def test_job_reads_several_photos_with_progress(tmp_path, monkeypatch):
+    c, _ = _client(tmp_path, monkeypatch)
+    files = [("images", ("a.jpg", (FIX / "board.jpg").read_bytes(), "image/jpeg")),
+             ("images", ("b.jpg", (FIX / "board.jpg").read_bytes(), "image/jpeg"))]
+    job = c.post("/api/jobs", files=files).json()
+    assert len(job["photos"]) == 2
+    job = _wait(c, job["id"])
+    assert job["status"] == "done" and all(p["status"] == "done" for p in job["photos"])
+    # the same board twice gives one set of matches, not two
+    assert len(job["extraction"]["matches"]) == 7
+    assert "owner" not in job
+
+
+def test_job_update_reviews_against_saved_league(tmp_path, monkeypatch):
+    c, _ = _client(tmp_path, monkeypatch)
+    job = _wait(c, c.post("/api/jobs", data={"samples": "bracket"}).json()["id"])
+    ms = job["extraction"]["matches"]
+    final = next(m for m in ms if m["stage"] == "final")
+    final.update(homeScore=None, awayScore=None, status="scheduled")
+    lg = c.post("/api/leagues", json={"name": "Night", "matches": ms, "jobId": job["id"]}).json()
+    upd = _wait(c, c.post("/api/jobs", data={"samples": "bracket", "leagueId": lg["id"]}).json()["id"])
+    assert upd["review"]["changes"] == []  # nothing new on the same photo
+    assert c.get("/api/stats").json()["photosRead"] == 2
+
+
+def test_refuses_non_images_and_needs_pin_to_publish(tmp_path, monkeypatch):
+    c, _ = _client(tmp_path, monkeypatch)
+    bad = c.post("/api/jobs", files=[("images", ("x.jpg", b"not an image", "image/jpeg"))])
+    assert bad.status_code == 415
+    monkeypatch.setenv("SNAP_PUBLISH_PIN", "4821")
+    monkeypatch.setenv("EC_PUBLISH", "1")
+    monkeypatch.setenv("EC_TOKEN", "should-not-be-used")
+    lg = c.post("/api/leagues", json={"name": "Pin Cup", "matches": [
+        {"home": "A", "away": "B", "homeScore": 1, "awayScore": 0, "status": "played"}]}).json()
+    r = c.post(f"/api/leagues/{lg['id']}/publish", headers={"x-publish-pin": "0000"}).json()
+    assert r["mode"] == "dry-run" and r["reason"] == "pin"
+
+
+def test_rate_limit(tmp_path, monkeypatch):
+    c, _ = _client(tmp_path, monkeypatch)
+    monkeypatch.setenv("SNAP_PHOTOS_PER_HOUR", "2")
+    assert c.post("/api/jobs", data={"samples": "board,bracket"}).status_code == 200
+    assert c.post("/api/jobs", data={"samples": "board"}).status_code == 429

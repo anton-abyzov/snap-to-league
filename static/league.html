@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>League board</title>
+<link rel="stylesheet" href="/static/tokens.css">
 <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
 <main class="wrap">
-  <div class="bar">
-    <div class="brand"><span class="dot"></span>Snap to League</div>
-    <div class="chips"><span class="chip" id="updated">Loading</span></div>
-  </div>
+  <header class="bar">
+    <a class="brand" href="/"><span class="ec">EasyChamp</span><span class="name">Snap <i>to</i> League</span></a>
+    <div class="chips"><span class="chip on" id="updated">Loading</span></div>
+  </header>
   <h1 id="name">League</h1>
   <p class="muted" id="sub"></p>
   <section class="panel" id="bracket-panel" hidden><h2>Bracket</h2><div id="bracket"></div></section>
@@ -23,7 +24,7 @@
   <p class="err" id="error" hidden role="alert"></p>
 </main>
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText } from "/static/standings.js";
 const $ = (id) => document.getElementById(id);
 const id = location.pathname.split("/").pop();
 let league;
@@ -54,7 +55,7 @@ function render() {
   $("board").innerHTML = stages.map((s) => `<div class="stagehead">${esc(s === "group" ? "Group stage" : s === "knockout" ? "Knockout" : s)}</div>` + league.matches.filter((m) => m.stage === s).map((m) => `
     <div class="fx"><span class="h">${esc(m.home)}</span>
     <span class="s ${m.status === "played" ? "" : "sched"}">${m.status === "played" ? (m.homeScore !== null && m.homeScore !== undefined ? `${m.homeScore} - ${m.awayScore}` : `${esc(m.winner)} won`) : esc([m.when, m.venue].filter(Boolean).join(" · ") || "vs")}</span>
-    <span class="a">${esc(m.away)}</span></div>`).join("")).join("");
+    <span class="a">${esc(m.away)}</span>${goalsText(m) ? `<span class="g">${esc(goalsText(m))}</span>` : ""}</div>`).join("")).join("");
 }
 
 $("read").addEventListener("click", () => league && speak(readOut(league.name, computeStandings(league.matches, league.teams), league.matches)));

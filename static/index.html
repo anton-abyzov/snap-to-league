@@ -3,205 +3,336 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Snap to League</title>
+<title>Snap to League · photo of the board to a live league</title>
+<meta name="description" content="Take a photo of a tournament whiteboard, paper scoresheet or bracket. AI reads every result and builds a live league with standings or a bracket on EasyChamp. Free, no sign-up.">
+<meta property="og:title" content="Snap to League: photo of the board, live league in seconds">
+<meta property="og:description" content="Whiteboards, scoresheets and brackets become a live league page with standings. Built on EasyChamp.">
+<meta property="og:image" content="/static/sample-board.jpg">
+<link rel="stylesheet" href="/static/tokens.css">
 <link rel="stylesheet" href="/static/app.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Snap to League","applicationCategory":"SportsApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Turn a photo of a tournament whiteboard, scoresheet or bracket into a live league with standings, on EasyChamp."}</script>
 </head>
 <body>
 <main class="wrap">
-  <div class="bar">
-    <div class="brand"><span class="dot"></span>Snap to League</div>
+  <header class="bar">
+    <a class="brand" href="/" aria-label="Snap to League home"><span class="ec">EasyChamp</span><span class="name">Snap <i>to</i> League</span></a>
     <div class="chips" id="chips"></div>
-  </div>
+  </header>
 
-  <section id="capture" class="hero">
-    <h1>Photo of the board. League in 20&nbsp;seconds.</h1>
-    <p class="muted">Snap a whiteboard, a paper scoresheet or a bracket. AI reads every match, checks the maths and gives you a live standings table you can publish to EasyChamp.</p>
-    <div class="actions">
-      <label class="btn big" for="photo">Snap the board</label>
-      <input id="photo" type="file" accept="image/*" capture="environment" hidden>
-      <button class="btn ghost" id="sample" type="button">Sample board</button>
-      <button class="btn ghost" id="sample-bracket" type="button">Sample bracket</button>
+  <!-- 1. capture -->
+  <section id="capture" class="hero" aria-labelledby="h1">
+    <div class="hero-copy">
+      <div class="kicker">Whiteboard · scoresheet · bracket · screenshot</div>
+      <h1 id="h1">Photo of the board. <em>Live league</em> in seconds.</h1>
+      <p class="muted">Snap every page of your tournament, or a screenshot from another app. AI reads each result, checks the maths and builds standings or a bracket you can share and publish to EasyChamp. No sign-up.</p>
+      <div class="actions">
+        <label class="btn big" for="photos">Snap the board</label>
+        <input id="photos" type="file" accept="image/*" capture="environment" multiple hidden>
+        <label class="btn ghost" for="library">Choose photos</label>
+        <input id="library" type="file" accept="image/*" multiple hidden>
+      </div>
+      <div class="actions small">
+        <span class="muted">No board handy?</span>
+        <button class="linkbtn" data-sample="board" type="button">Try a group table</button>
+        <button class="linkbtn" data-sample="bracket" type="button">a bracket</button>
+        <button class="linkbtn" data-sample="sheet1,sheet2" type="button">two scoresheets</button>
+      </div>
+      <p id="league-note" class="muted small" hidden></p>
     </div>
-    <label class="field reader" id="reader-box" hidden>Photo reader
-      <select id="reader"></select>
-      <span class="muted" id="reader-note"></span>
-    </label>
-    <p id="league-note" class="muted" hidden></p>
+    <div class="hero-art" aria-hidden="true">
+      <img src="/static/sample-bracket.jpg" alt="">
+      <div class="scan"></div>
+      <div class="bug"><span>QF</span><span>Kirbo 2 · 0 NeoZ</span></div>
+    </div>
   </section>
 
-  <section id="working" class="panel" hidden aria-live="polite">
-    <div class="working">
-      <img id="working-img" alt="The photo being read">
-      <div>
-        <div class="clock" id="clock">0 s</div>
-        <p class="pulse" id="working-text">Astra is reading the board</p>
-      </div>
+  <section class="steps" aria-label="How it works" id="steps">
+    <div><b>1 · Snap</b>Every page, or a screenshot from Challonge, a group chat or a spreadsheet.</div>
+    <div><b>2 · Read</b>Two AI readers, one check. Anything unsure gets a yellow card.</div>
+    <div><b>3 · Publish</b>Standings or a bracket on EasyChamp. The next photo updates it.</div>
+  </section>
+
+  <!-- photo strip, shared by capture and reading -->
+  <section id="tray" class="panel" hidden aria-live="polite">
+    <div class="panel-head">
+      <h2 id="tray-title">Photos</h2>
+      <span class="clock" id="clock" hidden>0 s</span>
     </div>
+    <div class="strip" id="strip"></div>
+    <div class="progress" id="progress" hidden><i></i></div>
+    <div class="actions">
+      <button class="btn" id="read" type="button">Read <span id="read-n">0</span> photos</button>
+      <button class="linkbtn" id="clear" type="button">Start over</button>
+    </div>
+    <label class="field" id="reader-box" hidden>Photo reader
+      <select id="reader"></select>
+      <span class="muted small" id="reader-note"></span>
+    </label>
   </section>
 
   <p id="error" class="err" hidden role="alert"></p>
 
+  <!-- 2. review -->
   <section id="review" hidden>
     <div class="grid2">
       <div class="panel">
         <div class="row2">
-          <label class="field">Competition<input id="name"></label>
-          <label class="field">Sport<select id="sport">
+          <label class="field">Competition<input id="name" autocomplete="off"></label>
+          <label class="field">Sport or game<select id="sport">
             <option value="soccer">Soccer</option><option value="futsal">Futsal</option><option value="basketball">Basketball</option>
-            <option value="volleyball">Volleyball</option><option value="padel">Padel</option><option value="esports">Esports</option><option value="other">Other</option>
+            <option value="volleyball">Volleyball</option><option value="padel">Padel</option><option value="pickleball">Pickleball</option>
+            <option value="smash">Smash</option><option value="fifa">FIFA / EA FC</option><option value="esports">Other esports</option><option value="other">Other</option>
           </select></label>
         </div>
-        <p id="changes" class="changes" hidden></p>
+        <div id="changes-box" hidden>
+          <div class="kicker">What these photos change</div>
+          <div class="changes" id="changes"></div>
+        </div>
         <div class="flags" id="flags"></div>
-        <h2>Matches</h2>
+        <div class="panel-head"><h2>Matches</h2><span class="muted small" id="meta"></span></div>
         <div class="matches" id="matches"></div>
         <button class="linkbtn" id="add" type="button">Add a match</button>
       </div>
       <div class="panel">
-        <h2>Table and bracket</h2>
+        <h2 id="table-title">Table</h2>
         <div class="tablebox" id="table"></div>
+        <label class="field" id="pin-box" hidden>EasyChamp publish PIN
+          <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Leave empty to save a shareable board only">
+        </label>
         <div class="actions">
           <button class="btn" id="publish" type="button">Publish league</button>
-          <button class="btn ghost" id="read" type="button">Read out</button>
+          <button class="btn ghost" id="speak" type="button">Read out</button>
         </div>
-        <p class="muted" id="read-note"></p>
-        <div class="photo"><img id="review-img" alt="The photo Astra read"></div>
-        <p class="muted" id="meta"></p>
+        <p class="muted small" id="speak-note"></p>
       </div>
     </div>
   </section>
 
+  <!-- 3. published -->
   <section id="done" class="panel done" hidden>
+    <div class="kicker" id="done-kicker">Published</div>
     <h2 id="done-title">League is live</h2>
     <p id="done-text"></p>
     <div class="url" id="done-url"></div>
     <div class="actions">
-      <a class="btn" id="done-open" href="#" target="_blank" rel="noopener">Open the league board</a>
-      <a class="btn ghost" id="done-local" href="#" target="_blank" rel="noopener" hidden>Big-screen board</a>
+      <a class="btn" id="done-open" href="#" target="_blank" rel="noopener">Open the league</a>
+      <a class="btn ghost" id="done-board" href="#" target="_blank" rel="noopener">Big-screen board</a>
       <button class="btn ghost" id="again" type="button">Snap an update</button>
     </div>
     <details><summary>EasyChamp import payload</summary><pre id="payload"></pre></details>
   </section>
+
+  <section class="panel" id="history-box" hidden>
+    <div class="panel-head"><h2>Your imports</h2><a class="small" href="/stats">All import stats</a></div>
+    <div class="history" id="history"></div>
+    <p class="muted small">Kept on this device only. Sign in to EasyChamp to keep them in your account.</p>
+  </section>
+
+  <footer class="foot">
+    <span>Built at ShellHacks 2026 on <a href="https://easychamp.com" rel="noopener">EasyChamp</a></span>
+    <a href="/stats">Import stats</a>
+    <a href="https://github.com/anton-abyzov/snap-to-league" rel="noopener">Source code</a>
+  </footer>
 </main>
 
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText } from "/static/standings.js";
 
 const $ = (id) => document.getElementById(id);
-const state = { league: null, snap: null, matches: [], teams: [] };
-const show = (...ids) => ["capture", "working", "review", "done"].forEach((v) => { $(v).hidden = !ids.includes(v); });
+const store = {
+  get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } },
+};
+const state = { files: [], samples: [], league: null, job: null, matches: [], teams: [] };
+let health = {};
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
+  health = h;
+  $("chips").innerHTML = [
+    [`Reader: ${h.readers}`, true],
+    [h.gemini === "google" ? "Gemini API" : "", !!h.gemini],
+    [h.publish === "live" ? "EasyChamp live" : "EasyChamp dry run", h.publish === "live"],
+    [h.voice ? "ElevenLabs voice" : "", h.voice],
+  ].filter(([t]) => t).map(([t, on]) => `<span class="chip ${on ? "on" : ""}">${esc(t)}</span>`).join("");
   if (h.choices && h.choices.length) {
-    let saved = null;
-    try { saved = localStorage.getItem("reader"); } catch (e) { /* storage blocked */ }
-    $("reader").innerHTML = h.choices.map((c) => `<option value="${esc(c.id)}">${esc(c.label)}${c.open ? " (open model)" : ""} · about $${c.cost} a photo</option>`).join("");
+    const saved = store.get("reader", null);
+    $("reader").innerHTML = h.choices.map((c) => `<option value="${esc(c.id)}">${esc(c.label)}${c.open ? " · open model" : ""} · about $${c.cost} a photo</option>`).join("");
     $("reader").value = h.choices.some((c) => c.id === saved) ? saved : h.primary;
-    $("reader-note").textContent = h.second ? `${h.second} checks every read and flags disagreements.` : "";
+    $("reader-note").textContent = h.second ? `${h.second} checks every read and flags any disagreement.` : "";
     $("reader-box").hidden = false;
   }
-  $("chips").innerHTML = `<span class="chip">${esc(h.readers || h.backend)}</span>`
-    + `<span class="chip ${h.publish === "live" ? "" : "off"}">EasyChamp ${h.publish === "live" ? "live" : "dry run"}</span>`
-    + `<span class="chip ${h.voice ? "" : "off"}">${h.voice ? "ElevenLabs voice" : "Browser voice"}</span>`;
+  $("pin-box").hidden = !h.pin;
+  $("pin").value = store.get("pin", "");
 }).catch(() => {});
+$("reader").addEventListener("change", () => store.set("reader", $("reader").value));
+$("pin").addEventListener("change", () => store.set("pin", $("pin").value));
+
+// ---------- photo tray ----------
+function addFiles(list) {
+  const room = (health.maxPhotos || 10) - state.files.length - state.samples.length;
+  [...list].slice(0, Math.max(0, room)).forEach((f) => state.files.push({ file: f, url: URL.createObjectURL(f) }));
+  renderTray();
+}
+$("photos").addEventListener("change", (e) => { addFiles(e.target.files); e.target.value = ""; });
+$("library").addEventListener("change", (e) => { addFiles(e.target.files); e.target.value = ""; });
+document.querySelectorAll("[data-sample]").forEach((b) => b.addEventListener("click", () => {
+  state.files = []; state.samples = b.dataset.sample.split(",");
+  renderTray(); startJob();
+}));
+$("clear").addEventListener("click", reset);
+
+function reset() {
+  state.files = []; state.samples = []; state.job = null;
+  renderTray(); show("capture");
+}
+
+function shotHtml(i, url, status, label, removable) {
+  return `<figure class="shot ${status}"><img src="${url}" alt="Photo ${i + 1}"><span class="n">${i + 1}</span>
+    ${removable ? `<button class="x" data-rm="${i}" aria-label="Remove photo ${i + 1}" type="button">&times;</button>` : ""}
+    <div class="bar-p" style="width:0"></div><figcaption class="state">${esc(label)}</figcaption></figure>`;
+}
+function renderTray(job) {
+  const photos = state.files.map((f) => f.url).concat(state.samples.map((s) => `/static/sample-${s === "board" || s === "bracket" ? s : s}.jpg`));
+  $("tray").hidden = !photos.length;
+  $("read-n").textContent = photos.length;
+  $("read").textContent = photos.length === 1 ? "Read 1 photo" : `Read ${photos.length} photos`;
+  $("read").hidden = !!job || !!state.samples.length;
+  $("tray-title").textContent = job ? (job.status === "done" ? "Photos read" : "Reading photos") : "Photos";
+  const cells = photos.map((u, i) => {
+    const p = job && job.photos[i];
+    const label = !p ? "Ready" : p.status === "queued" ? "Waiting" : p.status === "reading" ? "Reading..." :
+      p.status === "done" ? `${p.matches} matches · ${p.seconds} s` : "Could not read";
+    return shotHtml(i, u, p ? p.status : "", label, !job && i < state.files.length);
+  });
+  if (!job && photos.length < (health.maxPhotos || 10)) cells.push(`<label class="shot add" for="photos"><span class="plus">+</span>Add a page</label>`);
+  $("strip").innerHTML = cells.join("");
+}
+$("strip").addEventListener("click", (e) => {
+  const i = e.target.dataset.rm;
+  if (i === undefined) return;
+  state.files.splice(+i, 1); renderTray();
+});
+$("read").addEventListener("click", startJob);
 
 let timer;
-function startClock(src, leagueMode) {
-  $("working-img").src = src;
-  $("working-text").textContent = leagueMode ? "Astra is reading the new photo" : "Astra is reading the board";
-  $("error").hidden = true;
-  show("working");
-  const t0 = Date.now();
+function startClock() {
+  const t0 = Date.now(); $("clock").hidden = false;
   clearInterval(timer);
   timer = setInterval(() => { $("clock").textContent = `${Math.round((Date.now() - t0) / 1000)} s`; }, 250);
 }
 
-$("reader").addEventListener("change", () => { try { localStorage.setItem("reader", $("reader").value); } catch (e) { /* storage blocked */ } });
-
-async function submit(form, src) {
+function startJob() {
+  const form = new FormData();
+  state.files.forEach((f) => form.append("images", f.file, f.file.name || "photo.jpg"));
+  if (state.samples.length) form.append("samples", state.samples.join(","));
   if (state.league) form.append("leagueId", state.league.id);
   if (!$("reader-box").hidden) form.append("reader", $("reader").value);
-  startClock(src, !!state.league);
-  try {
-    const r = await fetch(form.has("image") ? "/api/snap" : "/api/sample", { method: "POST", body: form });
-    const body = await r.json();
-    if (!r.ok) throw new Error(body.detail || `HTTP ${r.status}`);
-    loadSnap(body);
-  } catch (e) {
-    $("error").textContent = `${e.message}. Try a closer, straighter photo, or enter the matches by hand.`;
-    $("error").hidden = false;
-    show(state.league ? "done" : "capture");
-  } finally { clearInterval(timer); }
+  $("error").hidden = true; $("progress").hidden = false; $("read").disabled = true;
+  show("capture"); $("capture").hidden = true; $("steps").hidden = true;
+  renderTray({ status: "reading", photos: [] });
+  startClock();
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/api/jobs");
+  xhr.upload.onprogress = (e) => {
+    if (!e.lengthComputable) return;
+    const pct = Math.round((e.loaded / e.total) * 100);
+    $("progress").firstElementChild.style.width = `${pct * 0.3}%`;
+    document.querySelectorAll(".shot .bar-p").forEach((b) => { b.style.width = `${pct}%`; });
+    $("tray-title").textContent = pct < 100 ? `Uploading ${pct}%` : "Reading photos";
+  };
+  xhr.onload = () => {
+    let body = {};
+    try { body = JSON.parse(xhr.responseText); } catch (e) { /* not json */ }
+    if (xhr.status >= 300) return fail(body.detail || `Upload failed (${xhr.status})`);
+    state.job = body; poll(body.id);
+  };
+  xhr.onerror = () => fail("The upload did not reach the app. Check the Wi-Fi and try again.");
+  xhr.send(form);
 }
 
-$("photo").addEventListener("change", (e) => {
-  const f = e.target.files[0];
-  if (!f) return;
-  const form = new FormData(); form.append("image", f);
-  submit(form, URL.createObjectURL(f));
-  e.target.value = "";
-});
-$("sample").addEventListener("click", () => submit(new FormData(), "/static/sample-board.jpg"));
-$("sample-bracket").addEventListener("click", () => { const f = new FormData(); f.append("kind", "bracket"); submit(f, "/static/sample-bracket.jpg"); });
+async function poll(id) {
+  try {
+    const r = await fetch(`/api/jobs/${id}`);
+    const job = await r.json();
+    if (!r.ok) return fail(job.detail || "Lost the import");
+    state.job = job;
+    const n = job.photos.length, finished = job.photos.filter((p) => p.status === "done" || p.status === "error").length;
+    $("progress").firstElementChild.style.width = `${30 + (70 * finished) / Math.max(1, n)}%`;
+    renderTray(job);
+    if (job.status === "reading") return setTimeout(() => poll(id), 700);
+    clearInterval(timer); $("read").disabled = false;
+    if (job.status === "error") return fail("None of the photos could be read. Try a closer, straighter photo in good light.");
+    loadJob(job);
+  } catch (e) { setTimeout(() => poll(id), 1500); }
+}
 
-function loadSnap(s) {
-  state.snap = s;
-  const ex = s.extraction;
-  if (s.merged) {
-    state.matches = s.merged.matches;
-    $("changes").textContent = s.merged.changes.length ? `New from this photo: ${s.merged.changes.join(", ")}` : "No changes found in this photo";
-    $("changes").hidden = false;
+function fail(msg) {
+  clearInterval(timer); $("read").disabled = false;
+  $("error").textContent = msg; $("error").hidden = false;
+  $("capture").hidden = false; $("steps").hidden = false;
+}
+
+// ---------- review ----------
+function loadJob(job) {
+  const ex = job.extraction;
+  if (job.review) {
+    state.matches = job.review.matches;
+    $("changes").innerHTML = job.review.changes.length ? job.review.changes.map((c) => `<div class="change"><span class="tag ${c.kind}">${c.kind}</span>
+      <span>${esc(c.home)} v ${esc(c.away)}</span>${c.before ? `<s>${esc(c.before)}</s>` : ""}<b>${esc(c.after)}</b></div>`).join("")
+      : `<div class="change muted">Nothing new on these photos.</div>`;
+    $("changes-box").hidden = false;
   } else {
-    state.matches = ex.matches;
-    state.teams = ex.teams;
+    state.matches = ex.matches; state.teams = ex.teams;
     $("name").value = ex.competition;
     const sp = (ex.sport || "other").toLowerCase();
     if (![...$("sport").options].some((o) => o.value === sp)) $("sport").add(new Option(sp[0].toUpperCase() + sp.slice(1), sp), 0);
     $("sport").value = sp;
-    $("changes").hidden = true;
+    $("changes-box").hidden = true;
   }
-  $("review-img").src = `/api/images/${s.image}`;
-  $("meta").textContent = `Read by ${s.backend === "astra" ? "GPT-6 Astra" : s.backend} in ${s.seconds} s. ${ex.matches.length} matches on the photo.${s.backend.includes("+") && !s.flags.some((f) => f.source === "second") ? " Both readers agree." : ""}`;
-  $("flags").innerHTML = s.flags.map((f) => `<div class="flag ${f.level}"><span class="card"></span><div><small>${f.source === "astra" ? "The reader is unsure" : f.source === "second" ? "Second reader disagrees" : "Check"}</small>${esc(f.message)}</div></div>`).join("");
-  renderMatches();
-  show("review");
+  const readers = [...new Set(job.photos.map((p) => p.reader).filter(Boolean))].join(", ");
+  $("meta").textContent = `${ex.matches.length} matches from ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s · ${readers}`;
+  const label = { astra: "The reader is unsure", second: "Second reader disagrees", merge: "Photos disagree", match: "Name matched", check: "Check" };
+  $("flags").innerHTML = job.flags.map((f) => `<div class="flag ${f.level}"><span class="card"></span><div><small>${label[f.source] || "Check"}</small>${esc(f.message)}</div></div>`).join("");
+  renderMatches(); show("review");
+  $("review").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function renderMatches() {
   $("matches").innerHTML = state.matches.map((m, i) => `
     <div class="match" data-i="${i}">
-      <input aria-label="Home team" data-f="home" value="${esc(m.home)}">
+      <input aria-label="Home" data-f="home" value="${esc(m.home)}">
       <input aria-label="Home score" class="score" data-f="homeScore" inputmode="numeric" value="${m.homeScore ?? ""}">
       <span class="dash">-</span>
       <input aria-label="Away score" class="score" data-f="awayScore" inputmode="numeric" value="${m.awayScore ?? ""}">
-      <input aria-label="Away team" class="away" data-f="away" value="${esc(m.away)}">
+      <input aria-label="Away" class="away" data-f="away" value="${esc(m.away)}">
       <button class="del" data-del="${i}" aria-label="Remove match" type="button">&times;</button>
       <div class="meta">
         <select aria-label="Stage" data-f="stage">${["group", "quarterfinal", "semifinal", "final", "knockout"].map((s) => `<option ${m.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select>
-        ${m.stage !== "group" ? `<input aria-label="Round" data-f="round" placeholder="round" value="${esc(m.round ?? "")}" size="8">
+        ${m.stage !== "group" ? `<input aria-label="Round" data-f="round" placeholder="round" value="${esc(m.round ?? "")}">
         <select aria-label="Winner" data-f="winner"><option value="">no winner yet</option>${[m.home, m.away].filter(Boolean).map((t) => `<option ${m.winner === t ? "selected" : ""}>${esc(t)}</option>`).join("")}</select>` : ""}
-        <input aria-label="When" data-f="when" placeholder="when" value="${esc(m.when ?? "")}" size="10">
-        <input aria-label="Field" data-f="venue" placeholder="field" value="${esc(m.venue ?? "")}" size="8">
+        <input aria-label="When" data-f="when" placeholder="when" value="${esc(m.when ?? "")}">
+        <input aria-label="Field or court" data-f="venue" placeholder="field" value="${esc(m.venue ?? "")}">
       </div>
+      ${goalsText(m) ? `<div class="goals">${esc(goalsText(m))}</div>` : ""}
     </div>`).join("");
   renderTable();
 }
-
 function renderTable() {
   const rows = computeStandings(state.matches, state.teams);
-  $("table").innerHTML = (rows.length ? standingsTable(rows) : "") + bracketHtml(state.matches);
+  const br = bracketHtml(state.matches);
+  $("table-title").textContent = rows.length && br ? "Table and bracket" : br ? "Bracket" : "Table";
+  $("table").innerHTML = (rows.length ? standingsTable(rows) : "") + br;
 }
-
 $("matches").addEventListener("input", (e) => {
   const box = e.target.closest(".match"); const f = e.target.dataset.f;
   if (!box || !f) return;
   const m = state.matches[+box.dataset.i];
   m[f] = e.target.value === "" ? null : e.target.value;
   if (f === "homeScore" || f === "awayScore") m[f] = num(m[f]);
-  if (m.stage !== "group" && m.homeScore !== null && m.awayScore !== null && m.homeScore !== m.awayScore && (f === "homeScore" || f === "awayScore"))
+  if (m.stage !== "group" && (f === "homeScore" || f === "awayScore") && m.homeScore !== null && m.awayScore !== null && m.homeScore !== m.awayScore)
     m.winner = m.homeScore > m.awayScore ? m.home : m.away;
-  m.status = (m.homeScore !== null && m.awayScore !== null) || m.winner ? "played" : "scheduled";
-  if (f === "stage") { renderMatches(); return; }
+  m.status = (m.homeScore !== null && m.homeScore !== undefined && m.awayScore !== null && m.awayScore !== undefined) || m.winner ? "played" : "scheduled";
+  if (f === "stage") return renderMatches();
   renderTable();
 });
 $("matches").addEventListener("click", (e) => {
@@ -209,50 +340,64 @@ $("matches").addEventListener("click", (e) => {
   state.matches.splice(+e.target.dataset.del, 1); renderMatches();
 });
 $("add").addEventListener("click", () => {
-  state.matches.push({ home: "", away: "", homeScore: null, awayScore: null, status: "scheduled", stage: "group", when: null, venue: null, group: null });
+  state.matches.push({ home: "", away: "", homeScore: null, awayScore: null, status: "scheduled", stage: "group", when: null, venue: null, group: null, goals: [] });
   renderMatches();
 });
-
-$("read").addEventListener("click", async () => {
-  const rows = computeStandings(state.matches, state.teams);
-  const how = await speak(readOut($("name").value, rows, state.matches));
-  $("read-note").textContent = how === "elevenlabs" ? "Voice by ElevenLabs" : how === "browser" ? "Browser voice (add an ElevenLabs key for the real one)" : "This browser cannot speak";
+$("speak").addEventListener("click", async () => {
+  const how = await speak(readOut($("name").value, computeStandings(state.matches, state.teams), state.matches));
+  $("speak-note").textContent = how === "elevenlabs" ? "Voice by ElevenLabs" : how === "browser" ? "Browser voice" : "This browser cannot speak";
 });
 
+// ---------- publish ----------
 $("publish").addEventListener("click", async () => {
   $("publish").disabled = true;
   try {
     const matches = state.matches.filter((m) => m.home && m.away);
     let r = await fetch("/api/leagues", { method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, snapIds: [state.snap.id] }) });
+      body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, jobId: state.job?.id }) });
     if (!r.ok) throw new Error((await r.json()).detail || "Could not save the league");
     state.league = await r.json();
-    r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST" });
+    r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST", headers: { "x-publish-pin": $("pin").value || "" } });
     const pub = await r.json();
     if (!r.ok) throw new Error(pub.detail || "Could not publish");
-    const url = `${location.origin}/l/${state.league.id}`;
+    const board = `${location.origin}/l/${state.league.id}`;
     const ec = pub.links && (pub.links.competition || pub.links.leagueSite);
     const live = pub.mode === "live" && pub.status === 200;
-    $("done-title").textContent = live ? "League is live on EasyChamp" : "League board is live";
-    $("done-text").textContent = live
-      ? "Teams can follow results and standings on the EasyChamp league site. Every new photo updates it."
-      : pub.mode === "live" ? `EasyChamp answered ${pub.status}; the local board below still works.`
-      : "Share this board with the teams. The EasyChamp import payload below is ready; set EC_PUBLISH=1 to send it.";
-    $("done-url").textContent = ec || url;
-    $("done-open").href = ec || url;
-    $("done-open").textContent = ec ? "Open on EasyChamp" : "Open the league board";
-    $("done-local").href = url;
-    $("done-local").hidden = !ec;
+    $("done-kicker").textContent = live ? "Published to EasyChamp" : "Saved";
+    $("done-title").textContent = live ? "League is live on EasyChamp" : "Your league board is ready";
+    $("done-text").textContent = live ? "Teams can follow results and standings on the EasyChamp league site. Every new photo updates it."
+      : pub.reason === "pin" ? "Share this board with the teams. Publishing to EasyChamp needs the organizer PIN."
+      : pub.mode === "live" ? `EasyChamp answered ${pub.status}; the board below still works.` : "Share this board with the teams.";
+    $("done-url").textContent = ec || board;
+    $("done-open").href = ec || board;
+    $("done-open").textContent = ec ? "Open on EasyChamp" : "Open the board";
+    $("done-board").href = board; $("done-board").hidden = !ec;
     $("payload").textContent = JSON.stringify(pub.payload, null, 1);
-    $("league-note").textContent = `Adding photos to ${state.league.name}.`;
-    $("league-note").hidden = false;
+    $("league-note").textContent = `New photos will update ${state.league.name}.`; $("league-note").hidden = false;
+    remember({ id: state.league.id, name: state.league.name, url: ec || board, matches: matches.length, photos: state.job?.photos.length || 0, at: Date.now() });
+    state.files = []; state.samples = [];
     show("done");
-  } catch (e) {
-    $("error").textContent = e.message; $("error").hidden = false;
-  } finally { $("publish").disabled = false; }
+  } catch (e) { $("error").textContent = e.message; $("error").hidden = false; }
+  finally { $("publish").disabled = false; }
 });
+$("again").addEventListener("click", () => { state.files = []; state.samples = []; renderTray(); show("capture"); $("steps").hidden = false; });
 
-$("again").addEventListener("click", () => show("capture"));
+function remember(entry) {
+  const list = store.get("imports", []).filter((x) => x.id !== entry.id);
+  list.unshift(entry); store.set("imports", list.slice(0, 20)); renderHistory();
+}
+function renderHistory() {
+  const list = store.get("imports", []);
+  $("history-box").hidden = !list.length;
+  $("history").innerHTML = list.map((x) => `<a href="${esc(x.url)}" target="_blank" rel="noopener"><span>${esc(x.name)}</span>
+    <span class="meta">${x.matches} matches · ${x.photos} photos · ${new Date(x.at).toLocaleDateString()}</span></a>`).join("");
+}
+renderHistory();
+
+function show(...ids) {
+  ["capture", "review", "done"].forEach((v) => { $(v).hidden = !ids.includes(v); });
+  if (ids.includes("capture")) { $("capture").hidden = false; }
+}
 </script>
 </body>
 </html>
