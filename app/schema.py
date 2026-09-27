@@ -1,6 +1,7 @@
 """Data shapes shared by the extractor, the checks and the EasyChamp publisher."""
 from __future__ import annotations
 
+import re
 from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -76,6 +77,18 @@ class Match(BaseModel):
 
 class Row(BaseModel):
     team: str
+
+    @field_validator("P", "W", "D", "L", "GF", "GA", "GD", "Pts", mode="before", check_fields=False)
+    @classmethod
+    def _int(cls, v):
+        """Tables from other sites leave columns blank or add signs ("+3", "90%"); blanks count as 0."""
+        if v is None or v == "":
+            return 0
+        if isinstance(v, (int, float)):
+            return int(v)
+        digits = re.sub(r"[^0-9-]", "", str(v))
+        return int(digits) if digits not in ("", "-") else 0
+
     P: int = 0
     W: int = 0
     D: int = 0

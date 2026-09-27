@@ -1,0 +1,60 @@
+[
+ {
+  "shot": "challonge-1",
+  "kind": "matches",
+  "truth": 8,
+  "correct": 8,
+  "missing": 0,
+  "extra": 0,
+  "seconds": 9.2,
+  "reader": "gemini-3.8-flash + gpt-6-astra"
+ },
+ {
+  "shot": "leaguerepublic-1",
+  "kind": "table",
+  "truth": 16,
+  "correct": 16,
+  "inOrder": 16,
+  "seconds": 12.9,
+  "reader": "gemini-3.8-flash + gpt-6-astra"
+ },
+ {
+  "shot": "score7-1",
+  "kind": "matches",
+  "truth": 6,
+  "correct": 6,
+  "missing": 0,
+  "extra": 0,
+  "seconds": 12.9,
+  "reader": "gpt-6-astra"
+ },
+ {
+  "shot": "score7-2",
+  "kind": "matches",
+  "truth": 3,
+  "correct": 3,
+  "missing": 0,
+  "extra": 0,
+  "seconds": 10.3,
+  "reader": "gemini-3.8-flash + gpt-6-astra"
+ },
+ {
+  "shot": "startgg-1",
+  "kind": "matches",
+  "truth": 22,
+  "correct": 20,
+  "missing": 2,
+  "extra": 3,
+  "seconds": 33.6,
+  "reader": "gemini-3.8-flash + gpt-6-astra"
+ },
+ {
+  "shot": "startgg-2",
+  "kind": "table",
+  "truth": 14,
+  "correct": 14,
+  "inOrder": 14,
+  "seconds": 11.5,
+  "reader": "gemini-3.8-flash + gpt-6-astra"
+ }
+]
