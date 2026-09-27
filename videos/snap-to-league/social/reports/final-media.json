@@ -1,0 +1,104 @@
+{
+  "files": [
+    {
+      "story": "personal",
+      "video": "renders/personal-ai-builds-1080x1920.mp4",
+      "video_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "bytes": 15788488,
+      "cover": "renders/personal-ai-builds-cover.png",
+      "cover_sha256": "cdf85a87abd3fd4eafbc437b9ae1894b9cfe2d34c91671c59c2f6e046f6939b9",
+      "captions": "renders/personal.srt",
+      "has_synthetic_narration": false,
+      "duration_seconds": 27.5,
+      "aspect_ratio": "9:16",
+      "resolution": [
+        1080,
+        1920
+      ],
+      "fps": 30,
+      "music": "Deep Urban by Eugenio Mininni / Mixkit",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1",
+            "nb_read_frames": "825"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "nb_read_frames": "1290"
+          }
+        ],
+        "format": {
+          "duration": "27.520000",
+          "size": "15788488"
+        }
+      },
+      "measured_audio": {
+        "integrated_lufs": -14.62,
+        "true_peak_dbtp": -1.75,
+        "loudness_range_lu": 7.9
+      },
+      "publication_performed": false,
+      "video_elementary_sha256": "199d4520c680a8e14f4ce7b648dd19f71706633ae426625932fc264a842e1cf5"
+    },
+    {
+      "story": "easychamp",
+      "video": "renders/easychamp-photo-results-1080x1920.mp4",
+      "video_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "bytes": 8651152,
+      "cover": "renders/easychamp-photo-results-cover.png",
+      "cover_sha256": "1ab6be23c633a005a85e14f9b6696904409f69f238e0a9c1c6720214c39d0a3f",
+      "captions": "renders/easychamp.srt",
+      "has_synthetic_narration": true,
+      "duration_seconds": 31,
+      "aspect_ratio": "9:16",
+      "resolution": [
+        1080,
+        1920
+      ],
+      "fps": 30,
+      "music": "Deep Urban by Eugenio Mininni / Mixkit",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1",
+            "nb_read_frames": "930"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "nb_read_frames": "1454"
+          }
+        ],
+        "format": {
+          "duration": "31.018000",
+          "size": "8651152"
+        }
+      },
+      "measured_audio": {
+        "integrated_lufs": -14.51,
+        "true_peak_dbtp": -1.88,
+        "loudness_range_lu": 7.9
+      },
+      "publication_performed": false,
+      "video_elementary_sha256": "712342608906a41367ca0c748d2f852ea5726d538415a172d18cf3a0cbae812a"
+    }
+  ],
+  "youtube_route": "Personal AI Power only; no family channel",
+  "audio_qa_limit": "Measured encoded audio and exact source/timing; no claim of full real-time subjective listening"
+}

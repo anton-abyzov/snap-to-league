@@ -1,0 +1,10 @@
+assets/
+**/assets/
+renders/
+**/renders/
+**/.hyperframes/
+**/snapshots/
+**/node_modules/
+.private/
+**/__pycache__/
+**/*.pyc

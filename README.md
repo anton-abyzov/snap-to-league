@@ -6,7 +6,7 @@ Snap to League imports photos of scoresheets, whiteboards and brackets, or scree
 
 [Try the demo](https://snap.easychamp.com) · [Watch the 110-second demo](https://www.youtube.com/watch?v=-ZdivkQQo9k) · [ShellHacks submission](https://devpost.com/software/snap-to-league) · [Campaign assets and release status](docs/campaign/RELEASE.md)
 
-Built for ShellHacks 2026. **EasyChamp is a pre-existing platform**; this project adds photo import, review, reconciliation and its publishing integration. The current public demo runs through a Cloudflare Worker and a tunnel to a development Mac. Availability depends on that host and tunnel; this is a hackathon demo.
+Built for ShellHacks 2026. **EasyChamp is a pre-existing platform**; this project adds photo import, review, reconciliation and its publishing integration. The current public demo runs through a Cloudflare Worker and a tunnel to a development Mac. Availability depends on that host and tunnel; this is a hackathon demo. Separate macOS user-login services now supervise the app and its dedicated named tunnel. The Mac must remain awake, logged in, and online. [Hosting verification](videos/snap-to-league/reports/stable-hosting.json).
 
 ## The workflow
 

@@ -1,0 +1,49 @@
+{
+  "personal": {
+    "before_integrated_lufs": -18.96,
+    "before_true_peak_dbtp": -1.75,
+    "target_integrated_lufs": -14.5,
+    "ceiling_dbtp": -1.5,
+    "passes": [
+      {
+        "gain_db": 4.46,
+        "filter": "aresample=192000,volume=4.460000dB,alimiter=limit=0.803526122:level=false:attack=5:release=60:latency=true,aresample=48000",
+        "integrated_lufs": -14.92,
+        "true_peak_dbtp": -1.85,
+        "loudness_range_lu": 8.1
+      },
+      {
+        "gain_db": 4.88,
+        "filter": "aresample=192000,volume=4.880000dB,alimiter=limit=0.803526122:level=false:attack=5:release=60:latency=true,aresample=48000",
+        "integrated_lufs": -14.62,
+        "true_peak_dbtp": -1.75,
+        "loudness_range_lu": 7.9
+      }
+    ],
+    "video_elementary_sha256": "199d4520c680a8e14f4ce7b648dd19f71706633ae426625932fc264a842e1cf5",
+    "video_unchanged": true,
+    "final_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+    "bytes": 15788488,
+    "scope": "one static gain on combined speech/music and a peak limiter; original ratio preserved except transient peak limiting"
+  },
+  "easychamp": {
+    "before_integrated_lufs": -17.45,
+    "before_true_peak_dbtp": -4.75,
+    "target_integrated_lufs": -14.5,
+    "ceiling_dbtp": -1.5,
+    "passes": [
+      {
+        "gain_db": 2.95,
+        "filter": "aresample=192000,volume=2.950000dB,alimiter=limit=0.803526122:level=false:attack=5:release=60:latency=true,aresample=48000",
+        "integrated_lufs": -14.51,
+        "true_peak_dbtp": -1.88,
+        "loudness_range_lu": 7.9
+      }
+    ],
+    "video_elementary_sha256": "712342608906a41367ca0c748d2f852ea5726d538415a172d18cf3a0cbae812a",
+    "video_unchanged": true,
+    "final_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+    "bytes": 8651152,
+    "scope": "one static gain on combined speech/music and a peak limiter; original ratio preserved except transient peak limiting"
+  }
+}

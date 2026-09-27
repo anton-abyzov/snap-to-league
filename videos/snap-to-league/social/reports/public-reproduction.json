@@ -1,0 +1,67 @@
+{
+  "scope": "Clean temporary copy of public source files plus parent tracked fonts/runtime; restored only the approved local release archive. No raw originals or isolated music used.",
+  "archive_sha256": "a4fcc41ea4cf932f2024bfd6843997329de4ff705982bace6211ffc406828a21",
+  "archive_bytes": 16913029,
+  "restore_exit_code": 0,
+  "member_hashes_verified": true,
+  "headless": true,
+  "PWDEBUG": "0",
+  "PLAYWRIGHT_HTML_OPEN": "never",
+  "hyperframes_version": "0.8.79",
+  "checks": {
+    "personal": {
+      "ok": true,
+      "strict": false,
+      "lint_errors": 0,
+      "lint_warnings": 14,
+      "runtime_errors": 0,
+      "layout_errors": 0,
+      "contrast": true,
+      "warnings": [
+        "nested_structure_needs_subcomposition",
+        "timeline_track_too_dense"
+      ]
+    },
+    "easychamp": {
+      "ok": true,
+      "strict": false,
+      "lint_errors": 0,
+      "lint_warnings": 14,
+      "runtime_errors": 0,
+      "layout_errors": 0,
+      "contrast": true,
+      "warnings": [
+        "nested_structure_needs_subcomposition",
+        "timeline_track_too_dense"
+      ]
+    }
+  },
+  "restored_media": {
+    "personal": {
+      "picture": {
+        "bytes": 7650224,
+        "sha256": "7f87b881b046ea8d2f6e7a3f1784304839e9632815d0cfafedd8ccc22e53fd33"
+      },
+      "finished_audio": {
+        "bytes": 5283918,
+        "sha256": "3e1841cabc3373f1ada9227dbfe6467869d88461b91827e404ff7a8ef55e6d43"
+      }
+    },
+    "easychamp": {
+      "picture": {
+        "bytes": 3811957,
+        "sha256": "18152a6d524ba69e8730a4a9f53d7be4020391db3bd2b7dcc6f24900af037ee0"
+      },
+      "finished_audio": {
+        "bytes": 5955662,
+        "sha256": "35191f161040bd38b86a338b28de83b9be9f5be1aa6e04e566e81046489f3780"
+      }
+    }
+  },
+  "limitations": [
+    "This is a local archive restore smoke test; remote release availability is verified after publication.",
+    "No second full render in the clean copy.",
+    "Non-strict authoring warnings concern inline scene nesting and dense Studio tracks; no runtime or layout errors.",
+    "The decoded final mix is restored from the completed editorial works; a future AAC encode need not be byte-identical."
+  ]
+}

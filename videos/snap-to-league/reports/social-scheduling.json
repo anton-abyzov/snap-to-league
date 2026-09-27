@@ -1,0 +1,312 @@
+{
+  "campaign": "snap_shellhacks_2026",
+  "state": "SCHEDULED",
+  "verified_at": "2026-09-27T08:40:56.962295+00:00",
+  "jobs": [
+    {
+      "key": "founder_youtube",
+      "provider": "postiz",
+      "id": "cmujkjolq0042oueh3r9tbk2u",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-27T16:30:00.000Z",
+      "target": "Anton Abyzov: AI Power @antonabyzov",
+      "integration_id": "cmgyq88pu0001po4fdvq4fvii",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/b06195cb1ae53c3524a4181cc6a7163c.mp4",
+      "media_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "content": "Paper scoresheets inspired our AI hackathon project. Try Snap to League: https://snap.easychamp.com/?utm_source=youtube&utm_medium=organic&utm_campaign=snap_shellhacks_2026\nFollow Anton for real AI builds and practical demos.\n\nAnna Abyzova and I built photo import, review and reconciliation at ShellHacks 2026, connected to the existing EasyChamp platform. Gemini reads the photo; the organizer reviews teams and scores. This short uses my real event voice and footage, plus labeled later demo captures.\n\nWatch the full 110-second demo: https://www.youtube.com/watch?v=-ZdivkQQo9k\nSubmitted project: https://devpost.com/software/snap-to-league\nPublic source: https://github.com/anton-abyzov/snap-to-league\nSubscribe: https://www.youtube.com/@antonabyzov\n\nHackathon demo runs on a development host. Supported game competitions publish through EasyChamp; placement boards share on Snap.\nMusic: Deep Urban — Eugenio Mininni / Mixkit, used under its Stock Music Free License.\n\n#ShellHacks #Gemini #BuildInPublic",
+      "settings": {
+        "__type": "youtube",
+        "title": "A Paper Scoresheet Inspired Our AI Hackathon Build",
+        "type": "public",
+        "selfDeclaredMadeForKids": "no",
+        "tags": [
+          {
+            "label": "Snap to League",
+            "value": "Snap to League"
+          },
+          {
+            "label": "ShellHacks 2026",
+            "value": "ShellHacks 2026"
+          },
+          {
+            "label": "Gemini API",
+            "value": "Gemini API"
+          },
+          {
+            "label": "AI project",
+            "value": "AI project"
+          },
+          {
+            "label": "EasyChamp",
+            "value": "EasyChamp"
+          },
+          {
+            "label": "build in public",
+            "value": "build in public"
+          },
+          {
+            "label": "Anton Abyzov",
+            "value": "Anton Abyzov"
+          }
+        ]
+      },
+      "verified_at": "2026-09-27T08:40:48.552075+00:00"
+    },
+    {
+      "key": "founder_telegram",
+      "provider": "postiz",
+      "id": "cmujkjoyn0043ouehk1ugz2ul",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-27T17:00:00.000Z",
+      "target": "@antonaipower",
+      "integration_id": "cmoqlxmmc0001ou1tcojd5pps",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/b06195cb1ae53c3524a4181cc6a7163c.mp4",
+      "media_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "content": "An ordinary scoresheet became our ShellHacks project.\n\nAnna and I built Snap to League: Gemini extracts results from a photo, then the organizer reviews teams and scores. Our new import/review workflow connects to the existing EasyChamp platform.\n\nShort founder story below. Full demo: https://www.youtube.com/watch?v=-ZdivkQQo9k\nTry it: https://snap.easychamp.com/?utm_source=telegram&utm_medium=organic&utm_campaign=snap_shellhacks_2026\nSource: https://github.com/anton-abyzov/snap-to-league\n\nFollow AI Power for more real builds. What would you try first: a league table or a knockout bracket?",
+      "settings": {
+        "__type": "telegram"
+      },
+      "verified_at": "2026-09-27T08:40:49.003354+00:00"
+    },
+    {
+      "key": "founder_x",
+      "provider": "blotato",
+      "id": "63f13c19-9543-4b82-9a06-ada38315cc6c",
+      "schedule_id": "4874161",
+      "state": "SCHEDULED",
+      "scheduled_at": "2026-09-27T19:30:00.000Z",
+      "target": "@aabyzov",
+      "account_id": "23729",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/b06195cb1ae53c3524a4181cc6a7163c.mp4",
+      "media_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "content": "Paper scoresheets inspired our #ShellHacks build.\n\nAnna and I made Snap to League: photo → reviewed results, connected to EasyChamp.\n\nFull demo: https://www.youtube.com/watch?v=-ZdivkQQo9k\nFollow for more real AI builds.",
+      "settings": {
+        "targetType": "twitter"
+      },
+      "status_type": "scheduled",
+      "verified_at": "2026-09-27T08:40:50.307146+00:00"
+    },
+    {
+      "key": "founder_linkedin",
+      "provider": "postiz",
+      "id": "cmujkjqb60044ouehr0b5s7ff",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-28T13:30:00.000Z",
+      "target": "Anton Abyzov",
+      "integration_id": "cmopiw0jb0001outahymxmkhv",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/b06195cb1ae53c3524a4181cc6a7163c.mp4",
+      "media_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "content": "A useful AI project can start with a paper scoresheet.\n\nAt ShellHacks, Anna Abyzova and I built Snap to League. Gemini extracts teams and scores; application code computes standings; the organizer checks the draft before publishing.\n\nThe review step matters. Handwriting, typos and similar names need attention. Another photo opens a comparison, so the organizer can inspect changes.\n\nEasyChamp existed before the event. Our hackathon work adds photo import, review and reconciliation on top of that platform.\n\nFounder story below. Full demo: https://www.youtube.com/watch?v=-ZdivkQQo9k\nTry the hackathon demo: https://snap.easychamp.com/?utm_source=linkedin&utm_medium=organic&utm_campaign=snap_shellhacks_2026\nSource: https://github.com/anton-abyzov/snap-to-league\n\nFollow for practical AI builds. If you organize competitions, which scoresheet is hardest to turn into a result people can follow?\n\n#ShellHacks #Gemini #BuildInPublic #EasyChamp",
+      "settings": {
+        "__type": "linkedin"
+      },
+      "verified_at": "2026-09-27T08:40:50.741867+00:00"
+    },
+    {
+      "key": "founder_instagram",
+      "provider": "postiz",
+      "id": "cmujkjqnj0045ouehrdfbtcqj",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-28T16:00:00.000Z",
+      "target": "@aabyzov",
+      "integration_id": "cmgzh1zr20001pr261ozok9yp",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/b06195cb1ae53c3524a4181cc6a7163c.mp4",
+      "media_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "content": "The AI idea started with a piece of paper.\n\nAnna and I built Snap to League at ShellHacks: photograph results, review the names and scores, then connect the competition to EasyChamp.\n\nReal event footage. Real problem. Follow @aabyzov for more builds, and watch the full demo on YouTube @antonabyzov.\n\nTry: snap.easychamp.com\nEasyChamp was the existing platform; photo import, review and reconciliation are our hackathon work.\n\n#ShellHacks #Gemini #BuildInPublic #EasyChamp",
+      "settings": {
+        "__type": "instagram-standalone",
+        "post_type": "post"
+      },
+      "verified_at": "2026-09-27T08:40:51.199209+00:00"
+    },
+    {
+      "key": "founder_threads",
+      "provider": "postiz",
+      "id": "cmujkjqzx0046oueh2uga9s5q",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-28T16:20:00.000Z",
+      "target": "@aabyzov",
+      "integration_id": "cmox71qtk0005ouwqjcnn3slv",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/b06195cb1ae53c3524a4181cc6a7163c.mp4",
+      "media_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "content": "The AI idea started with a paper scoresheet. Anna and I built Snap to League at ShellHacks: photo → reviewed teams and scores → a competition people can follow. It connects to the existing EasyChamp platform.\n\nFull demo: https://www.youtube.com/watch?v=-ZdivkQQo9k\nFollow for more real AI builds. What would you scan first?",
+      "settings": {
+        "__type": "threads"
+      },
+      "verified_at": "2026-09-27T08:40:51.616516+00:00"
+    },
+    {
+      "key": "founder_tiktok",
+      "provider": "blotato",
+      "id": "57f86864-a6b5-4d37-bc6b-331321184f1b",
+      "schedule_id": "4874163",
+      "state": "SCHEDULED",
+      "scheduled_at": "2026-09-28T23:15:00.000Z",
+      "target": "@antonabyzov",
+      "account_id": "40681",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/b06195cb1ae53c3524a4181cc6a7163c.mp4",
+      "media_sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "content": "The AI idea started with a paper scoresheet. Anna and I built Snap to League at ShellHacks: photo → review → results people can follow, connected to the existing EasyChamp platform. Follow for real AI builds. Full demo on YouTube @antonabyzov. Try snap.easychamp.com. #ShellHacks #Gemini #BuildInPublic #EasyChamp",
+      "settings": {
+        "isDraft": false,
+        "targetType": "tiktok",
+        "isYourBrand": true,
+        "autoAddMusic": false,
+        "disabledDuet": false,
+        "privacyLevel": "PUBLIC_TO_EVERYONE",
+        "isAiGenerated": false,
+        "disabledStitch": false,
+        "disabledComments": false,
+        "isBrandedContent": false
+      },
+      "status_type": "scheduled",
+      "verified_at": "2026-09-27T08:40:52.772862+00:00"
+    },
+    {
+      "key": "product_instagram",
+      "provider": "postiz",
+      "id": "cmujkjs7w0047oueh2sf88nfd",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-29T22:00:00.000Z",
+      "target": "@easychamp_inc",
+      "integration_id": "cmrtubtu70020ourr1ijv2gxf",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/10b198f36971e369f18242f2b4dbaf4e10.mp4",
+      "media_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "content": "Your results are already on paper. Start there.\n\nSnap to League reads a scoresheet with Gemini. Check the teams and scores, then publish supported game competitions through EasyChamp. New result? Add another photo and review the changes.\n\nTry snap.easychamp.com. Follow @easychamp_inc for organizer workflows and product demos.\n\nBuilt at ShellHacks on the existing EasyChamp platform. Real footage and labeled demo captures; promotional narration uses a separate AI voice. Placement boards share on Snap.\n\n#EasyChamp #ShellHacks #TournamentManagement #Gemini",
+      "settings": {
+        "__type": "instagram",
+        "post_type": "post"
+      },
+      "verified_at": "2026-09-27T08:40:53.198742+00:00"
+    },
+    {
+      "key": "product_facebook",
+      "provider": "postiz",
+      "id": "cmujkjsjh0048ouehatft4bvn",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-29T22:15:00.000Z",
+      "target": "EasyChampInc",
+      "integration_id": "cmrrskxlh000bourrmb87rhu6",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/10b198f36971e369f18242f2b4dbaf4e10.mp4",
+      "media_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "content": "Keep the game moving. Start with the scoresheet you already have.\n\nSnap to League uses Gemini to read a photo. Review teams and scores, then publish supported game competitions through EasyChamp. Add another photo to review the next result.\n\nTry the hackathon demo: https://snap.easychamp.com/?utm_source=facebook&utm_medium=organic&utm_campaign=snap_shellhacks_2026\nFull demonstration: https://www.youtube.com/watch?v=-ZdivkQQo9k\n\nFollow EasyChamp for more organizer workflows. Built at ShellHacks on the existing platform. Real footage and labeled demo captures; separate AI promotional voice. Placement boards share on Snap.\n\n#EasyChamp #ShellHacks #TournamentManagement",
+      "settings": {
+        "__type": "facebook",
+        "post_type": "post"
+      },
+      "verified_at": "2026-09-27T08:40:53.623048+00:00"
+    },
+    {
+      "key": "product_threads",
+      "provider": "postiz",
+      "id": "cmujkjsvl0049oueh4douyln7",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-29T22:30:00.000Z",
+      "target": "@easychamp_inc",
+      "integration_id": "cmu1jfwlh000boudeinc1fht1",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/10b198f36971e369f18242f2b4dbaf4e10.mp4",
+      "media_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "content": "Still tracking scores on paper? Start with a photo. Snap to League reads it with Gemini; you review the names and scores before publishing supported games through EasyChamp.\n\nTry: https://snap.easychamp.com/?utm_source=threads&utm_medium=organic&utm_campaign=snap_shellhacks_2026\nFollow EasyChamp for organizer workflows. Built at ShellHacks on our existing platform. Real captures; separate AI narration.",
+      "settings": {
+        "__type": "threads"
+      },
+      "verified_at": "2026-09-27T08:40:54.060325+00:00"
+    },
+    {
+      "key": "product_youtube",
+      "provider": "postiz",
+      "id": "cmujkjt7h004aouehy3z39i5h",
+      "state": "QUEUE",
+      "scheduled_at": "2026-09-30T16:30:00.000Z",
+      "target": "Anton Abyzov: AI Power @antonabyzov",
+      "integration_id": "cmgyq88pu0001po4fdvq4fvii",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/10b198f36971e369f18242f2b4dbaf4e10.mp4",
+      "media_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "content": "Turn a scoresheet photo into reviewed results. Try Snap to League: https://snap.easychamp.com/?utm_source=youtube&utm_medium=organic&utm_campaign=snap_shellhacks_2026\nSubscribe for more practical AI product demos.\n\nGemini reads the photo; you review teams and scores before publishing supported game competitions through EasyChamp. Another photo opens the next-result comparison.\n\nBuilt by Anton Abyzov and Anna Abyzova at ShellHacks 2026 on the existing EasyChamp platform. This product cut combines real recordings, labeled demo data and a separately recorded published example. A separate ElevenLabs promotional narrator is AI-generated; this is not a cloned founder voice. Placement boards share on Snap.\n\nFull 110-second demonstration: https://www.youtube.com/watch?v=-ZdivkQQo9k\nSubmitted project: https://devpost.com/software/snap-to-league\nSource: https://github.com/anton-abyzov/snap-to-league\nSubscribe: https://www.youtube.com/@antonabyzov\nEasyChamp: https://easychamp.com\n\nHackathon demo currently depends on a development host.\nMusic: Deep Urban — Eugenio Mininni / Mixkit, used under its Stock Music Free License.\n\n#EasyChamp #Gemini #ShellHacks",
+      "settings": {
+        "__type": "youtube",
+        "title": "Photo to Reviewed Results: Snap to League with Gemini",
+        "type": "public",
+        "selfDeclaredMadeForKids": "no",
+        "tags": [
+          {
+            "label": "Snap to League",
+            "value": "Snap to League"
+          },
+          {
+            "label": "EasyChamp",
+            "value": "EasyChamp"
+          },
+          {
+            "label": "Gemini API",
+            "value": "Gemini API"
+          },
+          {
+            "label": "tournament results",
+            "value": "tournament results"
+          },
+          {
+            "label": "scoresheet photo",
+            "value": "scoresheet photo"
+          },
+          {
+            "label": "AI product demo",
+            "value": "AI product demo"
+          },
+          {
+            "label": "ShellHacks",
+            "value": "ShellHacks"
+          }
+        ]
+      },
+      "verified_at": "2026-09-27T08:40:54.480980+00:00"
+    },
+    {
+      "key": "product_x",
+      "provider": "blotato",
+      "id": "04692b53-90a1-483f-95b6-e7831761bb06",
+      "schedule_id": "4874164",
+      "state": "SCHEDULED",
+      "scheduled_at": "2026-09-30T20:00:00.000Z",
+      "target": "@EasyChampInc",
+      "account_id": "18005",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/10b198f36971e369f18242f2b4dbaf4e10.mp4",
+      "media_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "content": "Your results are already on paper. Start there.\n\nSnap to League: photo → review → supported game competitions on EasyChamp. Add another photo to review new results.\n\nTry https://snap.easychamp.com\nFollow for organizer workflows. #EasyChamp #ShellHacks",
+      "settings": {
+        "targetType": "twitter"
+      },
+      "status_type": "scheduled",
+      "verified_at": "2026-09-27T08:40:55.739022+00:00"
+    },
+    {
+      "key": "product_tiktok",
+      "provider": "blotato",
+      "id": "07a71468-329f-480e-840a-d314b4288362",
+      "schedule_id": "4874165",
+      "state": "SCHEDULED",
+      "scheduled_at": "2026-10-01T23:30:00.000Z",
+      "target": "@easychamp_inc",
+      "account_id": "40691",
+      "media_url": "https://postiz.easychamp.com/uploads/2026/09/27/10b198f36971e369f18242f2b4dbaf4e10.mp4",
+      "media_sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "content": "Still tracking scores on paper? Snap a scoresheet, review teams and scores, then publish supported games through EasyChamp. Another result? Review another photo. Try snap.easychamp.com and follow EasyChamp for organizer workflows. Built at ShellHacks on our existing platform. Real captures; separate AI narration. #EasyChamp #ShellHacks #TournamentManagement #Gemini",
+      "settings": {
+        "isDraft": false,
+        "targetType": "tiktok",
+        "isYourBrand": true,
+        "autoAddMusic": false,
+        "disabledDuet": false,
+        "privacyLevel": "PUBLIC_TO_EVERYONE",
+        "isAiGenerated": true,
+        "disabledStitch": false,
+        "disabledComments": false,
+        "isBrandedContent": false
+      },
+      "status_type": "scheduled",
+      "verified_at": "2026-09-27T08:40:56.961859+00:00"
+    }
+  ],
+  "count": 13,
+  "scope": "Scheduling receipts; public delivery has not yet occurred."
+}
