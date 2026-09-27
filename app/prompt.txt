@@ -8,6 +8,7 @@ Rules:
 - Entrants can be players (gamer tags) or teams; list them all in "teams".
 - Scorers: if the record lists who scored for a match (for example "Goals: Smith 2, Lee 71'"), add them to that match's "goals" as {"player", "side": "home" or "away", "count", "minute", "number"}: one entry per goal when minutes are written (minute like "31'"), "number" is a shirt number if written (without "#") and is not part of "player". Leave "goals" empty when no scorers are written.
 - Standings only: if the photo shows a league table but no individual games, put each row in "table" as {"team", "P", "W", "D", "L", "GF", "GA", "Pts"} (use null for a column that is not shown) and leave "matches" empty.
+- Leaderboard: if the photo ranks entrants instead of listing games (race results or heat times, quiz points per round, tallest cup tower, golf scores, a list of places), fill "leaderboard" and leave "matches" empty: {"metric": what is measured ("cups", "points", "time", "strokes"...), "lower_is_better": true for times and golf, "rounds": the column labels for each round if there are several, "entries": [{"name", "values": one value per round as written, "total": as written or null, "place": as written or null, "note": anything like DNF or DQ}]}.
 - The photo may be a screenshot of another app (Challonge, start.gg, a league website, a spreadsheet, a group chat); read it the same way.
 - group is the group label if the board has one (for example "A"), otherwise null.
 - when and venue are copied as written ("Sun 10am", "Field 2"), otherwise null.
@@ -16,4 +17,4 @@ Rules:
 - Do not run any commands.
 
 Answer ONLY with compact JSON (no indentation) in exactly this shape:
-{"extracted": {"competition": "...", "sport": "...", "teams": ["..."], "matches": [{"home": "...", "away": "...", "homeScore": 0, "awayScore": 0, "status": "played", "when": null, "venue": null, "stage": "group", "group": null, "round": null, "winner": null, "goals": []}], "rules_notes": ["..."], "uncertain": ["..."], "table": []}}
+{"extracted": {"competition": "...", "sport": "...", "teams": ["..."], "matches": [{"home": "...", "away": "...", "homeScore": 0, "awayScore": 0, "status": "played", "when": null, "venue": null, "stage": "group", "group": null, "round": null, "winner": null, "goals": []}], "rules_notes": ["..."], "uncertain": ["..."], "table": [], "leaderboard": null}}

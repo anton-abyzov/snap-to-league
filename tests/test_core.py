@@ -359,3 +359,23 @@ def test_basketball_points_are_two_for_a_win_one_for_a_loss():
     t = {r.team: r.Pts for r in compute(ms, sport="basketball")}
     assert t == {"A": 2, "B": 1}
     assert {r.team: r.Pts for r in compute(ms)} == {"A": 3, "B": 0}
+
+
+def test_leaderboard_ranking_times_ties_and_dnf():
+    from app.ranking import rank
+    from app.schema import Leaderboard
+    lb = Leaderboard.model_validate({"metric": "time", "lower_is_better": True, "entries": [
+        {"name": "Kai", "total": "1:02.40", "place": 1}, {"name": "Ana", "total": "58.9"},
+        {"name": "Leo", "total": "58.9"}, {"name": "Zed", "total": None, "note": "DNF"}]})
+    ranked, flags = rank(lb)
+    assert [(r["name"], r["place"]) for r in ranked] == [("Ana", 1), ("Leo", 1), ("Kai", 3), ("Zed", None)]
+    assert any("Kai 1st, the numbers say 3rd" in f.message for f in flags)
+
+
+def test_leaderboard_sums_rounds_and_reads_as_a_photo():
+    from app.ranking import rank
+    ex, _ = _parse('{"extracted": {"competition": "Cup Stacking", "matches": [], "leaderboard": {"metric": "cups", '
+                   '"rounds": ["R1", "R2"], "entries": [{"name": "Stackers", "values": ["21", "28"]}, '
+                   '{"name": "Towers", "values": ["30", "25"]}]}}}')
+    ranked, _ = rank(ex.leaderboard)
+    assert [(r["name"], r["score"], r["place"]) for r in ranked] == [("Towers", 55, 1), ("Stackers", 49, 2)]

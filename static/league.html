@@ -32,7 +32,7 @@
   <p class="err" id="error" hidden role="alert"></p>
 </main>
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml, leaderboardHtml } from "/static/standings.js";
 const $ = (id) => document.getElementById(id);
 const id = location.pathname.split("/").pop();
 let league;
@@ -71,6 +71,15 @@ async function load() {
 function render() {
   document.title = league.name;
   $("name").textContent = league.name;
+  if (!league.matches.length && league.leaderboard) {
+    $("sub").textContent = `Leaderboard · ${league.leaderboard.entries.length} entries`;
+    $("table-panel").hidden = false; $("bracket-panel").hidden = true; $("scorers-panel").hidden = true;
+    $("table-panel").querySelector("h2").textContent = "Leaderboard";
+    $("table").innerHTML = leaderboardHtml(league.leaderboard);
+    $("board").closest(".panel").hidden = true;
+    $("updated").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+    return;
+  }
   const played = league.matches.filter((m) => m.status === "played").length;
   $("sub").textContent = `${league.sport[0].toUpperCase()}${league.sport.slice(1)} · ${played} of ${league.matches.length} matches played`;
   const results = league.matches.filter((m) => m.status === "played").map((m) => `<span><b>FT</b> ${esc(m.home)} ${m.homeScore ?? ""}-${m.awayScore ?? ""} ${esc(m.away)}</span>`);

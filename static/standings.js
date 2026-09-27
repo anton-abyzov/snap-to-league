@@ -141,3 +141,48 @@ export function scorersTable(rows) {
   return `<table class="st scorers"><thead><tr><th class="pos">#</th><th class="team">Player</th><th class="team">Team</th><th>G</th><th class="team">When</th></tr></thead><tbody>${rows.map((r, i) =>
     `<tr style="--i:${i}"><td class="pos">${i + 1}</td><td class="team">${r.number ? `<span class="shirt">${esc(r.number)}</span>` : ""}${esc(r.player)}</td><td class="team muted-cell">${esc(r.team)}</td><td class="pts">${r.goals}</td><td class="team muted-cell">${esc(r.minutes.join(", "))}</td></tr>`).join("")}</tbody></table>`;
 }
+
+// ---------- leaderboards (races, heats, quizzes, cup stacking) ----------
+export function toNumber(v) {
+  if (v === null || v === undefined || v === "") return null;
+  const s = String(v).trim().toLowerCase().replace(",", ".");
+  const t = s.match(/^(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)$/);
+  if (t) return (+(t[1] || 0)) * 3600 + (+t[2]) * 60 + parseFloat(t[3]);
+  const n = s.match(/-?\d+(?:\.\d+)?/);
+  return n ? parseFloat(n[0]) : null;
+}
+
+export function rankLeaderboard(lb) {
+  const rows = (lb.entries || []).map((e) => {
+    let score = toNumber(e.total);
+    const vals = (e.values || []).map(toNumber);
+    if (score === null && vals.some((v) => v !== null)) {
+      score = vals.reduce((a, v) => a + (v || 0), 0);
+      if (lb.lower_is_better && vals.some((v) => v === null)) score = null;
+    }
+    const out = /dnf|dns|dq|dsq|out/i.test(e.note || "");
+    return { ...e, score: out ? null : score };
+  });
+  rows.sort((a, b) => (a.score === null) - (b.score === null) || (a.score === null ? 0 : lb.lower_is_better ? a.score - b.score : b.score - a.score) || a.name.localeCompare(b.name));
+  let place = 0, prev;
+  rows.forEach((r, i) => { if (r.score === null) { r.place = null; return; } if (r.score !== prev) { place = i + 1; prev = r.score; } r.place = place; });
+  return rows;
+}
+
+function fmt(n, lb) {
+  if (n === null || n === undefined) return "–";
+  if (lb.metric === "time" && n >= 60) { const m = Math.floor(n / 60), s = (n - m * 60).toFixed(2).padStart(5, "0"); return `${m}:${s}`; }
+  return Number.isInteger(n) ? String(n) : n.toFixed(2);
+}
+
+export function leaderboardHtml(lb) {
+  if (!lb || !(lb.entries || []).length) return "";
+  const rows = rankLeaderboard(lb);
+  const podium = rows.filter((r) => r.place && r.place <= 3).slice(0, 3);
+  const order = [1, 0, 2].map((i) => podium[i]).filter(Boolean);
+  const pod = `<div class="podium">${order.map((r) => `<div class="step p${r.place}" style="--i:${r.place}"><span class="medal">${r.place}</span><b>${esc(r.name)}</b><em>${fmt(r.score, lb)} ${esc(lb.metric || "")}</em><i></i></div>`).join("")}</div>`;
+  const rounds = lb.rounds || [];
+  const head = `<thead><tr><th class="pos">#</th><th class="team">Name</th>${rounds.map((r) => `<th>${esc(r)}</th>`).join("")}<th>${esc(lb.lower_is_better ? "Best" : "Total")}</th></tr></thead>`;
+  const body = rows.map((r, i) => `<tr style="--i:${i}" class="${r.place && r.place <= 3 ? "through" : ""}"><td class="pos">${r.place ?? "–"}</td><td class="team">${esc(r.name)}${r.note ? ` <span class="muted-cell">${esc(r.note)}</span>` : ""}</td>${rounds.map((_, j) => `<td>${esc((r.values || [])[j] ?? "–")}</td>`).join("")}<td class="pts">${fmt(r.score, lb)}</td></tr>`).join("");
+  return pod + `<table class="st">${head}<tbody>${body}</tbody></table>`;
+}

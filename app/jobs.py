@@ -20,6 +20,7 @@ from . import extract as extract_mod
 from .merge import combine, review
 from .schema import Extraction, Flag, Match
 from .standings import checks
+from .ranking import rank
 
 POOL = ThreadPoolExecutor(max_workers=3)      # jobs
 PHOTOS = ThreadPoolExecutor(max_workers=4)    # photos across all jobs
@@ -145,10 +146,15 @@ def _finish(job: dict, read: list, paths: list[Path], league: dict | None, t0: f
         rules_notes=[n for _, ex, _ in read for n in ex.rules_notes],
         uncertain=list(dict.fromkeys(u for _, ex, _ in read for u in ex.uncertain)),
         table=next((ex.table for _, ex, _ in read if ex.table), []),
+        leaderboard=max((ex.leaderboard for _, ex, _ in read if ex.leaderboard), key=lambda lb: len(lb.entries), default=None),
     )
     if not extraction.teams and extraction.table:
         extraction.teams = [r.team for r in extraction.table]
     table, flags = checks(extraction, [])
+    if extraction.leaderboard:
+        ranked, rank_flags = rank(extraction.leaderboard)
+        flags += rank_flags
+        job["ranking"] = ranked
     for i, _, notes in read:
         tag = f"Photo {i + 1}: " if len(paths) > 1 else ""
         flags += [Flag(level="warn", message=tag + n, source="second") for n in notes]

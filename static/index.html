@@ -42,6 +42,8 @@
         <button class="linkbtn" data-sample="shellhacks-groups" type="button">ShellHacks Break Cup</button>
         <button class="linkbtn" data-sample="shellhacks-smash" type="button">Midnight Smash</button>
         <button class="linkbtn" data-sample="shellhacks-hoops" type="button">3x3 basketball</button>
+        <button class="linkbtn" data-sample="shellhacks-cupstack" type="button">Cup stacking</button>
+        <button class="linkbtn" data-sample="shellhacks-trivia" type="button">Trivia night</button>
         <button class="linkbtn" data-sample="groups" type="button">a two-group cup</button>
         <button class="linkbtn" data-sample="matchcard" type="button">a match card</button>
         <button class="linkbtn" data-sample="bracket" type="button">a bracket</button>
@@ -107,7 +109,7 @@
         </div>
         <div class="checking" id="checking" hidden><span class="dot"></span><span id="checking-text"></span></div>
         <div class="flags" id="flags"></div>
-        <div class="panel-head"><h2>Matches</h2><span class="muted small" id="meta"></span></div>
+        <div class="panel-head"><h2 id="matches-title">Matches</h2><span class="muted small" id="meta"></span></div>
         <div class="matches" id="matches"></div>
         <button class="linkbtn" id="add" type="button">Add a match</button>
       </div>
@@ -165,14 +167,14 @@
 </main>
 
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml, leaderboardHtml, rankLeaderboard } from "/static/standings.js";
 
 const $ = (id) => document.getElementById(id);
 const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } },
 };
-const state = { files: [], samples: [], league: null, job: null, matches: [], teams: [], table: [] };
+const state = { files: [], samples: [], league: null, job: null, matches: [], teams: [], table: [], leaderboard: null };
 let health = {};
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
@@ -382,6 +384,7 @@ function loadJob(job) {
     $("changes-box").hidden = false;
   } else {
     state.matches = ex.matches; state.teams = ex.teams; state.table = ex.table || [];
+    state.leaderboard = ex.leaderboard || null;
     $("name").value = ex.competition;
     const sp = (ex.sport || "other").toLowerCase();
     if (![...$("sport").options].some((o) => o.value === sp)) $("sport").add(new Option(sp[0].toUpperCase() + sp.slice(1), sp), 0);
@@ -389,8 +392,9 @@ function loadJob(job) {
     $("changes-box").hidden = true;
   }
   const readers = [...new Set(job.photos.map((p) => p.reader).filter(Boolean))].join(", ");
-  const nm = ex.matches.length, np = job.photos.length;
-  $("meta").textContent = `${nm} match${nm === 1 ? "" : "es"} from ${np} photo${np === 1 ? "" : "s"} in ${job.seconds} s`;
+  const nm = ex.matches.length, np = job.photos.length, ne = (ex.leaderboard?.entries || []).length;
+  const what = nm ? `${nm} match${nm === 1 ? "" : "es"}` : `${ne} entr${ne === 1 ? "y" : "ies"}`;
+  $("meta").textContent = `${what} from ${np} photo${np === 1 ? "" : "s"} in ${job.seconds} s`;
   renderFlags(job);
   renderMatches(); show("review");
   keepInView($("review"));
@@ -409,7 +413,24 @@ function renderFlags(job) {
   }
 }
 
+function renderEntries() {
+  $("matches-title").textContent = "Results";
+  const lb = state.leaderboard, cols = (lb.rounds || []).length || 0;
+  const labels = (lb.rounds || []);
+  $("matches").innerHTML = `<div class="entries-head" style="--cols:${cols + 1}"><span>Name</span>${labels.map((r) => `<span>${esc(r)}</span>`).join("")}<span>${lb.lower_is_better ? "Best" : "Total"}</span><span></span></div>
+    <div class="entries">${lb.entries.map((e, i) => `<div class="entry" data-e="${i}" style="--cols:${cols + 1};--i:${i}">
+      <input aria-label="Name" data-k="name" value="${esc(e.name)}">
+      ${labels.map((_, j) => `<input aria-label="${esc(labels[j])}" class="num" data-k="v${j}" value="${esc((e.values || [])[j] ?? "")}">`).join("")}
+      <input aria-label="Total" class="num" data-k="total" value="${esc(e.total ?? "")}" placeholder="auto">
+      <button class="del" data-edel="${i}" aria-label="Remove" type="button">&times;</button></div>`).join("")}</div>`;
+  $("add").textContent = "Add an entry";
+  renderTable();
+}
+
 function renderMatches() {
+  if (!state.matches.length && state.leaderboard) return renderEntries();
+  $("matches-title").textContent = "Matches";
+  $("add").textContent = "Add a match";
   $("matches").innerHTML = state.matches.map((m, i) => `
     <div class="match ${m.status === "played" ? "played" : ""}" data-i="${i}" style="--i:${i}">
       <span class="side home-tag">Home</span>
@@ -435,11 +456,27 @@ function renderTable() {
   const br = bracketHtml(state.matches);
   const read = !rows.length && !br && state.table && state.table.length;
   $("table-title").textContent = rows.length && br ? "Table and bracket" : br ? "Bracket" : read ? "Table as read from the photo" : "Table";
+  if (state.leaderboard && !state.matches.length) {
+    $("table-title").textContent = "Leaderboard";
+    $("table").innerHTML = leaderboardHtml(state.leaderboard);
+    $("scorers-box").hidden = true;
+    $("publish").textContent = "Share the leaderboard";
+    return;
+  }
+  $("publish").textContent = "Publish league";
   const sc = topScorers(state.matches);
   $("scorers-box").hidden = !sc.length; $("scorers").innerHTML = scorersTable(sc);
   $("table").innerHTML = (rows.length ? groupTablesHtml(groupTables(state.matches, state.teams, $("sport").value)) : read ? standingsTable(state.table.map((r) => ({ ...r, D: r.D ?? 0, GF: r.GF ?? 0, GA: r.GA ?? 0, GD: (r.GF ?? 0) - (r.GA ?? 0) }))) : "") + br;
 }
 $("matches").addEventListener("input", (e) => {
+  const row = e.target.closest(".entry");
+  if (row) {
+    const en = state.leaderboard.entries[+row.dataset.e], k = e.target.dataset.k;
+    if (k === "name") en.name = e.target.value;
+    else if (k === "total") en.total = e.target.value || null;
+    else { en.values = en.values || []; en.values[+k.slice(1)] = e.target.value || null; }
+    return renderTable();
+  }
   const box = e.target.closest(".match"); const f = e.target.dataset.f;
   if (!box || !f) return;
   const m = state.matches[+box.dataset.i];
@@ -454,10 +491,12 @@ $("matches").addEventListener("input", (e) => {
 });
 $("sport").addEventListener("change", renderTable);
 $("matches").addEventListener("click", (e) => {
+  if (e.target.dataset.edel !== undefined) { state.leaderboard.entries.splice(+e.target.dataset.edel, 1); return renderEntries(); }
   if (e.target.dataset.del === undefined) return;
   state.matches.splice(+e.target.dataset.del, 1); renderMatches();
 });
 $("add").addEventListener("click", () => {
+  if (state.leaderboard && !state.matches.length) { state.leaderboard.entries.push({ name: "", values: [], total: null }); return renderEntries(); }
   state.matches.push({ home: "", away: "", homeScore: null, awayScore: null, status: "scheduled", stage: "group", when: null, venue: null, group: null, goals: [] });
   renderMatches();
 });
@@ -471,8 +510,9 @@ $("publish").addEventListener("click", async () => {
   $("publish").disabled = true;
   try {
     const matches = state.matches.filter((m) => m.home && m.away);
+    if (state.leaderboard) state.leaderboard.entries = state.leaderboard.entries.filter((x) => x.name);
     let r = await fetch("/api/leagues", { method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, jobId: state.job?.id, table: state.table || [] }) });
+      body: JSON.stringify({ id: state.league?.id, name: $("name").value || "Untitled cup", sport: $("sport").value, teams: state.teams, matches, jobId: state.job?.id, table: state.table || [], leaderboard: state.leaderboard }) });
     if (!r.ok) throw new Error((await r.json()).detail || "Could not save the league");
     state.league = await r.json();
     r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST", headers: { "x-publish-pin": $("pin").value || "" } });
@@ -482,8 +522,9 @@ $("publish").addEventListener("click", async () => {
     const ec = pub.links && (pub.links.competition || pub.links.leagueSite);
     const live = pub.mode === "live" && pub.status === 200;
     $("done-kicker").textContent = live ? "Published to EasyChamp" : "Saved";
-    $("done-title").textContent = live ? "League is live on EasyChamp" : "Your league board is ready";
-    $("done-text").textContent = live ? "Teams can follow results and standings on the EasyChamp league site. Every new photo updates it."
+    $("done-title").textContent = live ? "League is live on EasyChamp" : pub.mode === "board" ? "Leaderboard is live" : "Your league board is ready";
+    $("done-text").textContent = pub.mode === "board" ? "Share this leaderboard: places and points update with every new photo. (EasyChamp leagues cover games today; races and quizzes are next.)"
+      : live ? "Teams can follow results and standings on the EasyChamp league site. Every new photo updates it."
       : pub.reason === "pin" ? "Share this board with the teams. Publishing to EasyChamp needs the organizer PIN."
       : pub.mode === "live" ? `EasyChamp answered ${pub.status}; the board below still works.` : "Share this board with the teams.";
     $("done-url").textContent = ec || board;

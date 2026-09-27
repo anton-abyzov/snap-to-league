@@ -141,9 +141,52 @@ def hoops(out: Path):
     rough(img, 71, -1.6).save(out / "shellhacks-hoops.jpg", quality=74)
 
 
+def cupstack(out: Path):
+    """MLH cup stacking: tallest tower in cups, one attempt each, one team did not finish."""
+    random.seed(81)
+    img = Image.new("RGB", (1300, 1200), (250, 248, 240))
+    d = ImageDraw.Draw(img)
+    t, m, n = ImageFont.truetype(MARKER, 58), ImageFont.truetype(MARKER, 46), ImageFont.truetype(HAND, 32)
+    d.text((70, 50), "MLH CUP STACKING", fill=(200, 30, 40), font=t)
+    d.text((70, 125), "ShellHacks - Panther Pit - tallest tower (cups)", fill=(100, 100, 100), font=n)
+    rows = [("Golden Panthers", "34"), ("Shell Shockers", "29"), ("Roary's Raiders", "31"),
+            ("404 Sleep Not Found", "22"), ("Null Pointers", "fell - DNF"), ("Merge Conflicts", "27")]
+    y = 220
+    for name, cups in rows:
+        d.text((90 + random.randint(-5, 5), y), name, fill=(25, 25, 35), font=m)
+        d.text((820, y), cups, fill=(30, 60, 150), font=m)
+        y += 120
+    rough(img, 83, 1.4).save(out / "shellhacks-cupstack.jpg", quality=74)
+
+
+def trivia(out: Path):
+    """Midnight trivia: four rounds, points per round, totals left blank on purpose."""
+    random.seed(91)
+    img = Image.new("RGB", (1500, 1100), (241, 242, 240))
+    d = ImageDraw.Draw(img)
+    t, m, n = ImageFont.truetype(MARKER, 56), ImageFont.truetype(MARKER, 40), ImageFont.truetype(HAND, 30)
+    d.text((60, 40), "Midnight Trivia - ShellHacks", fill=(20, 45, 140), font=t)
+    d.text((60, 115), "4 rounds  -  10 pts each  -  Room 243", fill=(110, 110, 110), font=n)
+    cols = ["R1", "R2", "R3", "R4"]
+    x0 = 700
+    for j, c in enumerate(cols):
+        d.text((x0 + j * 170, 190), c, fill=(170, 30, 30), font=m)
+    rows = [("Hackers", ["7", "9", "6", "8"]), ("Mentors", ["8", "6", "9", "9"]), ("Organizers", ["6", "7", "7", "5"]),
+            ("Sponsors", ["9", "8", "8", "7"]), ("WiFi Down", ["5", "6", "4", "7"])]
+    y = 280
+    for name, vals in rows:
+        d.text((70 + random.randint(-5, 5), y), name, fill=(25, 25, 35), font=m)
+        for j, v in enumerate(vals):
+            d.text((x0 + 20 + j * 170, y), v, fill=(25, 25, 35), font=m)
+        y += 130
+    rough(img, 93, -1.8).save(out / "shellhacks-trivia.jpg", quality=74)
+
+
 if __name__ == "__main__":
     folder = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     groups(folder)
     knockout(folder)
     smash(folder)
     hoops(folder)
+    cupstack(folder)
+    trivia(folder)

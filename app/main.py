@@ -24,7 +24,8 @@ from .standings import checks, compute
 ROOT = Path(__file__).resolve().parent.parent
 STATIC = ROOT / "static"
 SAMPLES = {k: ROOT / "tests" / "fixtures" / f"{k}.jpg" for k in ("board", "bracket", "sheet1", "sheet2", "groups", "matchcard",
-                                                            "shellhacks-groups", "shellhacks-knockout", "shellhacks-smash", "shellhacks-hoops")}
+                                                            "shellhacks-groups", "shellhacks-knockout", "shellhacks-smash", "shellhacks-hoops",
+                                                            "shellhacks-cupstack", "shellhacks-trivia")}
 
 app = FastAPI(title="Snap to League")
 
@@ -194,6 +195,7 @@ class LeagueIn(BaseModel):
     snapIds: list[str] = []
     jobId: str | None = None
     table: list[dict] = []
+    leaderboard: dict | None = None
 
 
 def corrections(job: dict | None, final: list[Match]) -> int:
@@ -216,7 +218,13 @@ def save_league(body: LeagueIn, request: Request):
     ex = Extraction(competition=body.name, sport=body.sport, teams=body.teams, matches=body.matches)
     table, flags = checks(ex, [])
     job = jobs.get(body.jobId) if body.jobId else None
+    ranking = None
+    if body.leaderboard:
+        from .ranking import rank
+        from .schema import Leaderboard
+        ranking, _ = rank(Leaderboard.model_validate(body.leaderboard))
     doc = {"id": lid, "name": body.name, "sport": body.sport, "teams": body.teams, "table": body.table,
+           "leaderboard": body.leaderboard, "ranking": ranking,
            "matches": [m.model_dump() for m in body.matches],
            "snapIds": list(dict.fromkeys(prev.get("snapIds", []) + body.snapIds)),
            "jobIds": list(dict.fromkeys(prev.get("jobIds", []) + ([body.jobId] if body.jobId else []))),
@@ -241,6 +249,8 @@ def publish(league_id: str, request: Request, x_publish_pin: str | None = Header
     doc = leagues.get(league_id)
     if not doc:
         raise HTTPException(404, "No such league")
+    if not doc.get("matches") and doc.get("leaderboard"):
+        return {"mode": "board", "reason": "leaderboard"}  # EasyChamp has no placement stage yet
     if not safety.publish_allowed(x_publish_pin):
         return {"mode": "dry-run", "reason": "pin", "payload": easychamp.build_payload(doc)}
     try:

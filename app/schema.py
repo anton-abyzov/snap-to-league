@@ -105,10 +105,44 @@ class Row(BaseModel):
     Pts: int = 0
 
 
+class Entry(BaseModel):
+    """One entrant on a leaderboard: a team or player with a value per round and a total."""
+    name: str
+    values: list[Optional[str]] = Field(default_factory=list)
+    total: Optional[str] = None
+    place: Optional[int] = None
+    note: Optional[str] = None
+
+    @field_validator("values", mode="before")
+    @classmethod
+    def _vals(cls, v):
+        return [None if x in (None, "") else str(x).strip() for x in (v or [])]
+
+    @field_validator("total", "note", mode="before")
+    @classmethod
+    def _txt(cls, v):
+        return None if v in (None, "") else str(v).strip()
+
+    @field_validator("place", mode="before")
+    @classmethod
+    def _place(cls, v):
+        digits = re.sub(r"\D", "", str(v or ""))
+        return int(digits) if digits else None
+
+
+class Leaderboard(BaseModel):
+    """Races, heats, quizzes, cup stacking: entrants ranked by a number instead of playing games."""
+    metric: str = "points"
+    lower_is_better: bool = False
+    rounds: list[str] = Field(default_factory=list)
+    entries: list[Entry] = Field(default_factory=list)
+
+
 class Extraction(BaseModel):
     competition: str = "Untitled cup"
     sport: str = "soccer"
     table: list["Row"] = Field(default_factory=list)  # a standings table read as-is (screenshot of a league site)
+    leaderboard: Optional[Leaderboard] = None
 
     @field_validator("competition", "sport", mode="before")
     @classmethod

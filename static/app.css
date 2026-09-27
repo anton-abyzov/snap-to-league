@@ -320,3 +320,21 @@ body.has-actionbar #read { display: none; }
   .match .side { display: none; }
   .match input.team { font-size: 16px; padding: 10px; }
 }
+
+/* leaderboard podium: 2nd, 1st, 3rd */
+.podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 8px; margin: 6px 0 14px; }
+.podium .step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding: 12px 6px 0; animation: rise .6s var(--ease-overshoot) both; animation-delay: calc(var(--i) * 120ms); min-width: 0; }
+.podium .step b { font: 800 15px/1.15 var(--font-display); overflow-wrap: anywhere; }
+.podium .step em { font: 600 12px/1 var(--font-mono); font-style: normal; color: var(--color-muted); }
+.podium .step i { display: block; width: 100%; margin-top: 6px; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--color-brand), var(--color-brand-navy)); }
+.podium .p1 i { height: 96px; } .podium .p2 i { height: 68px; opacity: .85; } .podium .p3 i { height: 48px; opacity: .72; }
+.podium .medal { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 800 16px/1 var(--font-display); color: #1d1602; box-shadow: var(--shadow-pop); }
+.podium .p1 .medal { background: linear-gradient(135deg, #ffe38a, #f2b01e); width: 42px; height: 42px; font-size: 19px; }
+.podium .p2 .medal { background: linear-gradient(135deg, #f1f4f8, #b7c0cc); }
+.podium .p3 .medal { background: linear-gradient(135deg, #f3c9a0, #c47a3f); }
+.entries { display: flex; flex-direction: column; gap: 8px; }
+.entry { display: grid; grid-template-columns: minmax(0, 1fr) repeat(var(--cols, 1), minmax(52px, 72px)) 30px; gap: 6px; align-items: center; animation: rise .45s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 45ms); }
+.entry input { font-size: 15px; padding: 8px; }
+.entry input.num { text-align: center; font-family: var(--font-mono); }
+.entries-head { display: grid; grid-template-columns: minmax(0, 1fr) repeat(var(--cols, 1), minmax(52px, 72px)) 30px; gap: 6px; font: 600 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); }
+.entries-head span:not(:first-child) { text-align: center; }

@@ -56,8 +56,10 @@ def _parse(text: str) -> tuple[Extraction, list[Row]]:
         rows = [Row.model_validate(r) for r in data.get("standings", []) if isinstance(r, dict)]
     except ValidationError as e:
         raise ExtractError(f"the read did not fit the league format: {str(e)[:200]}")
-    if not ex.matches and not ex.table:
-        raise ExtractError("no matches or table found on the photo: " + "; ".join(ex.uncertain)[:200])
+    if ex.leaderboard and not ex.leaderboard.entries:
+        ex.leaderboard = None
+    if not ex.matches and not ex.table and not ex.leaderboard:
+        raise ExtractError("no games, table or leaderboard found on the photo: " + "; ".join(ex.uncertain)[:200])
     return ex, rows
 
 
