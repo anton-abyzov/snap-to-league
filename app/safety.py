@@ -26,8 +26,10 @@ _lock = threading.Lock()
 
 
 def visitor(request: Request) -> str:
-    # behind Cloudflare the real address arrives in CF-Connecting-IP
-    return request.headers.get("cf-connecting-ip") or (request.client.host if request.client else "unknown")
+    # through snap.easychamp.com the edge Worker passes the visitor's address in X-Snap-Visitor;
+    # straight through the tunnel Cloudflare sets CF-Connecting-IP
+    return (request.headers.get("x-snap-visitor") or request.headers.get("cf-connecting-ip")
+            or (request.client.host if request.client else "unknown"))
 
 
 def check_image(data: bytes) -> str:

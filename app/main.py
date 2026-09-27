@@ -165,7 +165,8 @@ async def create_job(request: Request, images: list[UploadFile] = File(default=[
         p = store.images_dir() / f"sample-{k}-{uuid.uuid4().hex[:6]}.jpg"
         p.write_bytes(SAMPLES[k].read_bytes())
         files.append(p)
-    return jobs.create(files, league, reader, safety.visitor(request))
+    job = jobs.create(files, league, reader, safety.visitor(request))
+    return {k: v for k, v in job.items() if k != "owner"}
 
 
 @app.get("/api/jobs/{job_id}")

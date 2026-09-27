@@ -8,7 +8,8 @@ export default {
     const origin = new URL(env.ORIGIN);
     const target = new URL(url.pathname + url.search, origin);
     const headers = new Headers(request.headers);
-    headers.set("cf-connecting-ip", request.headers.get("cf-connecting-ip") || "");
+    // the tunnel replaces cf-connecting-ip with the Worker's own address, so pass the visitor's separately
+    headers.set("x-snap-visitor", request.headers.get("cf-connecting-ip") || "");
     headers.set("x-forwarded-host", url.host);
     try {
       const resp = await fetch(target, {
