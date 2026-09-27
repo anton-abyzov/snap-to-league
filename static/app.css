@@ -192,7 +192,7 @@ body::after { /* print-grain, very light */
 
 .hero-art { aspect-ratio: auto; background: linear-gradient(160deg, #1a2150, #0d1230 70%); display: grid; grid-template-columns: 1fr 1.1fr; gap: 0; min-height: 340px; }
 .hero-art .photo { position: relative; overflow: hidden; }
-.hero-art .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .95; transform: scale(1.04); animation: drift 14s ease-in-out infinite alternate; }
+.hero-art .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left top; opacity: .95; transform: scale(1.04); animation: drift 14s ease-in-out infinite alternate; }
 .hero-art .photo .tag { position: absolute; left: 10px; top: 10px; font: 600 10px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; background: rgba(10, 14, 30, .75); color: #fff; padding: 6px 7px; }
 .hero-art .photo::after { content: ""; position: absolute; top: 0; bottom: 0; right: -1px; width: 48px; background: linear-gradient(90deg, transparent, #141a42); }
 .hero-art .scan { height: 36%; }
