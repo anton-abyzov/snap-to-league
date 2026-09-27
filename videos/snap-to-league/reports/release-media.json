@@ -1,0 +1,10 @@
+{
+  "tag": "snap-to-league-shellhacks-2026",
+  "repository": "anton-abyzov/snap-to-league",
+  "zip_sha256": "b7517e756309efba1c9d079b7f881d6ef0bb52c9c193b584311f37970ac79d5e",
+  "members": {
+    "landscape-editorial.mp4": "22b077bb84dbfdc9b11150aebb8b02ebfefa309a8e38d4333e4cbd4e886d4088",
+    "vertical-editorial.mp4": "40c677b19a3ab8c5f120e3effa1a0e21eef2a9f00cce723ea0dfcae86c6be2dc",
+    "EDITABLE-MEDIA-LICENSE.txt": "97e008395fdae1d7f63eb417e3e4abf09e07ffa6aa7b1c42881b6212756bbc88"
+  }
+}

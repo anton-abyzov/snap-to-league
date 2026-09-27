@@ -1,46 +1,66 @@
-# Devpost submission
+# Snap to League — Devpost draft
 
-**Name:** Snap to League
+**Status:** Prepared copy; not a submission receipt.
 
-**Tagline:** Photo of the board. Live league in seconds.
+**Tagline:** Turn a photo of your results into a competition people can follow.
 
-**Links:** https://snap.easychamp.com · https://github.com/anton-abyzov/snap-to-league
+**Demo:** [snap.easychamp.com](https://snap.easychamp.com)
 
-**Tracks to tick:** Best Overall · Microsoft "What's Missing?" · MLH Best Use of Gemini API · MLH Best Use of ElevenLabs · MLH Best Domain Name from GoDaddy Registry
+**Source:** [anton-abyzov/snap-to-league](https://github.com/anton-abyzov/snap-to-league)
+
+**Video:** `PENDING_FINAL_JUDGE_VIDEO_URL` — maximum 120 seconds
+
+**Team:** Anton Abyzov and Anna Abyzova
+
+**Discord contact:** `anton.abyzov`
 
 ## Inspiration
 
-Every weekend thousands of tournaments run on a whiteboard, a paper scoresheet or a group chat. League apps want you to type every team and score back in, so organizers never do, and players never get a table. We wanted the organizer's only job to be taking a photo.
+A scoresheet already contains the names, games and results an organizer needs. We wanted to start with a photo of that sheet, then make review and correction clear before sharing the competition.
+
+We filmed the demo at ShellHacks using paper results and a phone. EasyChamp, the platform behind game publishing, existed before the event.
 
 ## What it does
 
-Snap one or more photos of a whiteboard, scoresheet or bracket, or screenshots from Challonge, start.gg or a league website. Two AI readers read every result; the app recomputes the table, flags anything doubtful with a yellow card, merges pages and spelling variants, attaches scorers, and shows exactly what a new photo changed. One tap publishes a real league on EasyChamp with standings or a bracket, rosters and goal events. A board left on a TV announces every new result out loud.
+Snap to League extracts a draft from photos or screenshots, computes standings from match results and flags inconsistencies. Organizers review names and scores and compare additional photos with a draft or saved competition.
+
+Supported game competitions publish through EasyChamp after sign-in. Knockout results produce brackets. Races, trivia and cup-stacking results become placement boards shared on Snap; these do not publish as EasyChamp stages.
+
+The in-product **Read out** control uses ElevenLabs when configured, with browser speech as a fallback. Our recording contains a genuine on-demand standings readout. Automatic announcement of changed match results is implemented separately in the saved board.
 
 ## How we built it
 
-- FastAPI back end; plain HTML and ES modules on EasyChamp's Matchday design tokens.
-- Gemini 3.8 Flash through the Gemini API reads each photo; GPT-6 Astra reads it in parallel as a second opinion. Organizers can choose open-weight readers (GLM 5.3 Flash, Qwen 3.8 Flash).
-- Pydantic validation, our own standings engine and merge rules; we never trust the model's table.
-- EasyChamp's league import creates the league site, knockout rounds, rosters and scorer events.
-- ElevenLabs voices the announcer.
-- A Cloudflare Worker serves snap.easychamp.com in front of a Cloudflare Tunnel.
+FastAPI handles photo jobs and publishing. Pydantic validates structured extraction; application code reconciles names, computes standings and presents checks. Gemini can read images through Google's API. An optional second reader compares extractions; an import can finish even if that second read fails.
 
-## Challenges
+EasyChamp sign-in identifies the publishing organizer. A Cloudflare Worker routes the demo hostname through a tunnel to a development Mac, so availability depends on that host and connection.
 
-- The first vision model we tried for player tracking in match video refused person re-identification, so we moved AI to what it does best: reading handwriting and screens.
-- Brackets: EasyChamp draws a bracket from round names and positions, so we rebuild the tree from who advanced.
-- Keeping a public app safe: a publish PIN, per-device limits, a daily AI budget, and keys that never leave the server.
+## Challenges and lessons
 
-## Accomplishments
+Similar spellings must be reconciled without merging opponents or players from different teams. Brackets need advancement relationships, not just scores. Model-extracted standings need comparison with calculations from the games.
 
-- 37 of 39 results read correctly from real Challonge, start.gg and Score7 screenshots; 30 of 30 standings rows from start.gg and LeagueRepublic.
-- Two scoresheets taken a week apart merge into one league with 15 goals by 8 scorers in 8 seconds.
-- A photo becomes a real EasyChamp league site with the right quarterfinal, semifinal and final.
+A reviewable draft with explicit uncertainty is more useful than presenting extraction as infallible. The demo shows a scoresheet, reviewed standings, a knockout bracket and a voice readout; it makes no universal accuracy or processing-time claim.
 
-## What we learned
+## Existing components and event contribution
 
-A cheap fast model with a second opinion beats one expensive model: Gemini 3.8 Flash read our samples perfectly at about half a cent a photo, and disagreements between readers are the best signal for what a human should check.
+Our submission adds Snap's photo-import, review, reconciliation and publishing integration. **EasyChamp identity, league import, competition sites and Matchday design tokens predate ShellHacks.** Frameworks are listed in `pyproject.toml`; model and speech providers are external services. Repository history begins September 26, 2026, at `b079e20`.
 
-## What's next
+## Challenge narratives
 
-"Import from photo" inside the EasyChamp console, per-sport search pages, and races, quizzes and judged contests as new competition formats.
+| Candidate entry | Product evidence |
+|---|---|
+| Best Overall | Working photo-to-competition workflow |
+| Microsoft | AI helps complete a concrete task without a chat window |
+| MLH Best Use of Gemini API | Actual image extraction through Google's Gemini API |
+| MLH Best Use of ElevenLabs | Speech inside the app, supported by the real readout and provider evidence |
+
+GoDaddy Registry remains conditional: no qualifying domain registration is established by `snap.easychamp.com`. Other service prizes require demonstrated use; an optional adapter is insufficient.
+
+## Next
+
+Move beyond development-host deployment, broaden representative image evaluation and improve review. Placement-based publishing in EasyChamp remains future work; shareable podiums on Snap already exist.
+
+## Before submitting
+
+Replace pending links and team details; select only supported challenge entries. Label previously published demo pages in the video and present existing EasyChamp as a dependency. Confirm the final video is at most 120 seconds. [Evidence notes](campaign/EVIDENCE-AND-CLAIMS.md) retain the current browser-audio limitation and distinguish source behavior from recorded proof.
+
+[Official requirements](https://shellhacks-2026.devpost.com/) · [Official rules](https://shellhacks-2026.devpost.com/rules) · [Complete challenge matrix](campaign/RULES-AND-CHALLENGES.md)

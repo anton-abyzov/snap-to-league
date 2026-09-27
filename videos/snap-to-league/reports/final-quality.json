@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "landscape": {
+    "file": "snap-to-league-landscape-1080p.mp4",
+    "sha256": "4de10199f7670b0d62b6a97aa9fb57879fcb3be3ae24532efe718722c8441068",
+    "bytes": 61266616,
+    "durationSeconds": 110.0,
+    "width": 1920,
+    "height": 1080,
+    "hyperframesCheckPassed": true,
+    "independentVisualReview": "passed; bracket, endcard, caption/privacy corrections verified",
+    "audioReview": "local transcript compared with final source ranges; winner phrase excluded"
+  },
+  "vertical": {
+    "file": "snap-to-league-vertical-1080p.mp4",
+    "sha256": "c5977fcd709de0802ff4222ec9073f1619caf79fd276da938ce02ccd69e8a971",
+    "bytes": 23578487,
+    "durationSeconds": 36.5,
+    "width": 1080,
+    "height": 1920,
+    "hyperframesCheckPassed": true,
+    "independentVisualReview": "passed; bracket, endcard, caption/privacy corrections verified",
+    "audioReview": "local transcript compared with final source ranges; winner phrase excluded"
+  }
+}

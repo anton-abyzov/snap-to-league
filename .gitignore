@@ -4,3 +4,32 @@ data/
 .env
 .pytest_cache/
 *.egg-info/
+
+# Video working files, originals and licensed music stay in verified media archive.
+node_modules/
+videos/**/assets/audio/
+videos/**/assets/footage/
+videos/**/assets/vendor/
+videos/**/renders/
+videos/**/.hyperframes/
+videos/**/.media/
+videos/**/snapshots/
+videos/**/capture/
+videos/**/assets/proof/raw/
+
+# Reproducible scripts + selected public proof are committed; media shipped as release assets.
+videos/**/editorial/*.mp4
+videos/**/editorial/*.wav
+videos/**/editorial/*-concat.txt
+videos/**/editorial/*.cache.json
+videos/**/assets/proof/*.mp4
+videos/**/assets/proof/*.webm
+videos/**/assets/proof/*.mp3
+videos/**/reports/*check*.json
+videos/**/reports/CLAUDE-HANDOFF*.md
+videos/**/reports/encoded-*/
+videos/**/reports/*-audio.log
+videos/**/.private/
+videos/**/reports/*.log
+videos/**/frame.md
+videos/**/caption-skin.json

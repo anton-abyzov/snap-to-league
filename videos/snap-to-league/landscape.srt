@@ -1,0 +1,163 @@
+1
+00:00:00,080 --> 00:00:01,870
+This summer, World Cup came to
+
+2
+00:00:01,880 --> 00:00:02,400
+Miami.
+
+3
+00:00:02,520 --> 00:00:05,090
+Office cups, school leagues,
+
+4
+00:00:05,580 --> 00:00:07,800
+and even hackathon fellows.
+
+5
+00:00:07,880 --> 00:00:08,770
+and they still
+
+6
+00:00:09,040 --> 00:00:09,769
+use a piece of paper to
+
+7
+00:00:09,779 --> 00:00:11,000
+track all the results.
+
+8
+00:00:11,120 --> 00:00:13,290
+That's what inspired us to create
+
+9
+00:00:13,300 --> 00:00:14,230
+a solution
+
+10
+00:00:14,540 --> 00:00:16,290
+to convert it all into a
+
+11
+00:00:16,420 --> 00:00:18,630
+beautiful league management software.
+
+12
+00:00:19,060 --> 00:00:19,980
+Let's take a look.
+
+13
+00:00:20,180 --> 00:00:21,650
+Pick it from a library
+
+14
+00:00:22,760 --> 00:00:23,980
+or do it live.
+
+15
+00:00:24,230 --> 00:00:25,840
+Gemini reads the photo.
+
+16
+00:00:25,870 --> 00:00:27,805
+A second AI pass checks the
+
+17
+00:00:27,815 --> 00:00:28,643
+extraction.
+
+18
+00:00:28,653 --> 00:00:30,838
+Review the teams and scores before
+
+19
+00:00:30,848 --> 00:00:31,920
+publishing.
+
+20
+00:00:34,530 --> 00:00:35,320
+Look at this.
+
+21
+00:00:35,750 --> 00:00:37,900
+Panthers versus Shellhacks.
+
+22
+00:00:38,040 --> 00:00:39,110
+It knows that this is a
+
+23
+00:00:39,120 --> 00:00:39,970
+group stage,
+
+24
+00:00:40,560 --> 00:00:41,690
+shows the standings,
+
+25
+00:00:56,000 --> 00:00:57,840
+and we could read it out.
+
+26
+00:00:58,000 --> 00:00:59,790
+Standings after two games.
+
+27
+00:01:00,000 --> 00:01:01,970
+First, Panthers, three points.
+
+28
+00:01:02,060 --> 00:01:04,130
+Second, Organizers, one point.
+
+29
+00:01:04,440 --> 00:01:06,090
+Third, Wizards, one point.
+
+30
+00:01:06,260 --> 00:01:08,390
+Fourth, Shellhacks, zero points.
+
+31
+00:01:08,550 --> 00:01:09,340
+Here we go.
+
+32
+00:01:09,550 --> 00:01:10,420
+The games,
+
+33
+00:01:10,830 --> 00:01:11,680
+the bracket,
+
+34
+00:01:16,140 --> 00:01:18,850
+With the handwriting or typing,
+
+35
+00:01:19,800 --> 00:01:21,870
+convert it into beautiful
+
+36
+00:01:22,760 --> 00:01:23,780
+statistics
+
+37
+00:01:29,030 --> 00:01:29,860
+New result?
+
+38
+00:01:29,870 --> 00:01:31,820
+Add another photo and review what
+
+39
+00:01:31,830 --> 00:01:32,620
+changed.
+
+40
+00:01:32,630 --> 00:01:35,367
+Snap to League, built at ShellHacks
+
+41
+00:01:35,377 --> 00:01:37,920
+on the existing EasyChamp platform.

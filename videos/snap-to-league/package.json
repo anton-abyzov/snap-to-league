@@ -1,0 +1,18 @@
+{
+  "name": "snap-to-league",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.8.79 preview",
+    "check": "npx --yes hyperframes@0.8.79 check",
+    "render": "npx --yes hyperframes@0.8.79 render --fps 30 --quality delivery --strict --output renders/snap-to-league-landscape-1080p.mp4",
+    "publish": "npx --yes hyperframes@0.8.79 publish",
+    "postinstall": "node scripts/setup_runtime.mjs",
+    "check:portrait": "npx --yes hyperframes@0.8.79 check portrait",
+    "render:portrait": "npx --yes hyperframes@0.8.79 render portrait --fps 30 --quality delivery --strict --output renders/snap-to-league-vertical-1080p.mp4"
+  },
+  "devDependencies": {
+    "@hyperframes/core": "0.8.79",
+    "gsap": "3.15.0"
+  }
+}

@@ -1,0 +1,592 @@
+{
+  "capturedAt": "2026-09-27T06:48:34.332481+00:00",
+  "headless": true,
+  "mockedResponses": false,
+  "newEasyChampPublications": 0,
+  "assets": [
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-mobile-clean-before.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:48:09.648243+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 150236,
+      "sha256": "ba1ffa909683d24cd5c3fa4d71a04c5dd27d245c9bdc0e444d5c701873392f42"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/demo-mobile-clean-update.png",
+      "source": "locally authored synthetic score board",
+      "capturedAt": "2026-09-27T06:48:09.722496+00:00",
+      "claim": "Synthetic input image rendered for real live import; not venue footage.",
+      "bytes": 160955,
+      "sha256": "9009d5ba3a4cb0f454a372b856094600f7ef5a72a69292c065a51e85892d0af6"
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.webm",
+      "source": "https://snap.easychamp.com",
+      "capturedAt": "2026-09-27T06:48:34.304800+00:00",
+      "claim": "Video-only real browser capture of upload, fresh AI read, editable score and next-photo update; no screenshots during recording, no readout action.",
+      "viewport": "430x900@1x",
+      "timeline": "videos/snap-to-league/reports/portrait-clean-timeline.json",
+      "bytes": 2321097,
+      "sha256": "26490d05b4595d547f8a95281e17dc49ee9e6a2dac5e710756caf587e4fcea58",
+      "frameVerification": {
+        "timesSeconds": [
+          6,
+          13,
+          25
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false,
+        "verifiedAt": "2026-09-27T06:51:30.877166+00:00"
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.mp4",
+      "source": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.webm",
+      "capturedAt": "2026-09-27T06:51:30.877605+00:00",
+      "claim": "H264 video-only recording derivative; no content/speed edits. 2x variant uses Lanczos upscale from430x900 to860x1800.",
+      "bytes": 2321307,
+      "sha256": "c87bb908df0f2a97f4e16d24080e4dd6e0b50ef94677bf4e6ec3cd5276017e02",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 430,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "27.400000",
+          "size": "2321307"
+        }
+      },
+      "frameVerification": {
+        "timesSeconds": [
+          6,
+          13,
+          25
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false
+      }
+    },
+    {
+      "file": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update-2x.mp4",
+      "source": "videos/snap-to-league/assets/proof/portrait-clean-live-import-and-update.webm",
+      "capturedAt": "2026-09-27T06:51:30.900219+00:00",
+      "claim": "H264 video-only recording derivative; no content/speed edits. 2x variant uses Lanczos upscale from430x900 to860x1800.",
+      "bytes": 6439887,
+      "sha256": "acad801321e30f1e43870490f8d64a250b33baa1c39d42d110d3d84a4751f306",
+      "mediaProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 860,
+            "height": 1800
+          }
+        ],
+        "format": {
+          "duration": "27.400000",
+          "size": "6439887"
+        }
+      },
+      "frameVerification": {
+        "timesSeconds": [
+          6,
+          13,
+          25
+        ],
+        "fullFrameContent": true,
+        "grayPadding": false
+      }
+    }
+  ],
+  "jobs": {
+    "3b67326d821c": {
+      "id": "3b67326d821c",
+      "status": "done",
+      "created": 1790491693.6544,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 5.3,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "ba1ffa909683d24c",
+          "competition": "ShellHacks Mobile Cup",
+          "sport": "soccer",
+          "check": "agrees"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Mobile Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": null,
+            "awayScore": null,
+            "status": "scheduled",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "5v5 soccer"
+        ],
+        "uncertain": [
+          "Team name spelled both 'Roary's Raiders' and 'Roarys Raiders' on screen."
+        ]
+      },
+      "flags": [
+        {
+          "level": "warn",
+          "message": "Team name spelled both 'Roary's Raiders' and 'Roarys Raiders' on screen.",
+          "source": "astra"
+        }
+      ],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 1,
+          "W": 0,
+          "D": 1,
+          "L": 0,
+          "GF": 2,
+          "GA": 2,
+          "GD": 0,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 1,
+          "W": 0,
+          "D": 0,
+          "L": 1,
+          "GF": 1,
+          "GA": 3,
+          "GD": -2,
+          "Pts": 0
+        }
+      ],
+      "review": null,
+      "seconds": 5.3,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 0,
+        "finished": true
+      },
+      "seconds_checked": 16.1,
+      "completedReceiptReadAt": "2026-09-27T06:51:30.877506+00:00"
+    },
+    "95d26e9740e6": {
+      "id": "95d26e9740e6",
+      "status": "done",
+      "created": 1790491705.107597,
+      "reader": "google/gemini-3.8-flash",
+      "photos": [
+        {
+          "status": "done",
+          "seconds": 4.5,
+          "matches": 4,
+          "reader": "gemini-3.8-flash",
+          "error": null,
+          "hash": "9009d5ba3a4cb0f4",
+          "competition": "ShellHacks Mobile Cup",
+          "sport": "soccer",
+          "check": "differs"
+        }
+      ],
+      "extraction": {
+        "competition": "ShellHacks Mobile Cup",
+        "sport": "soccer",
+        "table": [],
+        "leaderboard": null,
+        "teams": [
+          "404 Sleep Not Found",
+          "Golden Panthers",
+          "Roary's Raiders",
+          "Shell Shockers"
+        ],
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "rules_notes": [
+          "5v5 soccer",
+          "A missing apostrophe \u2014 same team (Roary's Raiders / Roarys Raiders)"
+        ],
+        "uncertain": []
+      },
+      "flags": [
+        {
+          "level": "info",
+          "message": "Read \"Roarys Raiders\" as Roary's Raiders",
+          "source": "match"
+        },
+        {
+          "level": "warn",
+          "message": "A second read saw Golden Panthers v Roary's Raiders as 1-0; check the photo",
+          "source": "second"
+        }
+      ],
+      "standings": [
+        {
+          "team": "Golden Panthers",
+          "P": 2,
+          "W": 2,
+          "D": 0,
+          "L": 0,
+          "GF": 4,
+          "GA": 1,
+          "GD": 3,
+          "Pts": 6
+        },
+        {
+          "team": "Shell Shockers",
+          "P": 2,
+          "W": 1,
+          "D": 0,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 3
+        },
+        {
+          "team": "404 Sleep Not Found",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 3,
+          "GA": 4,
+          "GD": -1,
+          "Pts": 1
+        },
+        {
+          "team": "Roary's Raiders",
+          "P": 2,
+          "W": 0,
+          "D": 1,
+          "L": 1,
+          "GF": 2,
+          "GA": 3,
+          "GD": -1,
+          "Pts": 1
+        }
+      ],
+      "review": {
+        "matches": [
+          {
+            "home": "Golden Panthers",
+            "away": "Shell Shockers",
+            "homeScore": 3,
+            "awayScore": 1,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": [
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "4'",
+                "number": null
+              },
+              {
+                "player": "Maya",
+                "side": "home",
+                "count": 1,
+                "minute": "19'",
+                "number": null
+              },
+              {
+                "player": "Lu\u00eds",
+                "side": "home",
+                "count": 1,
+                "minute": "30'",
+                "number": null
+              },
+              {
+                "player": "Kenji",
+                "side": "away",
+                "count": 1,
+                "minute": "12'",
+                "number": null
+              }
+            ]
+          },
+          {
+            "home": "Roary's Raiders",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 2,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": null,
+            "goals": []
+          },
+          {
+            "home": "Golden Panthers",
+            "away": "Roary's Raiders",
+            "homeScore": 1,
+            "awayScore": 0,
+            "status": "played",
+            "when": null,
+            "venue": null,
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Golden Panthers",
+            "goals": []
+          },
+          {
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "homeScore": 2,
+            "awayScore": 1,
+            "status": "played",
+            "when": "Sunday 1pm",
+            "venue": "Panther Pit",
+            "stage": "group",
+            "group": "A",
+            "round": null,
+            "winner": "Shell Shockers",
+            "goals": []
+          }
+        ],
+        "changes": [
+          {
+            "kind": "result",
+            "home": "Shell Shockers",
+            "away": "404 Sleep Not Found",
+            "before": "not played",
+            "after": "2-1"
+          }
+        ],
+        "renamed": {}
+      },
+      "seconds": 4.5,
+      "checking": {
+        "model": "gpt-6-astra",
+        "done": 1,
+        "total": 1,
+        "differences": 1,
+        "finished": true
+      },
+      "seconds_checked": 13.1,
+      "completedReceiptReadAt": "2026-09-27T06:51:30.877588+00:00"
+    }
+  },
+  "network": [],
+  "errors": [],
+  "notes": [
+    "Replacement for rejected portrait recording. Browser430x900,DPR1;recording430x900. No screenshots or viewport changes occurred while recording.",
+    "Natural timings retained. Two fresh uncached imports. Actual yellow unsure card visible, then actual Name matched card after update. No account/publish/voice actions."
+  ]
+}

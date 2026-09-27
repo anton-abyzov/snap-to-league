@@ -1,0 +1,71 @@
+1
+00:00:00,080 --> 00:00:00,970
+and they still
+
+2
+00:00:01,240 --> 00:00:01,969
+use a piece of paper to
+
+3
+00:00:01,979 --> 00:00:03,200
+track all the results.
+
+4
+00:00:03,400 --> 00:00:04,870
+Pick it from a library
+
+5
+00:00:05,980 --> 00:00:07,200
+or do it live.
+
+6
+00:00:07,450 --> 00:00:09,060
+Gemini reads the photo.
+
+7
+00:00:09,090 --> 00:00:11,025
+A second AI pass checks the
+
+8
+00:00:11,035 --> 00:00:11,863
+extraction.
+
+9
+00:00:11,873 --> 00:00:14,058
+Review the teams and scores before
+
+10
+00:00:14,068 --> 00:00:15,140
+publishing.
+
+11
+00:00:17,760 --> 00:00:18,830
+It knows that this is a
+
+12
+00:00:18,840 --> 00:00:19,690
+group stage,
+
+13
+00:00:20,280 --> 00:00:21,410
+shows the standings,
+
+14
+00:00:21,570 --> 00:00:22,360
+Here we go.
+
+15
+00:00:22,570 --> 00:00:23,440
+The games,
+
+16
+00:00:23,850 --> 00:00:24,700
+the bracket,
+
+17
+00:00:26,430 --> 00:00:28,220
+Standings after two games.
+
+18
+00:00:28,430 --> 00:00:30,150
+First, Panthers, three points.

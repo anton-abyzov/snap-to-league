@@ -1,0 +1,72 @@
+[
+  {
+    "start": 0,
+    "duration": 3.2,
+    "audio": "9045",
+    "source_in": 30.14,
+    "picture": "9051",
+    "style": "paper",
+    "heading": "STILL TRACKING\nSCORES ON PAPER?",
+    "subheading": "Snap to League"
+  },
+  {
+    "start": 3.2,
+    "duration": 4,
+    "audio": "9049",
+    "source_in": 11.6,
+    "picture": "9051",
+    "style": "phone",
+    "heading": "SNAP THE BOARD.",
+    "subheading": "Photo \u2192 review \u2192 share"
+  },
+  {
+    "start": 7.2,
+    "duration": 10.42,
+    "audio": "bridge-a",
+    "source_in": 0,
+    "picture": "import",
+    "style": "proof",
+    "heading": "LET AI READ IT.\nYOU REVIEW IT.",
+    "subheading": "Live capture \u00b7 Demo data"
+  },
+  {
+    "start": 17.62,
+    "duration": 3.79,
+    "audio": "9049",
+    "source_in": 57.16,
+    "picture": "9049",
+    "style": "phone",
+    "heading": "SEE THE\nSTANDINGS.",
+    "subheading": "Original on-phone demo"
+  },
+  {
+    "start": 21.41,
+    "duration": 5.02,
+    "audio": "9056",
+    "source_in": 17.1,
+    "picture": "snap-bracket",
+    "style": "phone",
+    "heading": "SEE THE\nBRACKET.",
+    "subheading": "Separate live capture \u00b7 Demo data"
+  },
+  {
+    "start": 26.43,
+    "duration": 3.72,
+    "audio": "9049",
+    "source_in": 66.96,
+    "picture": "9049",
+    "style": "phone",
+    "heading": "HEAR THE\nRESULTS.",
+    "subheading": "Actual in-product audio \u00b7 ElevenLabs"
+  },
+  {
+    "start": 30.15,
+    "duration": 6.35,
+    "audio": null,
+    "source_in": 0,
+    "picture": "9051",
+    "style": "end",
+    "heading": "PLAY THE GAME.\nKEEP THE STORY.",
+    "subheading": "snap.easychamp.com"
+  }
+]

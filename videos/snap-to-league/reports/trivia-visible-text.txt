@@ -1,0 +1,28 @@
+EASYCHAMP
+SNAP
+TO
+LEAGUE
+Updated 02:35 AM
+Midnight Trivia · Demo
+
+Leaderboard · 5 entries
+
+LEADERBOARD
+1
+Sponsors
+32 points
+1
+Mentors
+32 points
+3
+Hackers
+30 points
+#	NAME	R1	R2	R3	R4	TOTAL
+1	Mentors	8	6	9	9	32
+1	Sponsors	9	8	8	7	32
+3	Hackers	7	9	6	8	30
+4	Organizers	6	7	7	5	25
+5	WiFi Down	5	6	4	7	22
+READ OUT
+TURN ON THE ANNOUNCER
+Leave this board on a TV: every new result is announced out loud.
