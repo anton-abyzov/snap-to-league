@@ -66,7 +66,7 @@ async def main():
         await pg.click("#read")
         await wait_review(pg)
         log["update"] = await pg.evaluate("[...document.querySelectorAll('.change')].map(c => c.innerText.replace(/\\n/g, ' '))")
-        await pg.evaluate("document.getElementById('review').scrollIntoView()")
+        await pg.evaluate("window.scrollTo(0, document.getElementById('changes-box').getBoundingClientRect().top + window.scrollY - 190)")
         await pg.screenshot(path=OUT / "07-update-changes-phone.png")
 
         # bracket on desktop: table and bracket view

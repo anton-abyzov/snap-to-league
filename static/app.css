@@ -165,3 +165,7 @@ details pre { max-height: 320px; overflow: auto; font: 12px/1.45 var(--font-mono
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+@media (max-width: 560px) {
+  .bar .chips .chip:not(:first-child) { display: none; }
+  .bar { padding-block: 8px; }
+}
