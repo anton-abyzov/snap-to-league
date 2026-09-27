@@ -262,3 +262,6 @@ table.st td.muted-cell { color: var(--color-muted); font-weight: 400; font-size:
   .ticker-track { animation: none; }
   .board .row, .board-foot, .hero-copy > * { opacity: 1; transform: none; }
 }
+
+#reader-box { max-width: 460px; }
+#reader-box:not(.ready) { display: none; }

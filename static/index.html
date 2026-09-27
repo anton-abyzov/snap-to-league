@@ -39,11 +39,17 @@
       </div>
       <div class="actions small">
         <span class="muted">No board handy?</span>
-        <button class="linkbtn" data-sample="groups" type="button">Try a two-group cup</button>
+        <button class="linkbtn" data-sample="shellhacks-groups" type="button">ShellHacks Break Cup</button>
+        <button class="linkbtn" data-sample="shellhacks-smash" type="button">Midnight Smash</button>
+        <button class="linkbtn" data-sample="groups" type="button">a two-group cup</button>
         <button class="linkbtn" data-sample="matchcard" type="button">a match card</button>
         <button class="linkbtn" data-sample="bracket" type="button">a bracket</button>
         <button class="linkbtn" data-sample="sheet1,sheet2" type="button">two scoresheets</button>
       </div>
+      <label class="field" id="reader-box">Photo reader
+      <select id="reader"></select>
+      <span class="muted small" id="reader-note"></span>
+    </label>
       <p id="league-note" class="muted small" hidden></p>
     </div>
     <div class="hero-art" aria-hidden="true">
@@ -77,10 +83,7 @@
       <button class="btn" id="read" type="button">Read photos</button>
       <button class="linkbtn" id="clear" type="button">Start over</button>
     </div>
-    <label class="field" id="reader-box" hidden>Photo reader
-      <select id="reader"></select>
-      <span class="muted small" id="reader-note"></span>
-    </label>
+
   </section>
 
   <p id="error" class="err" hidden role="alert"></p>
@@ -176,6 +179,7 @@ fetch("/api/health").then((r) => r.json()).then((h) => {
     $("reader").value = h.choices.some((c) => c.id === saved) ? saved : h.primary;
     $("reader-note").textContent = h.second ? `${h.second} checks every read and flags any disagreement.` : "";
     $("reader-box").hidden = false;
+    $("reader-box").classList.add("ready");
   }
   $("pin-box").hidden = !h.pin;
   $("pin").value = store.get("pin", "");
@@ -241,7 +245,7 @@ function startJob() {
   state.files.forEach((f) => form.append("images", f.file, f.file.name || "photo.jpg"));
   if (state.samples.length) form.append("samples", state.samples.join(","));
   if (state.league) form.append("leagueId", state.league.id);
-  if (!$("reader-box").hidden) form.append("reader", $("reader").value);
+  if ($("reader-box").classList.contains("ready")) form.append("reader", $("reader").value);
   $("error").hidden = true; $("progress").hidden = false; $("read").disabled = true;
   show("capture"); $("capture").hidden = true; $("steps").hidden = true;
   renderTray({ status: "reading", photos: [] });

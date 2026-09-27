@@ -184,8 +184,10 @@ def build_payload(league: dict) -> dict:
                 "Fixtures": [fixture(m, i + 1) for i, m in enumerate(ms)],
             } for g, ms in groups.items()],
         })
-    if knockout:
-        rounds = knockout_rounds(knockout)
+    third = [m for m in knockout if re.search(r"3rd|third", f"{m.round or ''} {m.stage}".casefold())]
+    knockout = [m for m in knockout if m not in third]
+    if knockout or third:
+        rounds = knockout_rounds(knockout) if knockout else [[]]
         double = any(re.search(r"loser|grand", (m.round or "").casefold()) for m in knockout)
         ko_fixtures, base, seq = [], 2 * len(rounds[0]), 0
         for ri, rms in enumerate(rounds):
@@ -197,13 +199,19 @@ def build_payload(league: dict) -> dict:
                 f["RoundNumber"] = ri + 1
                 f["MatchDayName"] = m.round if double else ROUND_NAMES.get(depth, m.round or "knockout")
                 ko_fixtures.append(f)
+        for m in third:  # EasyChamp draws the 3rd-place game beside the final, outside the tree
+            seq += 1
+            f = fixture(m, base + seq)
+            f["MatchDay"] = f["RoundNumber"] = len(rounds)
+            f["MatchDayName"] = "3rd_place_playoff"
+            ko_fixtures.append(f)
         stages.append({
             "Id": f"snap:{lid}:stage:knockout", "Name": "Knockout", "Type": "playoff", "Order": 2,
-            "RoundCount": 1, "TeamCount": len({t for m in knockout for t in (m.home, m.away)}), "GroupCount": 1,
+            "RoundCount": 1, "TeamCount": len({t for m in knockout + third for t in (m.home, m.away)}), "GroupCount": 1,
             "Groups": [{
                 "Id": f"snap:{lid}:group:knockout", "Name": "Knockout",
-                "TeamIds": list(dict.fromkeys(team_id[t] for m in knockout for t in (m.home, m.away))),
-                "FixturesCount": len(knockout),
+                "TeamIds": list(dict.fromkeys(team_id[t] for m in knockout + third for t in (m.home, m.away))),
+                "FixturesCount": len(ko_fixtures),
                 "Fixtures": ko_fixtures,
             }],
         })
