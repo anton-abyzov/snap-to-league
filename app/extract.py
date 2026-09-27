@@ -76,11 +76,12 @@ def astra(image: Path) -> str:
         return out.read_text()
 
 
-def gemini(image: Path) -> str:
+def gemini(image: Path, model: str | None = None) -> str:
+    """Google's Gemini API directly (what the MLH Gemini prize asks for). Needs GEMINI_API_KEY."""
     key = os.environ.get("GEMINI_API_KEY")
     if not key:
         raise ExtractError("GEMINI_API_KEY is not set")
-    model = os.environ.get("GEMINI_MODEL", "gemini-flash-latest")
+    model = model or os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
     with tempfile.TemporaryDirectory() as tmp:
         image = prepare(image, Path(tmp))
         data = image.read_bytes()
@@ -177,6 +178,8 @@ def disagreements(first: Extraction, second: Extraction, second_name: str) -> li
 
 
 def _read(name: str, image: Path, model: str | None = None) -> tuple[Extraction, list[Row]]:
+    if name == "openrouter" and model and model.startswith("google/") and os.environ.get("GEMINI_API_KEY"):
+        return _parse(gemini(image, model.split("/", 1)[1]))  # Gemini through Google's own API
     if name == "openrouter" and model:
         return _parse(openrouter(image, model))
     return _parse(BACKENDS[name](image))
