@@ -265,3 +265,4 @@ table.st td.muted-cell { color: var(--color-muted); font-weight: 400; font-size:
 
 #reader-box { max-width: 460px; }
 #reader-box:not(.ready) { display: none; }
+#reader-note { text-transform: none; letter-spacing: 0; font: 400 13px/1.4 var(--font-body); }
