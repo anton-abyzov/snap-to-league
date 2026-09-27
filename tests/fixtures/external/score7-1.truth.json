@@ -2,7 +2,7 @@
  "source_url": "https://www.score7.io/tournaments/uwucyru8rf/stages/4139616",
  "matches": [
   {
-   "id": "4 @ 0",
+   "id": "1",
    "home": "S.D Ribadeo",
    "away": "Pto de Vega C.F",
    "homeScore": 4,
@@ -10,7 +10,7 @@
    "winner": "S.D Ribadeo"
   },
   {
-   "id": "2 @ 0",
+   "id": "2",
    "home": "A.D. Rio Ouro \"A\"",
    "away": "S.D Ribadeo",
    "homeScore": 2,
@@ -18,7 +18,7 @@
    "winner": "A.D. Rio Ouro \"A\""
   },
   {
-   "id": "0 @ 4",
+   "id": "3",
    "home": "Pto de Vega C.F",
    "away": "A.D. Rio Ouro \"A\"",
    "homeScore": 0,
@@ -26,7 +26,7 @@
    "winner": "A.D. Rio Ouro \"A\""
   },
   {
-   "id": "1 @ 1",
+   "id": "4",
    "home": "C.D. Valdés Atl \"B\"",
    "away": "A.D. Rio Ouro \"B\"",
    "homeScore": 1,
@@ -34,7 +34,7 @@
    "winner": null
   },
   {
-   "id": "0 @ 1",
+   "id": "5",
    "home": "A.D. Rio Ouro \"B\"",
    "away": "Andés C.F",
    "homeScore": 0,
@@ -42,7 +42,7 @@
    "winner": "Andés C.F"
   },
   {
-   "id": "4 @ 0",
+   "id": "6",
    "home": "Andés C.F",
    "away": "C.D. Valdés Atl \"B\"",
    "homeScore": 4,

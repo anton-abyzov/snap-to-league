@@ -3,7 +3,7 @@
  "viewport": "390x844 mobile (dpr 2)",
  "matches": [
   {
-   "id": "2 @ 0",
+   "id": "1",
    "home": "A.D. Rio Ouro \"A\"",
    "away": "S.D Ribadeo",
    "homeScore": 2,
@@ -11,7 +11,7 @@
    "winner": "A.D. Rio Ouro \"A\""
   },
   {
-   "id": "1 @ 0",
+   "id": "2",
    "home": "C.D. Valdés Atl \"A\"",
    "away": "Andés C.F",
    "homeScore": 1,
@@ -19,7 +19,7 @@
    "winner": "C.D. Valdés Atl \"A\""
   },
   {
-   "id": "4 @ 0",
+   "id": "3",
    "home": "A.D. Rio Ouro \"A\"",
    "away": "C.D. Valdés Atl \"A\"",
    "homeScore": 4,

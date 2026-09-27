@@ -61,7 +61,7 @@
     <div class="strip" id="strip"></div>
     <div class="progress" id="progress" hidden><i></i></div>
     <div class="actions">
-      <button class="btn" id="read" type="button">Read <span id="read-n">0</span> photos</button>
+      <button class="btn" id="read" type="button">Read photos</button>
       <button class="linkbtn" id="clear" type="button">Start over</button>
     </div>
     <label class="field" id="reader-box" hidden>Photo reader
@@ -194,7 +194,6 @@ function shotHtml(i, url, status, label, removable) {
 function renderTray(job) {
   const photos = state.files.map((f) => f.url).concat(state.samples.map((s) => `/static/sample-${s === "board" || s === "bracket" ? s : s}.jpg`));
   $("tray").hidden = !photos.length;
-  $("read-n").textContent = photos.length;
   $("read").textContent = photos.length === 1 ? "Read 1 photo" : `Read ${photos.length} photos`;
   $("read").hidden = !!job || !!state.samples.length;
   $("tray-title").textContent = job ? (job.status === "done" ? "Photos read" : "Reading photos") : "Photos";
