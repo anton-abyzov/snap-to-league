@@ -217,7 +217,7 @@ function renderAccount() {
   $("publish").textContent = u ? (lb ? "Share the leaderboard" : "Publish to EasyChamp") : (lb ? "Sign in and share" : "Sign in and publish");
 }
 $("account").addEventListener("click", (e) => {
-  if (e.target.id === "signin") { savePending(false); signIn(); }
+  if (e.target.id === "signin") { savePending(false); signIn().catch((err) => { $("error").textContent = err.message; $("error").hidden = false; }); }
   if (e.target.id === "signout") { signOut(); renderAccount(); }
 });
 // The sign-in trip leaves the page, so the draft on screen is kept for this tab and restored after.
@@ -582,9 +582,20 @@ $("speak").addEventListener("click", async () => {
 
 // ---------- publish ----------
 $("publish").addEventListener("click", () => publishNow());
+// Back from the sign-in page restores this page from cache with the button still waiting: reset it.
+addEventListener("pageshow", (e) => { if (e.persisted) { $("publish").disabled = false; renderAccount(); } });
+async function goSignIn() {
+  savePending(true);
+  $("publish").disabled = true; $("publish").textContent = "Opening EasyChamp sign-in...";
+  try { await signIn(); }
+  catch (e) { $("publish").disabled = false; renderAccount(); $("error").textContent = e.message || "Could not open EasyChamp sign-in. Try again."; $("error").hidden = false; }
+}
 async function publishNow() {
-  let token = await accessToken();
-  if (!token) { savePending(true); return signIn(); }
+  $("error").hidden = true;
+  let token = null;
+  try { token = await accessToken(); } catch (e) { token = null; }
+  if (!token) return goSignIn();
+  $("publish").textContent = "Publishing to EasyChamp...";
   const auth = { authorization: `Bearer ${token}` };
   $("publish").disabled = true;
   try {
@@ -595,7 +606,7 @@ async function publishNow() {
     if (!r.ok) throw new Error((await r.json()).detail || "Could not save the league");
     state.league = await r.json();
     r = await fetch(`/api/leagues/${state.league.id}/publish`, { method: "POST", headers: auth });
-    if (r.status === 401) { signOut(); savePending(true); return signIn(); }
+    if (r.status === 401) { signOut(); return goSignIn(); }
     const pub = await r.json();
     if (!r.ok) throw new Error(pub.detail || "Could not publish");
     const board = `${location.origin}/l/${state.league.id}`;
@@ -618,7 +629,7 @@ async function publishNow() {
     state.files = []; state.samples = [];
     show("done");
   } catch (e) { $("error").textContent = e.message; $("error").hidden = false; }
-  finally { $("publish").disabled = false; }
+  finally { if (!$("publish").textContent.startsWith("Opening")) { $("publish").disabled = false; renderAccount(); } }
 }
 $("again").addEventListener("click", () => { state.files = []; state.samples = []; renderTray(); show("capture"); keepInView($("capture")); });
 

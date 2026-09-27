@@ -23,7 +23,15 @@ export function user() {
   return { name: s.name, email: s.email };
 }
 
+async function ready() {
+  if (cfg && cfg.issuer && cfg.clientId) return cfg;
+  const h = await (await fetch("/api/health", { cache: "no-store" })).json();  // the page loaded without it
+  if (!h.auth) throw new Error("EasyChamp sign-in is not available right now. Reload the page and try again.");
+  return (cfg = h.auth);
+}
+
 export async function signIn() {
+  await ready();
   const verifier = random(48), state = random(16);
   const challenge = b64url(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
   sessionStorage.setItem(FLOW, JSON.stringify({ verifier, state }));
@@ -40,6 +48,7 @@ function keep(tok) {
 }
 
 async function tokenCall(body) {
+  await ready();
   const r = await fetch(`${cfg.issuer}/protocol/openid-connect/token`, { method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ client_id: cfg.clientId, ...body }) });
   if (!r.ok) throw new Error(`sign-in failed (${r.status})`);
