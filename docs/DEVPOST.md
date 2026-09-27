@@ -8,7 +8,7 @@
 
 **Source:** [anton-abyzov/snap-to-league](https://github.com/anton-abyzov/snap-to-league)
 
-**Video:** `PENDING_FINAL_JUDGE_VIDEO_URL` — maximum 120 seconds
+**Video:** [110-second unlisted demo](https://www.youtube.com/watch?v=KYboiI2Xmfw) — guest playback and embedding verified; maximum 120 seconds
 
 **Team:** Anton Abyzov and Anna Abyzova
 

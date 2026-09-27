@@ -1,0 +1,26 @@
+{
+  "url": "https://www.youtube.com/watch?v=KYboiI2Xmfw",
+  "state": "PUBLISHED",
+  "visibility": "unlisted",
+  "provider": "YouTube via Postiz",
+  "postId": "cmujhmh8i0040ouehy8v4lide",
+  "integrationId": "cmgyq88pu0001po4fdvq4fvii",
+  "channelName": "Anton Abyzov: AI Power",
+  "channelHandle": "@AntonAbyzov",
+  "channelId": "UCyTfblxO-5A3RfHFzQAzq2w",
+  "title": "Snap to League \u2014 Paper Results to Live Competitions | ShellHacks 2026",
+  "sourceSha256": "4de10199f7670b0d62b6a97aa9fb57879fcb3be3ae24532efe718722c8441068",
+  "guestVerification": {
+    "playabilityStatus": "OK",
+    "playableInEmbed": true,
+    "isUnlisted": true,
+    "durationSeconds": 110.041,
+    "playbackProgressSeconds": [
+      5.03,
+      9.21
+    ],
+    "readyState": 4,
+    "checkedAt": "2026-09-27T07:21:52.377062+00:00",
+    "browser": "headless Chromium"
+  }
+}
