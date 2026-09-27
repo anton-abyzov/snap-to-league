@@ -170,7 +170,7 @@ def test_second_reader_disagreement():
     same = Extraction(matches=[Match(home="Sharks", away="Lions", homeScore=1, awayScore=3, status="played")])
     other = Extraction(matches=[Match(home="Lions", away="Sharks", homeScore=3, awayScore=4, status="played")])
     assert disagreements(a, same, "astra") == []
-    assert disagreements(a, other, "astra") == ["astra read Lions v Sharks as 3-4; check the photo"]
+    assert disagreements(a, other, "astra") == ["A second read saw Lions v Sharks as 3-4; check the photo"]
 
 
 def test_combine_two_sheets_merges_names_results_and_scorers():

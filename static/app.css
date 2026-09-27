@@ -266,3 +266,14 @@ table.st td.muted-cell { color: var(--color-muted); font-weight: 400; font-size:
 #reader-box { max-width: 460px; }
 #reader-box:not(.ready) { display: none; }
 #reader-note { text-transform: none; letter-spacing: 0; font: 400 13px/1.4 var(--font-body); }
+
+/* sticky "read" bar once photos are chosen: the next step is always under the thumb */
+.actionbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--color-line-strong); box-shadow: 0 -10px 30px -18px rgba(15, 20, 40, .45); animation: barup .35s var(--ease-overshoot) both; }
+.actionbar-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+.actionbar .btn { min-height: 52px; }
+.actionbar-hint { max-width: 1120px; margin: 6px auto 0; font-size: var(--text-caption); color: var(--color-muted); text-align: center; }
+body.has-actionbar .wrap { padding-bottom: 150px; }
+@keyframes barup { from { transform: translateY(100%); } }
+body.has-actionbar #read { display: none; }

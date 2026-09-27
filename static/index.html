@@ -148,6 +148,14 @@
     <p class="muted small">Kept on this device only. Sign in to EasyChamp to keep them in your account.</p>
   </section>
 
+  <div class="actionbar" id="actionbar" hidden>
+    <div class="actionbar-inner">
+      <label class="btn ghost" for="photos">+ Add a page</label>
+      <button class="btn" id="read-now" type="button">Read 1 photo</button>
+    </div>
+    <p class="actionbar-hint" id="actionbar-hint">Add every page of the board, then read them together.</p>
+  </div>
+
   <footer class="foot">
     <span>Built at ShellHacks 2026 on <a href="https://easychamp.com" rel="noopener">EasyChamp</a></span>
     <a href="/stats">Import stats</a>
@@ -169,7 +177,7 @@ let health = {};
 fetch("/api/health").then((r) => r.json()).then((h) => {
   health = h;
   $("chips").innerHTML = [
-    [h.second ? `${(h.choices.find((c) => c.id === h.primary) || {}).label || h.readers} · ${h.second} check` : `Reader: ${h.readers}`, true],
+    [(h.choices.find((c) => c.id === h.primary) || {}).label || "AI reader", true],
     [h.gemini === "google" ? "Gemini API" : "", !!h.gemini],
     [h.publish === "live" ? "EasyChamp live" : "EasyChamp dry run", h.publish === "live"],
     [h.voice ? "ElevenLabs voice" : "", h.voice],
@@ -178,7 +186,7 @@ fetch("/api/health").then((r) => r.json()).then((h) => {
     const saved = store.get("reader", null);
     $("reader").innerHTML = h.choices.map((c) => `<option value="${esc(c.id)}">${esc(c.label)}${c.open ? " · open model" : ""} · about $${c.cost} a photo</option>`).join("");
     $("reader").value = h.choices.some((c) => c.id === saved) ? saved : h.primary;
-    $("reader-note").textContent = h.second ? `${h.second} checks every read and flags any disagreement.` : "";
+    $("reader-note").textContent = h.checked ? "Every read is double-checked; anything unsure gets a yellow card." : "";
     $("reader-box").hidden = false;
     $("reader-box").classList.add("ready");
   }
@@ -204,12 +212,14 @@ async function shrink(file) {
   } catch (e) { return file; }
 }
 async function addFiles(list) {
+  state.samples = [];
   const room = (health.maxPhotos || 10) - state.files.length - state.samples.length;
   for (const f of [...list].slice(0, Math.max(0, room))) {
     const small = await shrink(f);
     state.files.push({ file: small, url: URL.createObjectURL(small) });
   }
   renderTray();
+  keepInView($("tray"));
 }
 $("photos").addEventListener("change", async (e) => { await addFiles(e.target.files); e.target.value = ""; });
 $("library").addEventListener("change", async (e) => { await addFiles(e.target.files); e.target.value = ""; });
@@ -229,7 +239,15 @@ function shotHtml(i, url, status, label, removable) {
     ${removable ? `<button class="x" data-rm="${i}" aria-label="Remove photo ${i + 1}" type="button">&times;</button>` : ""}
     <div class="bar-p" style="width:0"></div><figcaption class="state">${esc(label)}</figcaption></figure>`;
 }
+function renderActionbar(job) {
+  const n = state.files.length;
+  const show = n > 0 && !job && !state.samples.length;
+  $("actionbar").hidden = !show;
+  document.body.classList.toggle("has-actionbar", show);
+  $("read-now").textContent = n === 1 ? "Read 1 photo" : `Read ${n} photos`;
+}
 function renderTray(job) {
+  renderActionbar(job);
   const photos = state.files.map((f) => f.url).concat(state.samples.map((s) => `/static/sample-${s}.jpg`));
   $("tray").hidden = !photos.length;
   $("read").textContent = photos.length === 1 ? "Read 1 photo" : `Read ${photos.length} photos`;
@@ -250,6 +268,7 @@ $("strip").addEventListener("click", (e) => {
   state.files.splice(+i, 1); renderTray();
 });
 $("read").addEventListener("click", () => startJob());
+$("read-now").addEventListener("click", () => startJob());
 
 // ---------- progress: one clock per import, honest phases, no layout jumps ----------
 const run = { t0: 0, phase: "", upload: 0, readStart: 0, photos: 0, done: 0, raf: 0 };
@@ -288,6 +307,7 @@ function keepInView(el) {
 }
 
 function startJob(attempt = 0) {
+  $("actionbar").hidden = true; document.body.classList.remove("has-actionbar");
   const form = new FormData();
   state.files.forEach((f) => form.append("images", f.file, f.file.name || "photo.jpg"));
   if (state.samples.length) form.append("samples", state.samples.join(","));
@@ -368,22 +388,22 @@ function loadJob(job) {
     $("changes-box").hidden = true;
   }
   const readers = [...new Set(job.photos.map((p) => p.reader).filter(Boolean))].join(", ");
-  $("meta").textContent = `${ex.matches.length} matches from ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s · ${readers}`;
+  $("meta").textContent = `${ex.matches.length} matches from ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s`;
   renderFlags(job);
   renderMatches(); show("review");
   keepInView($("review"));
 }
 
 function renderFlags(job) {
-  const label = { astra: "The reader is unsure", second: "Second reader disagrees", merge: "Photos disagree", match: "Name matched", check: "Check" };
+  const label = { astra: "The reader is unsure", second: "Double-check", merge: "Photos disagree", match: "Name matched", check: "Check" };
   $("flags").innerHTML = job.flags.map((f, i) => `<div class="flag ${f.level}" style="--i:${i}"><span class="card"></span><div><small>${label[f.source] || "Check"}</small>${esc(f.message)}</div></div>`).join("");
   const c = job.checking;
   $("checking").hidden = !c;
   if (c) {
     $("checking").classList.toggle("finished", !!c.finished);
-    $("checking-text").textContent = !c.finished ? `${c.model} is double-checking every result (${c.done} of ${c.total} photos)`
-      : c.differences ? `${c.model} read ${c.differences} result${c.differences > 1 ? "s" : ""} differently; see the cards below`
-      : `${c.model} agrees with every result`;
+    $("checking-text").textContent = !c.finished ? "Double-checking every result"
+      : c.differences ? `The double-check found ${c.differences} result${c.differences > 1 ? "s" : ""} to look at; see the cards below`
+      : "Double-checked: every result confirmed";
   }
 }
 

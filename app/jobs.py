@@ -97,7 +97,7 @@ def _run(job: dict, paths: list[Path], league: dict | None) -> None:
                 name = second.split("/")[-1]
                 photo.update(status="done", matches=len(other.matches), reader=name, error=None,
                              seconds=round(time.monotonic() - t0, 1))
-                results[i] = (i, other, [f"{main.split('/')[-1]} could not read this photo; showing {name}'s read"])
+                results[i] = (i, other, ["The first read failed, so this is the backup read; check it"])
                 second_jobs.pop(i)
 
     read = [r for r in results if r]

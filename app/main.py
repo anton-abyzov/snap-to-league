@@ -92,7 +92,7 @@ def health():
     readers = f"{PRIMARY.split('/')[-1]} + {SECOND.split('/')[-1]}" if dual else os.environ.get("SNAP_BACKEND", "GPT-6 Astra")
     return {"ok": True, "backend": os.environ.get("SNAP_BACKEND", "openrouter" if dual else "astra"), "readers": readers,
             "choices": [{"id": k, **v} for k, v in READERS.items()] if dual else [], "primary": PRIMARY,
-            "second": SECOND.split("/")[-1] if dual else None,
+            "checked": bool(dual and SECOND),
             "publish": "live" if os.environ.get("EC_PUBLISH") == "1" and (os.environ.get("EC_TOKEN") or os.environ.get("EC_TOKEN_CMD")) else "dry-run",
             "pin": bool(os.environ.get("SNAP_PUBLISH_PIN")), "maxPhotos": safety.MAX_PHOTOS,
             "gemini": "google" if os.environ.get("GEMINI_API_KEY") else ("openrouter" if dual else None),

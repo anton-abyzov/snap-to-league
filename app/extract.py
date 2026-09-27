@@ -156,7 +156,6 @@ READERS = {
     "google/gemini-3.8-flash": {"label": "Gemini 3.8 Flash", "open": False, "cost": 0.005},
     "z-ai/glm-5.3-flash": {"label": "GLM 5.3 Flash", "open": True, "cost": 0.001},
     "anthropic/claude-sonnet-5": {"label": "Claude Sonnet 5", "open": False, "cost": 0.018},
-    "openai/gpt-6-astra": {"label": "GPT-6 Astra", "open": False, "cost": 0.032},
     "qwen/qwen3.8-flash": {"label": "Qwen 3.8 Flash", "open": True, "cost": 0.0013},
 }
 SECOND = os.environ.get("SNAP_SECOND_MODEL", "openai/gpt-6-astra")
@@ -187,9 +186,9 @@ def disagreements(first: Extraction, second: Extraction, second_name: str) -> li
     for k, m in b.items():
         if k not in a:
             score = f"{m.homeScore}-{m.awayScore}" if m.homeScore is not None else (f"won by {m.winner}" if m.winner else "not played")
-            notes.append(f"{second_name} read {m.home} v {m.away} as {score}; check the photo")
+            notes.append(f"A second read saw {m.home} v {m.away} as {score}; check the photo")
     if len(first.matches) != len(second.matches):
-        notes.append(f"{second_name} counted {len(second.matches)} matches, the main reader {len(first.matches)}")
+        notes.append(f"A second read counted {len(second.matches)} matches instead of {len(first.matches)}; check the photo")
     return notes[:6]
 
 
