@@ -1,0 +1,8 @@
+name = "snap-to-league-edge"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+routes = [{ pattern = "snap.easychamp.com", custom_domain = true }]
+
+[vars]
+ORIGIN = "https://lap-settlement-louisiana-pda.trycloudflare.com"
