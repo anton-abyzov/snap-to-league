@@ -1,1 +1,5 @@
-Internal Server Error
+{
+ "http_status": 500,
+ "body": "Internal Server Error",
+ "cause": "pydantic ValidationError: Extraction.competition got None (no title visible in crop); uncaught in app/extract.py _parse -> 500"
+}

@@ -64,6 +64,21 @@ def spend(request: Request, photos: int) -> None:
         _day.extend([now] * photos)
 
 
+_buckets: dict[tuple[str, str], deque] = defaultdict(deque)
+
+
+def limit(request: Request, bucket: str, per_hour: int) -> None:
+    """A simple per-visitor hourly limit for cheap endpoints (voice, saves)."""
+    now, key = time.time(), (bucket, visitor(request))
+    with _lock:
+        q = _buckets[key]
+        while q and now - q[0] > 3600:
+            q.popleft()
+        if len(q) >= per_hour:
+            raise HTTPException(429, "Too many requests from this device; try again in a while")
+        q.append(now)
+
+
 def publish_allowed(pin: str | None) -> bool:
     want = os.environ.get("SNAP_PUBLISH_PIN")
     if not want:
@@ -75,3 +90,4 @@ def reset() -> None:
     with _lock:
         _hits.clear()
         _day.clear()
+        _buckets.clear()

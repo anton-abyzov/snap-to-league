@@ -204,7 +204,8 @@ def corrections(job: dict | None, final: list[Match]) -> int:
 
 
 @app.post("/api/leagues")
-def save_league(body: LeagueIn):
+def save_league(body: LeagueIn, request: Request):
+    safety.limit(request, "save", int(os.environ.get("SNAP_SAVES_PER_HOUR", "120")))
     # same competition name means the same league, so a fresh session never publishes a twin
     same = None if body.id else leagues.find_by_name(body.name)
     lid = body.id or (same or {}).get("id") or uuid.uuid4().hex[:10]
@@ -232,7 +233,8 @@ def get_league(league_id: str):
 
 
 @app.post("/api/leagues/{league_id}/publish")
-def publish(league_id: str, x_publish_pin: str | None = Header(None)):
+def publish(league_id: str, request: Request, x_publish_pin: str | None = Header(None)):
+    safety.limit(request, "publish", 30)
     doc = leagues.get(league_id)
     if not doc:
         raise HTTPException(404, "No such league")
@@ -252,14 +254,15 @@ class SpeakIn(BaseModel):
 
 
 @app.post("/api/speak")
-def speak(body: SpeakIn):
+def speak(body: SpeakIn, request: Request):
+    safety.limit(request, "speak", int(os.environ.get("SNAP_SPEAKS_PER_HOUR", "40")))
     key = os.environ.get("ELEVENLABS_API_KEY")
     if not key:
         return Response(status_code=204)
     voice = os.environ.get("ELEVENLABS_VOICE_ID", "EXAVITQu4vr4xnSDxMaL")
     r = httpx.post(f"https://api.elevenlabs.io/v1/text-to-speech/{voice}",
                    headers={"xi-api-key": key, "accept": "audio/mpeg"},
-                   json={"text": body.text[:1500], "model_id": os.environ.get("ELEVENLABS_MODEL", "eleven_turbo_v2_5")},
+                   json={"text": body.text[:700], "model_id": os.environ.get("ELEVENLABS_MODEL", "eleven_turbo_v2_5")},
                    timeout=60)
     if r.status_code != 200:
         raise HTTPException(502, f"ElevenLabs {r.status_code}: {r.text[:200]}")
