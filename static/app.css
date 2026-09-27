@@ -134,7 +134,7 @@ table.st tr.through td.pos { color: var(--color-qual-promotion); box-shadow: ins
 .stagehead { font: 600 var(--text-kicker)/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--color-muted); padding-top: 10px; }
 
 .done { display: flex; flex-direction: column; gap: 12px; }
-.url { font: 500 14px var(--font-mono); word-break: break-all; background: var(--color-surface-2); padding: 10px 12px; border-radius: var(--radius-control); border: 1px solid var(--color-line-strong); }
+.url { display: block; color: var(--color-ink); font: 500 14px var(--font-mono); word-break: break-all; background: var(--color-surface-2); padding: 10px 12px; border-radius: var(--radius-control); border: 1px solid var(--color-line-strong); }
 details pre { max-height: 320px; overflow: auto; font: 12px/1.45 var(--font-mono); background: var(--color-surface-2); padding: 10px; border-radius: var(--radius-control); }
 .err { color: var(--color-loss); font-weight: 600; }
 

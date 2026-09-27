@@ -32,7 +32,7 @@
   <p class="err" id="error" hidden role="alert"></p>
 </main>
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml, leaderboardHtml } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, speaking, stopSpeaking, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml, leaderboardHtml } from "/static/standings.js";
 const $ = (id) => document.getElementById(id);
 const id = location.pathname.split("/").pop();
 let league;
@@ -104,9 +104,14 @@ function render() {
 $("announcer").addEventListener("click", async () => {
   announcer = !announcer;
   $("announcer").textContent = announcer ? "Announcer on" : "Turn on the announcer";
+  if (!announcer) stopSpeaking();
   if (announcer) await speak(`Announcer on for ${league ? league.name : "this league"}. New results will be read out here.`);
 });
-$("read").addEventListener("click", () => league && speak(readOut(league.name, computeStandings(league.matches, league.teams), league.matches)));
+$("read").addEventListener("click", () => {
+  if (speaking()) return stopSpeaking();
+  if (league) speak(readOut(league.name, computeStandings(league.matches, league.teams), league.matches));
+});
+document.addEventListener("voice", (e) => { $("read").textContent = e.detail ? "Stop" : "Read out"; });
 load();
 setInterval(load, 15000);
 </script>

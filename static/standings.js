@@ -104,12 +104,45 @@ export function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+// One voice at a time: a new read-out stops the one playing, and a stale reply from the voice service
+// (the button pressed twice) is dropped. Pages listen for the "voice" event to show Read out / Stop.
+const voice = { id: 0, audio: null, busy: false };
+function setBusy(busy) {
+  voice.busy = busy;
+  document.dispatchEvent(new CustomEvent("voice", { detail: busy }));
+}
+export function speaking() { return voice.busy; }
+export function stopSpeaking() {
+  voice.id++;
+  if (voice.audio) { voice.audio.pause(); voice.audio = null; }
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  setBusy(false);
+}
 export async function speak(text) {
+  stopSpeaking();
+  const id = voice.id;
+  setBusy(true);
+  const done = () => { if (id === voice.id) { voice.audio = null; setBusy(false); } };
   try {
     const r = await fetch("/api/speak", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text }) });
-    if (r.status === 200) { const a = new Audio(URL.createObjectURL(await r.blob())); await a.play(); return "elevenlabs"; }
+    if (id !== voice.id) return "stopped";
+    if (r.status === 200) {
+      const blob = await r.blob();
+      if (id !== voice.id) return "stopped";
+      const a = new Audio(URL.createObjectURL(blob));
+      voice.audio = a; a.onended = done; a.onerror = done;
+      await a.play();
+      return "elevenlabs";
+    }
   } catch (e) { console.warn("voice service failed, using the browser voice", e); }
-  if ("speechSynthesis" in window) { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(text)); return "browser"; }
+  if (id !== voice.id) return "stopped";
+  if ("speechSynthesis" in window) {
+    const u = new SpeechSynthesisUtterance(text);
+    u.onend = done; u.onerror = done;
+    speechSynthesis.speak(u);
+    return "browser";
+  }
+  done();
   return "none";
 }
 

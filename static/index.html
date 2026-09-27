@@ -137,7 +137,7 @@
     <div class="kicker" id="done-kicker">Published</div>
     <h2 id="done-title">League is live</h2>
     <p id="done-text"></p>
-    <div class="url" id="done-url"></div>
+    <a class="url" id="done-url" href="#" target="_blank" rel="noopener"></a>
     <div class="actions">
       <a class="btn" id="done-open" href="#" target="_blank" rel="noopener">Open the league</a>
       <a class="btn ghost" id="done-board" href="#" target="_blank" rel="noopener">Big-screen board</a>
@@ -161,14 +161,14 @@
   </div>
 
   <footer class="foot">
-    <span>Built at ShellHacks 2026 on <a href="https://easychamp.com" rel="noopener">EasyChamp</a></span>
+    <span>Built at ShellHacks 2026 on <a href="https://easychamp.com" target="_blank" rel="noopener">EasyChamp</a></span>
     <a href="/stats">Import stats</a>
-    <a href="https://github.com/anton-abyzov/snap-to-league" rel="noopener">Source code</a>
+    <a href="https://github.com/anton-abyzov/snap-to-league" target="_blank" rel="noopener">Source code</a>
   </footer>
 </main>
 
 <script type="module">
-import { computeStandings, standingsTable, readOut, esc, speak, num, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml, leaderboardHtml, rankLeaderboard } from "/static/standings.js";
+import { computeStandings, standingsTable, readOut, esc, speak, speaking, stopSpeaking, num, bracketHtml, goalsText, topScorers, scorersTable, groupTables, groupTablesHtml, leaderboardHtml, rankLeaderboard } from "/static/standings.js";
 
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -537,8 +537,11 @@ $("add").addEventListener("click", () => {
   state.matches.push({ home: "", away: "", homeScore: null, awayScore: null, status: "scheduled", stage: "group", when: null, venue: null, group: null, goals: [] });
   renderMatches();
 });
+document.addEventListener("voice", (e) => { $("speak").textContent = e.detail ? "Stop" : "Read out"; });
 $("speak").addEventListener("click", async () => {
+  if (speaking()) return stopSpeaking();
   const how = await speak(readOut($("name").value, computeStandings(state.matches, state.teams), state.matches));
+  if (how === "stopped") return;
   $("speak-note").textContent = how === "elevenlabs" ? "Voice by ElevenLabs" : how === "browser" ? "Browser voice" : "This browser cannot speak";
 });
 
@@ -564,7 +567,7 @@ $("publish").addEventListener("click", async () => {
       : live ? "Teams can follow results and standings on the EasyChamp league site. Every new photo updates it."
       : pub.reason === "pin" ? "Share this board with the teams. Publishing to EasyChamp needs the organizer PIN."
       : pub.mode === "live" ? `EasyChamp answered ${pub.status}; the board below still works.` : "Share this board with the teams.";
-    $("done-url").textContent = ec || board;
+    $("done-url").textContent = ec || board; $("done-url").href = ec || board;
     $("done-open").href = ec || board;
     $("done-open").textContent = ec ? "Open on EasyChamp" : "Open the board";
     $("done-board").href = board; $("done-board").hidden = !ec;
