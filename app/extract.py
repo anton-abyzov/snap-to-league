@@ -207,7 +207,8 @@ def extract(image: Path, reader: str | None = None) -> tuple[Extraction, list[Ro
                 if not second_job:
                     raise ExtractError(f"{primary}: {e}")
                 ex, rows = second_job.result()
-                return ex, rows, SECOND.split("/")[-1], round(time.monotonic() - t0, 1), []
+                note = f"{primary.split('/')[-1]} could not read this photo ({str(e)[:120]}); showing {SECOND.split('/')[-1]}'s read"
+                return ex, rows, SECOND.split("/")[-1], round(time.monotonic() - t0, 1), [note]
             notes: list[str] = []
             if second_job:
                 try:

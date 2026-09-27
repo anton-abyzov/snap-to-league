@@ -1,4 +1,4 @@
-"""Load KEY=VALUE lines from ./.env into the environment without overriding what is already set."""
+"""Load KEY=VALUE lines from ./.env into the environment. The app's own .env wins over the shell."""
 import os
 from pathlib import Path
 
@@ -12,4 +12,4 @@ def load_env(path: Path = Path(__file__).resolve().parent.parent / ".env") -> No
             continue
         key, value = line.split("=", 1)
         if value.strip():
-            os.environ.setdefault(key.strip(), value.strip())
+            os.environ[key.strip()] = value.strip()
