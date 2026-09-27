@@ -37,3 +37,6 @@ videos/**/caption-skin.json
 # Local render caches and pre-polish timing audit contain workstation paths.
 videos/**/editorial/*.audio-cache.json
 videos/**/reports/timeline-polish-before.json
+
+# Local Cloudflare state and cached credentials never belong in source.
+.wrangler/

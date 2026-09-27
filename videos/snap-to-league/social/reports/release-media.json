@@ -1,0 +1,21 @@
+{
+  "repository": "anton-abyzov/snap-to-league",
+  "tag": "snap-to-league-social-2026-v1",
+  "asset": "social-editable-media.zip",
+  "zip_sha256": "a4fcc41ea4cf932f2024bfd6843997329de4ff705982bace6211ffc406828a21",
+  "zip_bytes": 16913029,
+  "members": {
+    "personal-editorial.mp4": "ed998e96151ada7b90b06b766a97bd8c8812fb17519724c8b3eb812f0b25e8ca",
+    "easychamp-editorial.mp4": "248d1ebb75e1ea73efe2280ea0680f7fa6d0521abfef5d20dfa28c056757978d",
+    "9061-phone-safe.mp4": "53b84b2a67982ce3cdc690aa1cfcb0212c0d5b216f30c4e7ee5b41d644b30697",
+    "9062-drift-safe-graded.mp4": "6e27d005033b4582691835ea4c50163d32f0bc7b7a19c0c3f1d8ad6e631762d9",
+    "EDITABLE-MEDIA-LICENSE.txt": "24e690a1e3de3855bc3ce269775ac537cd3e666c0a8382fbf9d8389dd6b41303"
+  },
+  "member_bytes": {
+    "personal-editorial.mp4": 8568289,
+    "easychamp-editorial.mp4": 4829777,
+    "9061-phone-safe.mp4": 1161615,
+    "9062-drift-safe-graded.mp4": 2469804,
+    "EDITABLE-MEDIA-LICENSE.txt": 1086
+  }
+}

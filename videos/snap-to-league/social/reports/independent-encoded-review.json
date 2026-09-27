@@ -1,0 +1,114 @@
+{
+  "reviewed_utc": "2026-09-27T08:39:09.434315+00:00",
+  "verdict": "PASSED",
+  "critical_or_high_findings": [],
+  "assets": [
+    {
+      "name": "personal",
+      "file": "renders/personal-ai-builds-1080x1920.mp4",
+      "sha256": "477bc6e6cc022e29518d18ab42286ca0af02487a9d925ee4255ff0ace1826b88",
+      "bytes": 15788488,
+      "hash_stable": true,
+      "video_packet_sha256": "199d4520c680a8e14f4ce7b648dd19f71706633ae426625932fc264a842e1cf5",
+      "decoded_video_sha256": "babc8bb5b3d9a893f454258ee1f5ba921174c4a30ff27b9ed68f6b438d13dbd0",
+      "video_packet_matches_reviewed_picture": true,
+      "decoded_video_matches_reviewed_picture": true,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "pix_fmt": "yuv420p",
+            "color_space": "bt709",
+            "color_transfer": "bt709",
+            "color_primaries": "bt709",
+            "r_frame_rate": "30/1",
+            "nb_read_frames": "825"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "nb_read_frames": "1290"
+          }
+        ],
+        "format": {
+          "duration": "27.520000",
+          "size": "15788488"
+        }
+      },
+      "full_decode_exit": 0,
+      "full_decode_errors": "",
+      "integrated_lufs": -14.62,
+      "true_peak_dbtp": -1.75,
+      "loudness_range_lu": 7.9
+    },
+    {
+      "name": "easychamp",
+      "file": "renders/easychamp-photo-results-1080x1920.mp4",
+      "sha256": "1a6c519b18416a092a32651977e445f5834d2f56f0468f418b1fae650d15d798",
+      "bytes": 8651152,
+      "hash_stable": true,
+      "video_packet_sha256": "712342608906a41367ca0c748d2f852ea5726d538415a172d18cf3a0cbae812a",
+      "decoded_video_sha256": "04f1a52bd12e00583a72088de84c7a9050fd55d95b29708fd6ecae851d07cb01",
+      "video_packet_matches_reviewed_picture": true,
+      "decoded_video_matches_reviewed_picture": true,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "pix_fmt": "yuv420p",
+            "color_space": "bt709",
+            "color_transfer": "bt709",
+            "color_primaries": "bt709",
+            "r_frame_rate": "30/1",
+            "nb_read_frames": "930"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "nb_read_frames": "1454"
+          }
+        ],
+        "format": {
+          "duration": "31.018000",
+          "size": "8651152"
+        }
+      },
+      "full_decode_exit": 0,
+      "full_decode_errors": "",
+      "integrated_lufs": -14.51,
+      "true_peak_dbtp": -1.88,
+      "loudness_range_lu": 7.9
+    }
+  ],
+  "scope": [
+    "Revised paper, review and comparison crops; actual standings output with separate-example label; sampled privacy and face framing; caption boundaries; complete final CTA.",
+    "Final audio normalization verified; all compressed video packets and all decoded video frames identical to the visually reviewed prior encode.",
+    "1080x1920 30fps H264 BT709 picture, AAC stereo 48kHz audio, 825 personal frames and 930 EasyChamp frames; full audio/video decode clean."
+  ],
+  "limitations": [
+    "Visual assessment used contact sheets and selected full-resolution frames, not an exhaustive perceptual inspection of every frame.",
+    "Audio source timing, streams, decode and loudness verified; no independent perceptual audio audition.",
+    "No provider upload, platform transcode or public playback verification performed by this reviewer.",
+    "This receipt applies only to the listed SHA-256 files."
+  ],
+  "supersedes_container_hashes": [
+    "8af870843691637b1507ed243faf893fa8d440b7c5079e0e2e311d2d4417486e",
+    "7d9f4081a6a4a82f745c4d6215bfa4a7302c0b9d80d4201fd65301f495688453"
+  ]
+}

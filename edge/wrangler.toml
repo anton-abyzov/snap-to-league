@@ -5,5 +5,5 @@ workers_dev = false
 routes = [{ pattern = "snap.easychamp.com", custom_domain = true }]
 
 [vars]
-# Recovered 2026-09-27: previous quick tunnel expired; verified live /api/health HTTP 200.
-ORIGIN = "https://arkansas-hardly-experiences-canberra.trycloudflare.com"
+# Dedicated named tunnel; the Mac and its app/tunnel login services must remain available.
+ORIGIN = "https://snap-origin.easychamp.com"

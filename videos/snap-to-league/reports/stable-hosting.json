@@ -1,0 +1,100 @@
+{
+  "verified_at": "2026-09-27T08:41:54.367733+00:00",
+  "status": "live_verified",
+  "public_url": "https://snap.easychamp.com",
+  "worker": {
+    "name": "snap-to-league-edge",
+    "version_id": "c67f8608-1e3d-4d39-a700-61c5e1df3089",
+    "deployment_id": "bea3651e-a2d3-4655-96ac-393d356e79b0",
+    "origin": "https://snap-origin.easychamp.com"
+  },
+  "checks": [
+    {
+      "url": "http://127.0.0.1:8077/api/health",
+      "http_status": 200,
+      "bytes": 657,
+      "sha256": "7516e44692a25fa3f4538872a08f1e04b5cd6766c7358b7d0853d8f37ade22eb",
+      "health": {
+        "ok": true,
+        "version": "cf109a0609",
+        "backend": "openrouter",
+        "gemini": "google",
+        "voice": true,
+        "publish": "live"
+      }
+    },
+    {
+      "url": "https://snap-origin.easychamp.com/api/health",
+      "http_status": 200,
+      "bytes": 657,
+      "sha256": "7516e44692a25fa3f4538872a08f1e04b5cd6766c7358b7d0853d8f37ade22eb",
+      "health": {
+        "ok": true,
+        "version": "cf109a0609",
+        "backend": "openrouter",
+        "gemini": "google",
+        "voice": true,
+        "publish": "live"
+      }
+    },
+    {
+      "url": "https://snap.easychamp.com/api/health",
+      "http_status": 200,
+      "bytes": 657,
+      "sha256": "7516e44692a25fa3f4538872a08f1e04b5cd6766c7358b7d0853d8f37ade22eb",
+      "health": {
+        "ok": true,
+        "version": "cf109a0609",
+        "backend": "openrouter",
+        "gemini": "google",
+        "voice": true,
+        "publish": "live"
+      }
+    },
+    {
+      "url": "https://snap.easychamp.com/",
+      "http_status": 200,
+      "bytes": 40582,
+      "sha256": "026ecf6cca39a1990f484b482ceb29f53a9147262845a14686bc472fefa1d439"
+    },
+    {
+      "url": "https://snap.easychamp.com/static/app.css",
+      "http_status": 200,
+      "bytes": 30959,
+      "sha256": "681d23eff2c71233b30332c1b8259e60eaccf85abe86bb31f5b7e86533941ddf"
+    },
+    {
+      "url": "https://snap.easychamp.com/static/tokens.css",
+      "http_status": 200,
+      "bytes": 57589,
+      "sha256": "8c8d4b3c2afc8c74e79c5257c64c8a95427ee8196266bf856ce1d832efee0ed8"
+    },
+    {
+      "url": "https://snap.easychamp.com/static/sample-groups.jpg",
+      "http_status": 200,
+      "bytes": 242059,
+      "sha256": "6fcdf268f4168707e42eb5e4895248919f84cc2fafe8c77119d3208d2ebf1c3a"
+    },
+    {
+      "url": "https://snap.easychamp.com/l/141fb7cd07",
+      "http_status": 200,
+      "bytes": 6957,
+      "sha256": "4d5920299ca05144128d06a61637e1c59e16bb83eb4030f1f746bdb309e38dd1"
+    },
+    {
+      "url": "https://snap.easychamp.com/api/leagues/141fb7cd07",
+      "http_status": 200,
+      "bytes": 1472,
+      "sha256": "3b6ed9178f1428c4bb0ed4e275b4add6a8843821225ecfcaad942fc88e871dbd",
+      "board": {
+        "id": "141fb7cd07",
+        "name": "MLH Cup Stacking \u00b7 Demo",
+        "status": null
+      },
+      "has_leaderboard": true
+    }
+  ],
+  "availability_limit": "Both LaunchAgents run in the macOS user login session. The Mac must remain powered, awake, logged in, and network-connected. No independent cloud compute or guaranteed uptime is claimed. App supervision is separately owned; this change does not alter app code or provider credentials.",
+  "ai_check_limit": "Health verifies configured adapters and current availability; no new AI extraction or authenticated EasyChamp publish was performed for this hosting change.",
+  "supervision": "Dedicated user-login services supervise the app and named tunnel; no dependency on an interactive terminal."
+}

@@ -1,0 +1,76 @@
+{
+  "personal_duration": 27.5,
+  "easychamp_duration": 31,
+  "picture_bases": {
+    "personal": "5dc11f545f6ba8adf26f7c7c4f9735af43332dc70d71a06d5fb7cb933ba7ae16",
+    "easychamp": "e2a26da0b8141d91f786cab9a83df15fcec0c8f01ab25fc27fe445172ba097e4"
+  },
+  "9061": {
+    "original_name": "139APPLE_IMG_9061.MOV",
+    "source_in": 0.1,
+    "source_out": 1.7,
+    "native_HLG_to_BT709": "avconvert Preset1920x1080",
+    "crop": "1080:1080:440:0",
+    "audio": "excluded",
+    "grade": "conservative shadow curve matching accepted 9062 grade",
+    "asset_sha256": "53b84b2a67982ce3cdc690aa1cfcb0212c0d5b216f30c4e7ee5b41d644b30697",
+    "original_sha256": "d4144196cb9b9241cd2d46eef34bb232263fce2109d6517b59c5badd61c0a4ab"
+  },
+  "9062": {
+    "source_in": 4.15,
+    "source_out": 6.55,
+    "audio": "excluded: unrelated venue TV",
+    "privacy": "baked tracked badge blur",
+    "grade": "accepted v2 conservative shadow grade",
+    "asset_sha256": "6e27d005033b4582691835ea4c50163d32f0bc7b7a19c0c3f1d8ad6e631762d9",
+    "original_sha256": "e791a8c69d69985121b8ad4e3c76e1b239d4d64d5365c7ebf5f59d161595e574"
+  },
+  "synthetic_voice": {
+    "personal": false,
+    "easychamp": true,
+    "model": "eleven_v3",
+    "voice_id": "EXAVITQu4vr4xnSDxMaL"
+  },
+  "music": {
+    "title": "Deep Urban",
+    "artist": "Eugenio Mininni",
+    "source": "https://assets.mixkit.co/music/623/623.mp3",
+    "license": "Mixkit Stock Music Free License",
+    "sha256": "ac7e28f0cdd6c607df199c759f34ca66cfebd881ea61c26473fb4cecebe64fa8"
+  },
+  "claims": {
+    "existing_platform": "EasyChamp identity, leagues and publishing pre-date the event",
+    "event_work": "Snap photo import, review and reconciliation",
+    "separate_examples": "Published competition shown as a separate example",
+    "update": "Comparison only; no claim of saving or publishing update",
+    "synthetic_narrator": "Separate stock voice in EasyChamp cut only; no voice clone",
+    "source_audio_9061_9062": "Excluded"
+  },
+  "motion": {
+    "skill": "motion-graphics-promo",
+    "version": "1.1.0",
+    "commit": "0a2430fa4cd324090dd9edf737a542fa7154e2aa",
+    "runtime": "HyperFrames 0.8.79 with GSAP 3.15.0",
+    "AdobeAfterEffects": false
+  },
+  "distribution_finish": {
+    "personal": {
+      "integrated_lufs": -14.62,
+      "true_peak_dbtp": -1.75,
+      "filter": "aresample=192000,volume=4.880000dB,alimiter=limit=0.803526122:level=false:attack=5:release=60:latency=true,aresample=48000",
+      "video_unchanged": true
+    },
+    "easychamp": {
+      "integrated_lufs": -14.51,
+      "true_peak_dbtp": -1.88,
+      "filter": "aresample=192000,volume=2.950000dB,alimiter=limit=0.803526122:level=false:attack=5:release=60:latency=true,aresample=48000",
+      "video_unchanged": true
+    }
+  },
+  "approved_archive": {
+    "asset": "social-editable-media.zip",
+    "tag": "snap-to-league-social-2026-v1",
+    "sha256": "a4fcc41ea4cf932f2024bfd6843997329de4ff705982bace6211ffc406828a21",
+    "contents": "Finished editorial picture/sound works plus privacy-safe muted cutaways; no isolated music or raw originals"
+  }
+}
