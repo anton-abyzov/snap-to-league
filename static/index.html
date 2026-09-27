@@ -115,8 +115,9 @@
         <h2 id="table-title">Table</h2>
         <div class="tablebox" id="table"></div>
         <div id="scorers-box" hidden><h2>Scorers</h2><div class="tablebox" id="scorers"></div></div>
-        <label class="field" id="pin-box" hidden>EasyChamp publish PIN
-          <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Leave empty to save a shareable board only">
+        <label class="field" id="pin-box" hidden>Organizer PIN for EasyChamp
+          <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Optional">
+          <span class="muted small hint">Without it you still get a board to share with the teams.</span>
         </label>
         <div class="actions">
           <button class="btn" id="publish" type="button">Publish league</button>
@@ -388,7 +389,8 @@ function loadJob(job) {
     $("changes-box").hidden = true;
   }
   const readers = [...new Set(job.photos.map((p) => p.reader).filter(Boolean))].join(", ");
-  $("meta").textContent = `${ex.matches.length} matches from ${job.photos.length} photo${job.photos.length > 1 ? "s" : ""} in ${job.seconds} s`;
+  const nm = ex.matches.length, np = job.photos.length;
+  $("meta").textContent = `${nm} match${nm === 1 ? "" : "es"} from ${np} photo${np === 1 ? "" : "s"} in ${job.seconds} s`;
   renderFlags(job);
   renderMatches(); show("review");
   keepInView($("review"));
@@ -409,19 +411,20 @@ function renderFlags(job) {
 
 function renderMatches() {
   $("matches").innerHTML = state.matches.map((m, i) => `
-    <div class="match" data-i="${i}" style="--i:${i}">
-      <input aria-label="Home" data-f="home" value="${esc(m.home)}">
-      <input aria-label="Home score" class="score" data-f="homeScore" inputmode="numeric" value="${m.homeScore ?? ""}">
-      <span class="dash">-</span>
-      <input aria-label="Away score" class="score" data-f="awayScore" inputmode="numeric" value="${m.awayScore ?? ""}">
-      <input aria-label="Away" class="away" data-f="away" value="${esc(m.away)}">
-      <button class="del" data-del="${i}" aria-label="Remove match" type="button">&times;</button>
+    <div class="match ${m.status === "played" ? "played" : ""}" data-i="${i}" style="--i:${i}">
+      <span class="side home-tag">Home</span>
+      <input aria-label="Home team" class="team" data-f="home" value="${esc(m.home)}">
+      <input aria-label="Home score" class="score" data-f="homeScore" inputmode="numeric" value="${m.homeScore ?? ""}" placeholder="–">
+      <button class="del" data-del="${i}" aria-label="Remove this match" title="Remove this match" type="button">&times;</button>
+      <span class="side away-tag">Away</span>
+      <input aria-label="Away team" class="team" data-f="away" value="${esc(m.away)}">
+      <input aria-label="Away score" class="score" data-f="awayScore" inputmode="numeric" value="${m.awayScore ?? ""}" placeholder="–">
       <div class="meta">
-        <select aria-label="Stage" data-f="stage">${["group", "quarterfinal", "semifinal", "final", "knockout"].map((s) => `<option ${m.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select>
-        ${m.stage !== "group" ? `<input aria-label="Round" data-f="round" placeholder="round" value="${esc(m.round ?? "")}">
-        <select aria-label="Winner" data-f="winner"><option value="">no winner yet</option>${[m.home, m.away].filter(Boolean).map((t) => `<option ${m.winner === t ? "selected" : ""}>${esc(t)}</option>`).join("")}</select>` : ""}
-        <input aria-label="When" data-f="when" placeholder="when" value="${esc(m.when ?? "")}">
-        <input aria-label="Field or court" data-f="venue" placeholder="field" value="${esc(m.venue ?? "")}">
+        <select aria-label="Stage" data-f="stage">${[["group", "Group"], ["quarterfinal", "Quarterfinal"], ["semifinal", "Semifinal"], ["final", "Final"], ["knockout", "Knockout"]].map(([v, t]) => `<option value="${v}" ${m.stage === v ? "selected" : ""}>${t}</option>`).join("")}</select>
+        ${m.stage !== "group" ? `<input aria-label="Round" data-f="round" placeholder="Round" value="${esc(m.round ?? "")}">
+        <select aria-label="Winner" data-f="winner"><option value="">No winner yet</option>${[m.home, m.away].filter(Boolean).map((t) => `<option ${m.winner === t ? "selected" : ""}>${esc(t)}</option>`).join("")}</select>` : ""}
+        <input aria-label="When" data-f="when" placeholder="When" value="${esc(m.when ?? "")}">
+        <input aria-label="Field or court" data-f="venue" placeholder="Field" value="${esc(m.venue ?? "")}">
       </div>
       ${goalsText(m) ? `<div class="goals">${esc(goalsText(m))}</div>` : ""}
     </div>`).join("");
@@ -445,6 +448,7 @@ $("matches").addEventListener("input", (e) => {
   if (m.stage !== "group" && (f === "homeScore" || f === "awayScore") && m.homeScore !== null && m.awayScore !== null && m.homeScore !== m.awayScore)
     m.winner = m.homeScore > m.awayScore ? m.home : m.away;
   m.status = (m.homeScore !== null && m.homeScore !== undefined && m.awayScore !== null && m.awayScore !== undefined) || m.winner ? "played" : "scheduled";
+  box.classList.toggle("played", m.status === "played");
   if (f === "stage") return renderMatches();
   renderTable();
 });

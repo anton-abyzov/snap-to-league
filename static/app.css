@@ -277,3 +277,46 @@ table.st td.muted-cell { color: var(--color-muted); font-weight: 400; font-size:
 body.has-actionbar .wrap { padding-bottom: 150px; }
 @keyframes barup { from { transform: translateY(100%); } }
 body.has-actionbar #read { display: none; }
+
+/* =====================================================================
+   Readability pass: scorecard match rows, calmer header, phone/iPad/desktop
+   ===================================================================== */
+.matches { gap: 10px; }
+.match { grid-template-columns: 44px minmax(0, 1fr) 64px 32px; grid-template-areas:
+  "htag home hs del" "atag away as ." "meta meta meta meta" "goals goals goals goals";
+  gap: 6px 8px; padding: 12px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-surface); border-top: 1px solid var(--color-line); }
+.match:first-child { border-top: 1px solid var(--color-line); }
+.match .side { font: 600 10px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--color-muted); }
+.match .home-tag { grid-area: htag; } .match .away-tag { grid-area: atag; }
+.match input.team { font: 700 17px/1.2 var(--font-body); padding: 10px 12px; text-align: left; }
+.match input[data-f="home"] { grid-area: home; } .match input[data-f="away"] { grid-area: away; }
+.match input[data-f="homeScore"] { grid-area: hs; } .match input[data-f="awayScore"] { grid-area: as; }
+.match input.score { font: 600 22px var(--font-mono); padding: 8px 0; height: 46px; }
+.match.played input.score { background: var(--color-brand-navy); color: #fff; border-color: var(--color-brand-navy); }
+.match .del { grid-area: del; width: 32px; height: 32px; border-radius: 50%; align-self: center; }
+.match .del:hover { background: var(--color-surface-2); color: var(--color-loss); }
+.match .meta { grid-area: meta; margin-top: 4px; }
+.match .meta select, .match .meta input { font-size: 14px; padding: 7px 8px; }
+.match .goals { grid-area: goals; }
+.match .dash { display: none; }
+.hint { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+/* header: sticky only where there is room for it */
+@media (max-width: 820px) {
+  .bar { position: static; }
+  .grid2 .actions .btn { flex: 1 1 140px; }
+  table.st th:nth-child(7), table.st td:nth-child(7), table.st th:nth-child(8), table.st td:nth-child(8) { display: none; } /* GF, GA */
+}
+/* iPad portrait and small laptops: review stacks so match cards stay wide */
+@media (min-width: 821px) and (max-width: 1100px) {
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .matches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1101px) {
+  .wrap { max-width: 1200px; }
+}
+@media (max-width: 560px) {
+  .match { grid-template-columns: minmax(0, 1fr) 54px 30px; grid-template-areas: "home hs del" "away as ." "meta meta meta" "goals goals goals"; padding: 10px; }
+  .match .side { display: none; }
+  .match input.team { font-size: 16px; padding: 10px; }
+}
