@@ -1,0 +1,215 @@
+{
+ "music": {
+  "title": "Deep Urban",
+  "creator": "Eugenio Mininni",
+  "source": "https://mixkit.co/free-stock-music/sports/",
+  "asset_url": "https://assets.mixkit.co/music/623/623.mp3",
+  "license": "Mixkit Stock Music Free License",
+  "license_url": "https://mixkit.co/license/#musicFree",
+  "sha256": "ac7e28f0cdd6c607df199c759f34ca66cfebd881ea61c26473fb4cecebe64fa8",
+  "reused_from": "videos/snap-to-league/assets/audio/deep-urban.mp3 (license recorded there 2026-09-27)",
+  "use": "Background bed inside the finished reels; music.wav stems are for localization of these reels only; raw track not redistributed.",
+  "sections_in_s": {
+   "1-soccer-whiteboard": 15.7,
+   "2-hoops-bracket": 119.49,
+   "3-padel-ladder": 160.86,
+   "4-esports-screenshot": 29.25
+  }
+ },
+ "voice": {
+  "provider": "ElevenLabs",
+  "model": "eleven_v3",
+  "voice_id": "EXAVITQu4vr4xnSDxMaL",
+  "synthetic": true,
+  "cloned_voice": false,
+  "lines": "scripts/reels_script.py",
+  "takes": "assets/audio/vo/<reel>-<n>.mp3 with character timings (.json)"
+ },
+ "event_footage": {
+  "source": "Anton's own iPhone recordings, ShellHacks 2026, FIU Miami, 2026-09-27 (private SanDisk archive, originals untouched)",
+  "clips": [
+   {
+    "original": "139APPLE_IMG_9051.MOV",
+    "range_s": [
+     0.4,
+     1.7
+    ],
+    "content": "hand writing a paper scoresheet",
+    "conversion": "avconvert Preset3840x2160 HLG->SDR BT.709, 9:16 crop, reel 3 hook"
+   },
+   {
+    "original": "139APPLE_IMG_9049.MOV",
+    "range_s": [
+     20.5,
+     22.4
+    ],
+    "content": "phone showing a photo of the paper sheet, then the Snap to League tray",
+    "conversion": "same; iOS photo-grid frames excluded",
+    "used_in": "reel 3 hook"
+   }
+  ],
+  "labelled_on_screen": "Real event footage \u00b7 ShellHacks 2026",
+  "stock": false,
+  "ai_generated": false
+ },
+ "product_captures": {
+  "app-soccer": {
+   "url": "https://snap.easychamp.com/?v=1790617272",
+   "captured_at": "2026-09-28T13:41:57-0400",
+   "http_status": null,
+   "input": {
+    "sample": "shellhacks-groups",
+    "sport": "soccer"
+   },
+   "competition_read": "ShellHacks '26 PANTHER PIT BREAK CUP",
+   "double_check": "Double-checked: every result confirmed",
+   "flags": "",
+   "screencast": {
+    "frames": 1902,
+    "span_s": 38.75,
+    "mean_fps": 49.08,
+    "max_gap_s": 3.157
+   },
+   "css_hidden": "#chips,#reader-box{display:none!important}",
+   "master": "assets/footage/app-soccer.mp4",
+   "master_sha256": "04079fe220376ef925522ceb73d46cb71b6983be403c314f2f16ebf21b93f9f9"
+  },
+  "app-hoops": {
+   "url": "https://snap.easychamp.com/?v=1790617319",
+   "captured_at": "2026-09-28T13:42:39-0400",
+   "http_status": null,
+   "input": {
+    "file": "assets/synthetic/hoops-bracket.jpg",
+    "sport": "basketball"
+   },
+   "competition_read": "3x3 HOOPS NIGHT",
+   "double_check": "Double-checked: every result confirmed",
+   "flags": "",
+   "screencast": {
+    "frames": 1344,
+    "span_s": 31.734,
+    "mean_fps": 42.35,
+    "max_gap_s": 3.324
+   },
+   "css_hidden": "#chips,#reader-box{display:none!important}",
+   "master": "assets/footage/app-hoops.mp4",
+   "master_sha256": "5ab093abd162267fc3bef30fed1bc9c7ac3bbd9444eb2bc9434809b9be516300"
+  },
+  "app-padel": {
+   "url": "https://snap.easychamp.com/?v=1790617360",
+   "captured_at": "2026-09-28T13:43:13-0400",
+   "http_status": null,
+   "input": {
+    "file": "assets/synthetic/padel-ladder.jpg",
+    "sport": "padel"
+   },
+   "competition_read": "Thursday PADEL Ladder",
+   "double_check": "Double-checked: every result confirmed",
+   "flags": "",
+   "screencast": {
+    "frames": 1046,
+    "span_s": 23.218,
+    "mean_fps": 45.05,
+    "max_gap_s": 2.972
+   },
+   "css_hidden": "#chips,#reader-box{display:none!important}",
+   "master": "assets/footage/app-padel.mp4",
+   "master_sha256": "799a5b6e9e258d36343ecd433156dcfe293ff6659888eed9026ddaf16ef3d1ae"
+  },
+  "app-smash": {
+   "url": "https://snap.easychamp.com/?v=1790617213",
+   "captured_at": "2026-09-28T13:40:46-0400",
+   "http_status": null,
+   "input": {
+    "file": "assets/synthetic/smash-screenshot.png",
+    "sport": "smash"
+   },
+   "competition_read": "Friday Smash Night",
+   "double_check": "Double-checked: every result confirmed",
+   "flags": "",
+   "screencast": {
+    "frames": 986,
+    "span_s": 25.45,
+    "mean_fps": 38.74,
+    "max_gap_s": 3.305
+   },
+   "css_hidden": "#chips,#reader-box{display:none!important}",
+   "master": "assets/footage/app-smash.mp4",
+   "master_sha256": "3912aa3c6b1c4a9a467df8d7c9012ab5e5b4a78121b0c24cead679e92c247aa8"
+  },
+  "site-pit": {
+   "url": "https://shellhacks-panther-pit-break-c.at.easychamp.com/champ/3b4dfb25-4fa3-4124-8e73-5afc6f4abd75?v=1790617463",
+   "captured_at": "2026-09-28T13:44:39-0400",
+   "http_status": 200,
+   "input": null,
+   "competition_read": null,
+   "double_check": null,
+   "flags": null,
+   "screencast": {
+    "frames": 158,
+    "span_s": 7.505,
+    "mean_fps": 21.05,
+    "max_gap_s": 2.374
+   },
+   "css_hidden": null,
+   "master": "assets/footage/site-pit.mp4",
+   "master_sha256": "eee326ec9b13bd9ae12575e6db3ea95f7066be93954b9e351e657656d85e2030"
+  },
+  "site-board": {
+   "url": "https://snap.easychamp.com/l/b766d1be06?v=1790617533",
+   "captured_at": "2026-09-28T13:45:46-0400",
+   "http_status": 200,
+   "input": null,
+   "competition_read": null,
+   "double_check": null,
+   "flags": null,
+   "screencast": {
+    "frames": 410,
+    "span_s": 6.863,
+    "mean_fps": 59.74,
+    "max_gap_s": 0.05
+   },
+   "css_hidden": null,
+   "master": "assets/footage/site-board.mp4",
+   "master_sha256": "47a4616dc94a2c6fd043a6f96e945dd0ce0a8d05cff7f1a379013f121a41a5fa"
+  },
+  "site-smash": {
+   "url": "https://shellhacks-midnight-smash--dem.at.easychamp.com/champ/b04bac02-216e-4492-bcdf-0ac2a4ef0881?v=1790617597",
+   "captured_at": "2026-09-28T13:46:55-0400",
+   "http_status": 200,
+   "input": null,
+   "competition_read": null,
+   "double_check": null,
+   "flags": null,
+   "screencast": {
+    "frames": 122,
+    "span_s": 7.345,
+    "mean_fps": 16.61,
+    "max_gap_s": 2.289
+   },
+   "css_hidden": null,
+   "master": "assets/footage/site-smash.mp4",
+   "master_sha256": "c704aac58813f78a2d9ad15c89e797970cd9804126b633f754a3fda8850e3f3a"
+  }
+ },
+ "capture_method": "Headless Chromium (Playwright, headless=True, PWDEBUG=0), iPhone-sized viewport 390x844 at 3x, Chrome DevTools screencast. No account, nothing published. Header model chip and photo-reader picker hidden with CSS so no model or vendor name appears.",
+ "synthetic_inputs": {
+  "script": "scripts/make_demo_inputs.py",
+  "files": {
+   "hoops-bracket.jpg": "ad7c520f3ce5d63902eb93e7e51edf8308352f0a88568af8ede3410c7130bf26",
+   "padel-ladder.jpg": "204564a94746104fb222313fdf496f4abb3c5cede14d0400c54c9ec346105ad8",
+   "smash-screenshot.png": "bcf4bfa08286b6b7b97905e1c0d46a489d8dae85daeb54c82ccfe0eddd75cd06"
+  },
+  "note": "Each image says 'demo data' on it and is labelled on screen (Synthetic demo photo / sheet / screenshot). The screenshot is a generic, unbranded bracket app layout."
+ },
+ "built_in_sample": {
+  "file": "assets/stills/sample-shellhacks-groups.jpg",
+  "source": "snap-to-league/static/sample-shellhacks-groups.jpg (app's 'ShellHacks Break Cup' sample)",
+  "sha256": "b5d6f48c5c9c48f32ce46e361af6d0f8f706f23a96ef10545eb36e47f35c819f"
+ },
+ "published_demo_leagues": [
+  "https://shellhacks-panther-pit-break-c.at.easychamp.com (reel 1)",
+  "https://shellhacks-midnight-smash--dem.at.easychamp.com (reel 4, labelled 'Separate published demo league')"
+ ],
+ "fonts": "Archivo / Archivo Black, SIL OFL (assets/fonts/*-OFL.txt)"
+}

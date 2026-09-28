@@ -1,0 +1,12 @@
+# Media and generated output stay out of git (renders/deliver live on the external render drive).
+deliver
+renders
+.build/
+capture/
+assets/audio/
+assets/footage/
+assets/stills/
+assets/synthetic/
+assets/vendor/
+snapshots/
+._*

@@ -1,0 +1,62 @@
+{
+ "1-soccer-whiteboard": {
+  "render_lufs": -15.61,
+  "render_tp": -3.64,
+  "passes": [
+   {
+    "gain_db": 1.61,
+    "lufs": -13.99,
+    "true_peak_dbtp": -1.99
+   }
+  ],
+  "textless_lufs": -24.7,
+  "textless_tp": -9.3,
+  "voice_lufs": -16.36,
+  "music_lufs": -26.17
+ },
+ "2-hoops-bracket": {
+  "render_lufs": -15.81,
+  "render_tp": -3.26,
+  "passes": [
+   {
+    "gain_db": 1.81,
+    "lufs": -14.01,
+    "true_peak_dbtp": -1.9
+   }
+  ],
+  "textless_lufs": -24.68,
+  "textless_tp": -13.52,
+  "voice_lufs": -16.51,
+  "music_lufs": -26.37
+ },
+ "3-padel-ladder": {
+  "render_lufs": -15.87,
+  "render_tp": -3.08,
+  "passes": [
+   {
+    "gain_db": 1.87,
+    "lufs": -13.97,
+    "true_peak_dbtp": -1.79
+   }
+  ],
+  "textless_lufs": -24.34,
+  "textless_tp": -13.79,
+  "voice_lufs": -16.33,
+  "music_lufs": -26.06
+ },
+ "4-esports-screenshot": {
+  "render_lufs": -15.54,
+  "render_tp": -3.06,
+  "passes": [
+   {
+    "gain_db": 1.54,
+    "lufs": -13.97,
+    "true_peak_dbtp": -1.89
+   }
+  ],
+  "textless_lufs": -24.7,
+  "textless_tp": -9.76,
+  "voice_lufs": -16.25,
+  "music_lufs": -26.17
+ }
+}
